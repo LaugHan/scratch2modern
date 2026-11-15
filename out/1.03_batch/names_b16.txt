@@ -1,0 +1,27 @@
+num docs: 32033
+vocab size: 27
+train tokens: 205281, val tokens: 22867
+num params: 4192
+batch size: 16, steps: 1024
+step    32 /  1024 | train loss 2.7276step    64 /  1024 | train loss 2.5242step    96 /  1024 | train loss 2.4433step   128 /  1024 | train loss 2.4202step   160 /  1024 | train loss 2.4160step   192 /  1024 | train loss 2.3872step   224 /  1024 | train loss 2.3763step   256 /  1024 | train loss 2.3311step   288 /  1024 | train loss 2.3506step   320 /  1024 | train loss 2.3435step   352 /  1024 | train loss 2.3371step   384 /  1024 | train loss 2.3237step   416 /  1024 | train loss 2.3281step   448 /  1024 | train loss 2.3321step   480 /  1024 | train loss 2.3145step   512 /  1024 | train loss 2.3039step   544 /  1024 | train loss 2.3162step   576 /  1024 | train loss 2.3006step   608 /  1024 | train loss 2.2943step   640 /  1024 | train loss 2.2792step   672 /  1024 | train loss 2.2809step   704 /  1024 | train loss 2.2881step   736 /  1024 | train loss 2.2714step   768 /  1024 | train loss 2.2717step   800 /  1024 | train loss 2.2834step   832 /  1024 | train loss 2.2678step   864 /  1024 | train loss 2.2466step   896 /  1024 | train loss 2.2464step   928 /  1024 | train loss 2.2486step   960 /  1024 | train loss 2.2533step   992 /  1024 | train loss 2.2308step  1024 /  1024 | train loss 2.2291
+--- inference (new, hallucinated names) ---
+sample  1: kelyn
+sample  2: amith
+sample  3: kahleia
+sample  4: devian
+sample  5: amair
+sample  6: arysia
+sample  7: tanne
+sample  8: ayley
+sample  9: kaina
+sample 10: kyira
+sample 11: ketien
+sample 12: keran
+sample 13: aleyn
+sample 14: mackari
+sample 15: kavivin
+sample 16: jarina
+sample 17: alena
+sample 18: amira
+sample 19: kalina
+sample 20: marina

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>scratch2modern</title>
+<meta name="description" content="从 microgpt 出发，一次加一样东西，用实验一步步构建现代大语言模型。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+
+<h1>scratch2modern</h1>
+<p class="sub">从 microgpt 到现代大语言模型</p>
+
+<p>Andrej Karpathy 的 microgpt 用两百行纯 Python 训练了一个 GPT。读数据、搭模型、求梯度、更新参数、生成文本，全部手写，不依赖任何库。它是一个完整的语言模型，只是很小，也很慢。</p>
+
+<p>今天的大模型用的是同一套算法，差别在于围绕它发展出来的一切：怎样训练得更快、更稳，模型结构怎样改进，训练完以后怎样让它听懂指令，以及怎样把这一切铺到成千上万张 GPU 上。这些东西各有论文、各有默认值，散落在各处，很难看出哪些是必需的，各自又在解决什么问题。</p>
+
+<p>这里的做法是从 microgpt 出发，每次只加一样东西。每一节先讲它是什么、为什么需要它，再把它加进代码，用实验看它到底带来了什么。有的改动让训练快了几十倍，有的让模型明显变好，也有的在我们的规模上不起作用，那就讲清楚它要在什么条件下才起作用。</p>
+
+<p>每一节对应<a href="https://github.com/LaugHan/scratch2modern">仓库</a>里一个可以单独运行的脚本，和上一节的 diff 就是这一节的全部改动。所有实验都在一张 GPU 上完成，可以自己复现。</p>
+
+<div class="part">第一章 · 训练</div>
+<ul class="toc">
+  <li><span class="no">1.01</span><a href="1.01.html">microgpt：两百行的完整 GPT</a></li>
+  <li><span class="no">1.02</span><span class="todo">PyTorch：从标量到张量</span></li>
+  <li><span class="no">1.03</span><span class="todo">Batch：一次处理一批文本</span></li>
+  <li><span class="no">1.04</span><span class="todo">GPU</span></li>
+  <li><span class="no">1.05</span><span class="todo">Tokenizer：怎样把文字切成 token</span></li>
+  <li><span class="no">1.06</span><span class="todo">优化器</span></li>
+  <li><span class="no">1.07</span><span class="todo">学习率调度</span></li>
+  <li><span class="no">1.08</span><span class="todo">数值精度</span></li>
+  <li><span class="no">1.09</span><span class="todo">工程加速</span></li>
+  <li><span class="no">1.10</span><span class="todo">训练细节：初始化、weight decay、梯度裁剪、dropout</span></li>
+  <li><span class="no">1.11</span><span class="todo">回顾</span></li>
+</ul>
+
+<div class="part">之后</div>
+<ul class="toc">
+  <li><span class="no">2</span><span class="todo">模型结构</span></li>
+  <li><span class="no">3</span><span class="todo">后训练</span></li>
+  <li><span class="no">—</span><span class="todo">Infra：显存、通信、并行</span></li>
+</ul>
+
+</main>
+</body>
+</html>

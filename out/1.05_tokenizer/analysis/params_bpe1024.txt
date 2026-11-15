@@ -1,0 +1,22 @@
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+bytes per token: 3.16, context: 256 tokens = 810 bytes
+step   128 /  4096 | train loss 4.0234 | val bpb 1.6413step   256 /  4096 | train loss 3.4762 | val bpb 1.5495step   384 /  4096 | train loss 3.3078 | val bpb 1.4827step   512 /  4096 | train loss 3.1955 | val bpb 1.4335step   640 /  4096 | train loss 3.1129 | val bpb 1.3995step   768 /  4096 | train loss 3.0388 | val bpb 1.3784step   896 /  4096 | train loss 2.9914 | val bpb 1.3535step  1024 /  4096 | train loss 2.9472 | val bpb 1.3356step  1152 /  4096 | train loss 2.9247 | val bpb 1.3240step  1280 /  4096 | train loss 2.8838 | val bpb 1.3136step  1408 /  4096 | train loss 2.8378 | val bpb 1.2964step  1536 /  4096 | train loss 2.8415 | val bpb 1.2897step  1664 /  4096 | train loss 2.8169 | val bpb 1.2767step  1792 /  4096 | train loss 2.7926 | val bpb 1.2707step  1920 /  4096 | train loss 2.7660 | val bpb 1.2623step  2048 /  4096 | train loss 2.7489 | val bpb 1.2604step  2176 /  4096 | train loss 2.7352 | val bpb 1.2487step  2304 /  4096 | train loss 2.7109 | val bpb 1.2430step  2432 /  4096 | train loss 2.7027 | val bpb 1.2374step  2560 /  4096 | train loss 2.7046 | val bpb 1.2311step  2688 /  4096 | train loss 2.6737 | val bpb 1.2257step  2816 /  4096 | train loss 2.6689 | val bpb 1.2204step  2944 /  4096 | train loss 2.6743 | val bpb 1.2142step  3072 /  4096 | train loss 2.6433 | val bpb 1.2068step  3200 /  4096 | train loss 2.6253 | val bpb 1.2037step  3328 /  4096 | train loss 2.6240 | val bpb 1.1962step  3456 /  4096 | train loss 2.6038 | val bpb 1.1923step  3584 /  4096 | train loss 2.5821 | val bpb 1.1873step  3712 /  4096 | train loss 2.5852 | val bpb 1.1834step  3840 /  4096 | train loss 2.5673 | val bpb 1.1785step  3968 /  4096 | train loss 2.5622 | val bpb 1.1749step  4096 /  4096 | train loss 2.5404 | val bpb 1.1727
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Lily. She loved to play with her ball. She would not wait to play. One day, she found a big box. She was very sad. She asked her mom, "Why are you sad?"
+Lily looked at the box and her mom said, "I am sorry, Lily. I was not a toy. I wanted to help you, but I will help you."
+Lily and Tom walked away. They found a big box. They were happy and had a big, red ball. They were very happy. They played together and had fun.
+
+sample 2: Once upon a time, there was a little girl named Lily. She loved to play in the park. One day, she found a big tree. She wanted to play with her toy with her toy in the tree.
+Lily was very happy. She wanted to help her. She tried to help it, but she could not find her home. She saw Lily's toy, but she was not very bad. She could not find her friends.
+Lily was very happy. She wished her pet and said, "I will help you get a pot. I will help you. I am just a magical for you."
+Lily and Ben played with the toy car. They were very happy. They played together every day. They had so much fun with the toy cars. They had a lot of fun. The car was a big and a kite carrot. They were very happy.
+They climbed the car and wood. They laughed and had fun. They were very happy and wanted to play with the car.
+But then, they heard a noise. It was a loud noise. The carrot was sad. The car was scared and wanted to play with them. The car was not scared
+
+sample 3: Once upon a time, there was a little girl named Lucy. She loved to play with her ball. One day, she saw a big tree with many others. She wanted to help her.
+At the park, Lucy came to the park, she saw a big, shiny thing on the ground. She was very sad. "Why are you sad?" Lucy asked. "I don't know. I am sorry for you. I want to play with it?"
+The little boy said, "I'm glad you."
+Tim and Sue were sad and said, "I'm sorry, I did not know what to do. I have you want to play with you." Sue smiled and said, "I love you. It's a big blue ball!"
+Then, Tim and Sue felt sad. Sue was very proud of her new ball. They knew that they should have to make a big and been. They talked about the ball. They all played together all day and had lots of fun.
+

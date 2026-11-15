@@ -1,0 +1,14 @@
+tokenizer: byte, vocab size: 257, train tokens: 19890737, val tokens: 408470
+num params: 138400 (41120 in wte and lm_head)
+bytes per token: 1.00, context: 256 tokens = 256 bytes
+step   128 /  4096 | train loss 2.4323 | val bpb 3.3259step   256 /  4096 | train loss 2.0442 | val bpb 2.5145step   384 /  4096 | train loss 1.6217 | val bpb 2.2145step   512 /  4096 | train loss 1.4767 | val bpb 2.0677step   640 /  4096 | train loss 1.4117 | val bpb 2.0116step   768 /  4096 | train loss 1.3684 | val bpb 1.9493step   896 /  4096 | train loss 1.3382 | val bpb 1.9127step  1024 /  4096 | train loss 1.3075 | val bpb 1.8807step  1152 /  4096 | train loss 1.2890 | val bpb 1.8537step  1280 /  4096 | train loss 1.2633 | val bpb 1.8170step  1408 /  4096 | train loss 1.2553 | val bpb 1.8046step  1536 /  4096 | train loss 1.2487 | val bpb 1.7906step  1664 /  4096 | train loss 1.2304 | val bpb 1.7688step  1792 /  4096 | train loss 1.2190 | val bpb 1.7607step  1920 /  4096 | train loss 1.2099 | val bpb 1.7464step  2048 /  4096 | train loss 1.1964 | val bpb 1.7289step  2176 /  4096 | train loss 1.1913 | val bpb 1.7079step  2304 /  4096 | train loss 1.1745 | val bpb 1.6988step  2432 /  4096 | train loss 1.1724 | val bpb 1.6955step  2560 /  4096 | train loss 1.1618 | val bpb 1.6770step  2688 /  4096 | train loss 1.1534 | val bpb 1.6648step  2816 /  4096 | train loss 1.1427 | val bpb 1.6548step  2944 /  4096 | train loss 1.1376 | val bpb 1.6414step  3072 /  4096 | train loss 1.1336 | val bpb 1.6305step  3200 /  4096 | train loss 1.1281 | val bpb 1.6191step  3328 /  4096 | train loss 1.1166 | val bpb 1.6095step  3456 /  4096 | train loss 1.1024 | val bpb 1.5961step  3584 /  4096 | train loss 1.0997 | val bpb 1.5864step  3712 /  4096 | train loss 1.0901 | val bpb 1.5760step  3840 /  4096 | train loss 1.0825 | val bpb 1.5652step  3968 /  4096 | train loss 1.0838 | val bpb 1.5586step  4096 /  4096 | train loss 1.0710 | val bpb 1.5531
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a closer and to the surprised. The bucket a big said not up and friends. The boy wanted to get home. They were sad and said, "I would and the race."
+The dog named Anna saw a big bird was surprised the could and said, "That is o
+
+sample 2: Once upon a time, there was a little boy named Tom were very happy. They were said, "What is the park with her mom and said, "We are you doing?" The dragon says."
+The dog was so happy and said, "Yes, I want to clean and said, "I want to the special and sa
+
+sample 3: Once there was a little boy named Ben was sad. He thought the could room, "Can I have you."
+Sara said, "Tim, I want to see wish and played to stop the park. He was so happy to help the water.
+

@@ -1,0 +1,6 @@
+sgd     : best lr 2, val bpb 1.3191 (seeds 1.3144-1.3242), train time 32.2s
+momentum: best lr 0.707, val bpb 1.2171 (seeds 1.2166-1.2179), train time 32.0s
+adam    : best lr 0.01, val bpb 1.1757 (seeds 1.1727-1.1778), train time 33.0s
+adamw   : best lr 0.01, val bpb 1.1833 (seeds 1.1824-1.1848), train time 33.1s
+lion    : best lr 0.00125, val bpb 1.2258 (seeds 1.2178-1.2311), train time 32.6s
+muon    : best lr 0.02, val bpb 1.1627 (seeds 1.1613-1.1636), train time 39.9s

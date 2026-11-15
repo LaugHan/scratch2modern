@@ -1,0 +1,10 @@
+context  char    : val bpb 2.6434
+context  byte    : val bpb 2.6230
+context  bpe512  : val bpb 1.8487
+context  bpe1024 : val bpb 1.5065
+context  bpe4096 : val bpb 1.2001
+params   char    : val bpb 1.5225
+params   byte    : val bpb 1.5531
+params   bpe512  : val bpb 1.2657
+params   bpe1024 : val bpb 1.1727
+params   bpe4096 : val bpb 1.2001

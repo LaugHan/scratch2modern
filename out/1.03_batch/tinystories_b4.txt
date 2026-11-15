@@ -1,0 +1,13 @@
+num docs: 27629
+vocab size: 89
+train tokens: 19882286, val tokens: 2213008
+num params: 10016
+batch size: 4, steps: 4096
+step   128 /  4096 | train loss 2.5667step   256 /  4096 | train loss 2.3387step   384 /  4096 | train loss 2.3292step   512 /  4096 | train loss 2.3154step   640 /  4096 | train loss 2.3032step   768 /  4096 | train loss 2.2849step   896 /  4096 | train loss 2.2733step  1024 /  4096 | train loss 2.2522step  1152 /  4096 | train loss 2.2310step  1280 /  4096 | train loss 2.1805step  1408 /  4096 | train loss 2.1398step  1536 /  4096 | train loss 2.1086step  1664 /  4096 | train loss 2.0752step  1792 /  4096 | train loss 2.0335step  1920 /  4096 | train loss 2.0149step  2048 /  4096 | train loss 1.9951step  2176 /  4096 | train loss 1.9837step  2304 /  4096 | train loss 1.9566step  2432 /  4096 | train loss 1.9471step  2560 /  4096 | train loss 1.9410step  2688 /  4096 | train loss 1.9169step  2816 /  4096 | train loss 1.8971step  2944 /  4096 | train loss 1.9014step  3072 /  4096 | train loss 1.8805step  3200 /  4096 | train loss 1.8671step  3328 /  4096 | train loss 1.8533step  3456 /  4096 | train loss 1.8401step  3584 /  4096 | train loss 1.8308step  3712 /  4096 | train loss 1.8287step  3840 /  4096 | train loss 1.8236step  3968 /  4096 | train loss 1.8099step  4096 /  4096 | train loss 1.8079
+--- inference (new, hallucinated stories) ---
+sample 1: Oe day, the lided to and sant the bug the tould the and to ave fun was and the play with he happy and and aid, "Tim som was non and sand a to ait and her and frond the he bre to the wit his to and greame. It was a dalllke big ar was ling it and friend sha
+
+sample 2: Onaye, the the sor the sand sa for the to cand lit the mowared her and the then for the help acher. At the awas sounght the sa dots and was dad a the and sare han the care is hom. The weas to oor. He da for the the bicle the and bet a what it to the to wa
+
+sample 3: One da don a big and with sooun thad the cous wand to and to was sowny help to the dis oot he sthe fellp to the for and the he rot the the aints and to and big and ploy hant ot ime the a and and was sa big and the and the and the to ad in a play tome he w
+

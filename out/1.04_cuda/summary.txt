@@ -1,0 +1,8 @@
+CPU batch  1: val loss 1.7483, train time 93.5s, tokens/s 44881
+CPU batch  4: val loss 1.7937, train time 137.4s, tokens/s 30526
+CPU batch 16: val loss 2.1452, train time 341.3s, tokens/s 12290
+CPU batch 64: val loss 2.2739, train time 361.6s, tokens/s 11598
+GPU batch  1: val loss 1.7483, train time 52.8s, tokens/s 79484
+GPU batch  4: val loss 1.7937, train time 14.9s, tokens/s 281248
+GPU batch 16: val loss 2.1452, train time 5.6s, tokens/s 750350
+GPU batch 64: val loss 2.2739, train time 4.4s, tokens/s 950378

@@ -1,0 +1,27 @@
+num docs: 32033
+vocab size: 27
+train tokens: 205281, val tokens: 22867
+num params: 4192
+batch size: 1, steps: 16384
+step   512 / 16384 | train loss 2.5782step  1024 / 16384 | train loss 2.5033step  1536 / 16384 | train loss 2.4456step  2048 / 16384 | train loss 2.4426step  2560 / 16384 | train loss 2.4465step  3072 / 16384 | train loss 2.4205step  3584 / 16384 | train loss 2.4077step  4096 / 16384 | train loss 2.3670step  4608 / 16384 | train loss 2.3888step  5120 / 16384 | train loss 2.3827step  5632 / 16384 | train loss 2.3865step  6144 / 16384 | train loss 2.3663step  6656 / 16384 | train loss 2.3652step  7168 / 16384 | train loss 2.3604step  7680 / 16384 | train loss 2.3495step  8192 / 16384 | train loss 2.3388step  8704 / 16384 | train loss 2.3415step  9216 / 16384 | train loss 2.3277step  9728 / 16384 | train loss 2.3331step 10240 / 16384 | train loss 2.3113step 10752 / 16384 | train loss 2.3053step 11264 / 16384 | train loss 2.3225step 11776 / 16384 | train loss 2.2981step 12288 / 16384 | train loss 2.2964step 12800 / 16384 | train loss 2.3039step 13312 / 16384 | train loss 2.2841step 13824 / 16384 | train loss 2.2622step 14336 / 16384 | train loss 2.2624step 14848 / 16384 | train loss 2.2629step 15360 / 16384 | train loss 2.2579step 15872 / 16384 | train loss 2.2382step 16384 / 16384 | train loss 2.2325
+--- inference (new, hallucinated names) ---
+sample  1: kelyn
+sample  2: annori
+sample  3: aina
+sample  4: aris
+sample  5: nakai
+sample  6: karick
+sample  7: shalyn
+sample  8: naya
+sample  9: carin
+sample 10: ana
+sample 11: kyleen
+sample 12: noren
+sample 13: maran
+sample 14: aleyn
+sample 15: madia
+sample 16: kendis
+sample 17: kani
+sample 18: mara
+sample 19: alena
+sample 20: anose

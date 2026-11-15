@@ -1,0 +1,8 @@
+names batch  1: val loss 2.2608, train time 19.3s, tokens/s 13550
+names batch  4: val loss 2.2439, train time 5.8s, tokens/s 45586
+names batch 16: val loss 2.2578, train time 2.3s, tokens/s 116333
+names batch 64: val loss 2.3102, train time 1.3s, tokens/s 198399
+tinystories batch  1: val loss 1.7483, train time 93.5s, tokens/s 44881
+tinystories batch  4: val loss 1.7937, train time 137.4s, tokens/s 30526
+tinystories batch 16: val loss 2.1452, train time 341.3s, tokens/s 12290
+tinystories batch 64: val loss 2.2739, train time 361.6s, tokens/s 11598

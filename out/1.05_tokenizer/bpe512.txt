@@ -1,0 +1,25 @@
+tokenizer: bpe512, vocab size: 512, train tokens: 8262052, val tokens: 169774
+num params: 23552 (16384 in wte and lm_head)
+bytes per token: 2.41
+step   128 /  4096 | train loss 3.9337 | val bpb 2.0866step   256 /  4096 | train loss 3.4354 | val bpb 2.0398step   384 /  4096 | train loss 3.3865 | val bpb 2.0170step   512 /  4096 | train loss 3.3590 | val bpb 2.0048step   640 /  4096 | train loss 3.3335 | val bpb 1.9938step   768 /  4096 | train loss 3.3118 | val bpb 1.9826step   896 /  4096 | train loss 3.3035 | val bpb 1.9766step  1024 /  4096 | train loss 3.2967 | val bpb 1.9689step  1152 /  4096 | train loss 3.2868 | val bpb 1.9621step  1280 /  4096 | train loss 3.2694 | val bpb 1.9557step  1408 /  4096 | train loss 3.2504 | val bpb 1.9457step  1536 /  4096 | train loss 3.2453 | val bpb 1.9418step  1664 /  4096 | train loss 3.2172 | val bpb 1.9279step  1792 /  4096 | train loss 3.2140 | val bpb 1.9225step  1920 /  4096 | train loss 3.2087 | val bpb 1.9150step  2048 /  4096 | train loss 3.1833 | val bpb 1.9075step  2176 /  4096 | train loss 3.1773 | val bpb 1.8994step  2304 /  4096 | train loss 3.1664 | val bpb 1.8901step  2432 /  4096 | train loss 3.1514 | val bpb 1.8836step  2560 /  4096 | train loss 3.1343 | val bpb 1.8826step  2688 /  4096 | train loss 3.1251 | val bpb 1.8744step  2816 /  4096 | train loss 3.1128 | val bpb 1.8676step  2944 /  4096 | train loss 3.1089 | val bpb 1.8618step  3072 /  4096 | train loss 3.0994 | val bpb 1.8576step  3200 /  4096 | train loss 3.0905 | val bpb 1.8531step  3328 /  4096 | train loss 3.0954 | val bpb 1.8485step  3456 /  4096 | train loss 3.0855 | val bpb 1.8463step  3584 /  4096 | train loss 3.0683 | val bpb 1.8429step  3712 /  4096 | train loss 3.0726 | val bpb 1.8387step  3840 /  4096 | train loss 3.0665 | val bpb 1.8366step  3968 /  4096 | train loss 3.0598 | val bpb 1.8345step  4096 /  4096 | train loss 3.0540 | val bpb 1.8335
+--- inference (new, hallucinated stories) ---
+sample 1: One day, a little girl named Lily. She wanted to see it and they were very tave.
+Anny hugged. The made Canty and had big, but she was a big gre it. The pufthanth told the blow. Ands was very make. Finy found a pastice.
+Mia was so happy to playing. The little girl was very happy. She was so happy and put the bave. They wind the tried, but she saw a big tree. They had a big chings.
+
+sample 2: Once upon a time, there was a big rab and the food and the caravage. The man, the parthothantop. The rock, he was scared, but he saw a big bround. He wanted to helped to play with the park.
+Then, and laugged. He fices and said, "You can help you want to my. Cankays, I have a letter and the mauggicte and some. In, he worry to try. You can't find the red.
+"Ben," said, I'm it," said to you help you have a me.
+But each the kee. Welly dady and Sue was happy to play with her hurt. When the find it was to help.
+"It was not remle. She mus and find the putice. They excave in the pace.
+The came
+
+sample 3: Once upon a time, there was a big flower. One day, the car. The when they played together and was very happy. It was very happy. It draby and started to the pach, and he had a big, and the par.
+One day, a little girl, hearden. She had a big, so happy. She wanted to sorry. She was very sad. She knowed and said, "Timpled, I'm," she glk. It's Joes, I can help," Bo," Tom.
+"Well, I willy.
+"Whed," said.
+The little girl,"Whank you?" Then was not make the pices.
+Then, Lily and put the couse, but the ving with the prelow. She hop. She gice the water. She was not knowed her brop.
+"Lily. Wellas," Lily, 
+"Lo," Lu
+

@@ -1,0 +1,13 @@
+num docs: 27629
+vocab size: 89
+train tokens: 19882286, val tokens: 2213008
+num params: 10016
+batch size: 16, steps: 1024
+step    32 /  1024 | train loss 2.9802step    64 /  1024 | train loss 2.3999step    96 /  1024 | train loss 2.3583step   128 /  1024 | train loss 2.3367step   160 /  1024 | train loss 2.3256step   192 /  1024 | train loss 2.3148step   224 /  1024 | train loss 2.3094step   256 /  1024 | train loss 2.3107step   288 /  1024 | train loss 2.3122step   320 /  1024 | train loss 2.2988step   352 /  1024 | train loss 2.2949step   384 /  1024 | train loss 2.2963step   416 /  1024 | train loss 2.2858step   448 /  1024 | train loss 2.2739step   480 /  1024 | train loss 2.2758step   512 /  1024 | train loss 2.2665step   544 /  1024 | train loss 2.2691step   576 /  1024 | train loss 2.2569step   608 /  1024 | train loss 2.2569step   640 /  1024 | train loss 2.2507step   672 /  1024 | train loss 2.2362step   704 /  1024 | train loss 2.2291step   736 /  1024 | train loss 2.2260step   768 /  1024 | train loss 2.2099step   800 /  1024 | train loss 2.2040step   832 /  1024 | train loss 2.1986step   864 /  1024 | train loss 2.1812step   896 /  1024 | train loss 2.1758step   928 /  1024 | train loss 2.1709step   960 /  1024 | train loss 2.1690step   992 /  1024 | train loss 2.1574step  1024 /  1024 | train loss 2.1624
+--- inference (new, hallucinated stories) ---
+sample 1:  an to the lay rithed the pond he ay an thelo the he thane ay sarind thed ar thend dour. The and acay, s a a thand she ay tand basand we alor als d to to ato cithe theand at anghind tir hind the santhe thinded he he she acand ay wand ake he ar s. The The 
+
+sample 2:  a touly the wapy is wared the fring as the sond hand shitild s owait at alpe. The de wand tha mey m waray ay therond souind band walls ud he fund gorand o thand as the thand hond the to the she ne therane coousald bid ter an hin bup ay ather. The tore wa
+
+sample 3:  to the wan ad mo thethe sis the s ano we tou wand the the tho toothes bin shee. Til s lard and go hareand as the thand tere sangale t t to beto athed fer herin fo isto o co sshe therer ame the ho the ange bererapp ther ar ind aithe ame an be theisto ok t
+

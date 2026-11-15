@@ -1,0 +1,18 @@
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 40976 (32768 in wte and lm_head)
+bytes per token: 3.16, context: 321 tokens = 1016 bytes
+step   128 /  4096 | train loss 4.3818 | val bpb 1.7420step   256 /  4096 | train loss 3.7614 | val bpb 1.6899step   384 /  4096 | train loss 3.6666 | val bpb 1.6719step   512 /  4096 | train loss 3.6434 | val bpb 1.6571step   640 /  4096 | train loss 3.6130 | val bpb 1.6447step   768 /  4096 | train loss 3.5989 | val bpb 1.6353step   896 /  4096 | train loss 3.5721 | val bpb 1.6293step  1024 /  4096 | train loss 3.5532 | val bpb 1.6208step  1152 /  4096 | train loss 3.5360 | val bpb 1.6080step  1280 /  4096 | train loss 3.5071 | val bpb 1.5957step  1408 /  4096 | train loss 3.4833 | val bpb 1.5856step  1536 /  4096 | train loss 3.4688 | val bpb 1.5754step  1664 /  4096 | train loss 3.4391 | val bpb 1.5687step  1792 /  4096 | train loss 3.4345 | val bpb 1.5640step  1920 /  4096 | train loss 3.4137 | val bpb 1.5573step  2048 /  4096 | train loss 3.4103 | val bpb 1.5509step  2176 /  4096 | train loss 3.3861 | val bpb 1.5472step  2304 /  4096 | train loss 3.3819 | val bpb 1.5456step  2432 /  4096 | train loss 3.3664 | val bpb 1.5410step  2560 /  4096 | train loss 3.3664 | val bpb 1.5370step  2688 /  4096 | train loss 3.3574 | val bpb 1.5337step  2816 /  4096 | train loss 3.3559 | val bpb 1.5304step  2944 /  4096 | train loss 3.3529 | val bpb 1.5268step  3072 /  4096 | train loss 3.3460 | val bpb 1.5229step  3200 /  4096 | train loss 3.3391 | val bpb 1.5204step  3328 /  4096 | train loss 3.3286 | val bpb 1.5185step  3456 /  4096 | train loss 3.3221 | val bpb 1.5158step  3584 /  4096 | train loss 3.3215 | val bpb 1.5132step  3712 /  4096 | train loss 3.3159 | val bpb 1.5112step  3840 /  4096 | train loss 3.3117 | val bpb 1.5092step  3968 /  4096 | train loss 3.2984 | val bpb 1.5073step  4096 /  4096 | train loss 3.3038 | val bpb 1.5065
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Lily. She liked to play with her. She was happy and her mom.
+Sammembered the park. She wanted to the wildress. She was very excited and she was very faster. 
+Lily thought, "I am a big, Lily! It's go to bef!" Lily said, "I'm we can play with me!"
+Lily was so happy and Tom and said, "I amass. I am sorry, I am a big tree!"
+Just. They played, but they all day, and play with the park. They were so happy. They played together. They played together and they played together.
+
+sample 2: Once upon a time, there was a little boy named Tim. Tim was a night and saw a big, a big, heary. Tim was very happy to play with the park. Tim was very pretty.
+Tim said, "Max, something unexpected happened. It's go to play with the park, trying. The mone was a big dog, and fun, and the sun in a big tree. The cat was happy to play with the big tree.
+The next day, Tim was very happy. The cat was not have his rains. Tim was sad. They played together. The dog was happy.
+
+sample 3: Once upon a time, there was a boy named Tim. Tim was very pretty. Tim started to play with a big tree. The bird was very happy and had a big, and a big tree.
+One day, Spot went to the bird in the sky. The bird was so he had a big bird was a big tree. He was not fir. He was very happy. He said, "I like to de! You are not. I want to hurt you for you have to the bird's fun!" Tim said. They had a great day. Tim and said, "Yes, Tim. You are you are good. I am a new friend, you, a big bird.
+

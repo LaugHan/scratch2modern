@@ -1,0 +1,13 @@
+num docs: 27629
+vocab size: 89
+train tokens: 19882286, val tokens: 2213008
+num params: 10016
+batch size: 64, steps: 256
+step     8 /   256 | train loss 3.8626step    16 /   256 | train loss 2.8674step    24 /   256 | train loss 2.6193step    32 /   256 | train loss 2.4965step    40 /   256 | train loss 2.4334step    48 /   256 | train loss 2.3959step    56 /   256 | train loss 2.3780step    64 /   256 | train loss 2.3670step    72 /   256 | train loss 2.3626step    80 /   256 | train loss 2.3447step    88 /   256 | train loss 2.3371step    96 /   256 | train loss 2.3374step   104 /   256 | train loss 2.3281step   112 /   256 | train loss 2.3146step   120 /   256 | train loss 2.3173step   128 /   256 | train loss 2.3073step   136 /   256 | train loss 2.3167step   144 /   256 | train loss 2.3072step   152 /   256 | train loss 2.3091step   160 /   256 | train loss 2.3114step   168 /   256 | train loss 2.2992step   176 /   256 | train loss 2.3016step   184 /   256 | train loss 2.2998step   192 /   256 | train loss 2.2923step   200 /   256 | train loss 2.2943step   208 /   256 | train loss 2.2924step   216 /   256 | train loss 2.2844step   224 /   256 | train loss 2.2858step   232 /   256 | train loss 2.2871step   240 /   256 | train loss 2.2896step   248 /   256 | train loss 2.2798step   256 /   256 | train loss 2.2925
+--- inference (new, hallucinated stories) ---
+sample 1: Ond so the ang hed to the lithe thet an the the the and lom wand the thede the she ay the the sapa her the alon she too t t he a the ere alll aithe tofrin too to the thead the tound uthe wand pe therd andad waind he san a and ay wand ad the an thee le he 
+
+sample 2: On touly t t there the thend and poun the bind he and they and anthere the there ainoute the a ply o war we wan tounge the the frey aroly be ang he the fre wa ime t the the he wand, theras the sand thed bind toto to t to t an fun ay a wa thee tous totheth
+
+sample 3: Ond me his alald and withe the as ad t wame t wand the the thinereeroy an ane the the the an heand cand and the and ane t wand tor the t to anto athe than he the ind wind as she and the ale t thethe the the fund to the a t lind asan amom ad s the toule at
+

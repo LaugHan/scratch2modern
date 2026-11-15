@@ -1,0 +1,6 @@
+char    : val bpb 2.3919, text seen 16.8 MB, train time 21.9s
+byte    : val bpb 2.3804, text seen 16.8 MB, train time 22.7s
+bpe512  : val bpb 1.8335, text seen 40.4 MB, train time 23.6s
+bpe1024 : val bpb 1.4982, text seen 53.1 MB, train time 27.2s
+bpe4096 : val bpb 1.2001, text seen 66.5 MB, train time 59.6s
+gpt2    : val bpb 1.1689, text seen 67.8 MB, train time 409.4s

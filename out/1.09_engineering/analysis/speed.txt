@@ -1,0 +1,30 @@
+width    48 baseline  :   3.508 ms/步,   1167.6k tokens/s
+width    48 no_sync   :   3.249 ms/步,   1260.5k tokens/s
+width    48 fused_adam:   2.854 ms/步,   1435.0k tokens/s
+width    48 sdpa      :   2.525 ms/步,   1621.9k tokens/s
+width    48 compile   :   1.461 ms/步,   2803.2k tokens/s
+width    48 cudagraph :   0.779 ms/步,   5257.4k tokens/s
+width   192 baseline  :   3.271 ms/步,   1252.4k tokens/s
+width   192 no_sync   :   3.220 ms/步,   1272.0k tokens/s
+width   192 fused_adam:   2.877 ms/步,   1423.6k tokens/s
+width   192 sdpa      :   2.254 ms/步,   1817.2k tokens/s
+width   192 compile   :   1.421 ms/步,   2882.0k tokens/s
+width   192 cudagraph :   0.818 ms/步,   5004.3k tokens/s
+width   768 baseline  :   3.985 ms/步,   1027.8k tokens/s
+width   768 no_sync   :   3.474 ms/步,   1178.9k tokens/s
+width   768 fused_adam:   3.418 ms/步,   1198.4k tokens/s
+width   768 sdpa      :   3.039 ms/步,   1347.6k tokens/s
+width   768 compile   :   2.389 ms/步,   1714.2k tokens/s
+width   768 cudagraph :   2.478 ms/步,   1652.7k tokens/s
+width  1536 baseline  :  10.629 ms/步,    385.4k tokens/s
+width  1536 no_sync   :  10.682 ms/步,    383.4k tokens/s
+width  1536 fused_adam:  10.383 ms/步,    394.5k tokens/s
+width  1536 sdpa      :  10.238 ms/步,    400.1k tokens/s
+width  1536 compile   :   9.009 ms/步,    454.6k tokens/s
+width  1536 cudagraph :   9.198 ms/步,    445.3k tokens/s
+width    48 baseline  : 每步   269 个 kernel,   255 次启动调用
+width    48 no_sync   : 每步   273 个 kernel,   261 次启动调用
+width    48 fused_adam: 每步   212 个 kernel,   200 次启动调用
+width    48 sdpa      : 每步   190 个 kernel,   180 次启动调用
+width    48 compile   : 每步    85 个 kernel,    83 次启动调用
+width    48 cudagraph : 每步    97 个 kernel,    12 次启动调用

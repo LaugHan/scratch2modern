@@ -1,0 +1,20 @@
+tokenizer: gpt2, vocab size: 50257, train tokens: 4921005, val tokens: 101231
+num params: 1615392 (1608224 in wte and lm_head)
+bytes per token: 4.04
+step   128 /  4096 | train loss 5.0423 | val bpb 1.4685step   256 /  4096 | train loss 3.9939 | val bpb 1.4060step   384 /  4096 | train loss 3.8501 | val bpb 1.3736step   512 /  4096 | train loss 3.7897 | val bpb 1.3501step   640 /  4096 | train loss 3.7091 | val bpb 1.3179step   768 /  4096 | train loss 3.6289 | val bpb 1.2981step   896 /  4096 | train loss 3.5855 | val bpb 1.2783step  1024 /  4096 | train loss 3.5394 | val bpb 1.2674step  1152 /  4096 | train loss 3.5079 | val bpb 1.2584step  1280 /  4096 | train loss 3.4648 | val bpb 1.2485step  1408 /  4096 | train loss 3.4514 | val bpb 1.2414step  1536 /  4096 | train loss 3.4198 | val bpb 1.2340step  1664 /  4096 | train loss 3.4063 | val bpb 1.2289step  1792 /  4096 | train loss 3.3972 | val bpb 1.2212step  1920 /  4096 | train loss 3.3758 | val bpb 1.2174step  2048 /  4096 | train loss 3.3613 | val bpb 1.2149step  2176 /  4096 | train loss 3.3379 | val bpb 1.2099step  2304 /  4096 | train loss 3.3251 | val bpb 1.2045step  2432 /  4096 | train loss 3.3215 | val bpb 1.2011step  2560 /  4096 | train loss 3.3145 | val bpb 1.1973step  2688 /  4096 | train loss 3.2979 | val bpb 1.1954step  2816 /  4096 | train loss 3.2986 | val bpb 1.1914step  2944 /  4096 | train loss 3.2699 | val bpb 1.1873step  3072 /  4096 | train loss 3.2706 | val bpb 1.1863step  3200 /  4096 | train loss 3.2612 | val bpb 1.1818step  3328 /  4096 | train loss 3.2537 | val bpb 1.1796step  3456 /  4096 | train loss 3.2513 | val bpb 1.1776step  3584 /  4096 | train loss 3.2319 | val bpb 1.1748step  3712 /  4096 | train loss 3.2376 | val bpb 1.1729step  3840 /  4096 | train loss 3.2307 | val bpb 1.1716step  3968 /  4096 | train loss 3.2256 | val bpb 1.1698step  4096 /  4096 | train loss 3.2079 | val bpb 1.1689
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time there, there lived in a big town, there lived in a big town, green sea. One day, the bird saw a big cat. The dog wanted to see the dog. The cat was very happy. The dog was happy and the dog and had fun.
+The dog came to play with the dog. They were happy and played together. They had lots of fun. They learned that. They learned that sometimes.
+
+sample 2: One forest, a little girl named Amy. She was very happy. She liked to play in the garden. She was so happy to have a big, but it was a little girl named Lily. She loved to play with her cars.
+One day, the bird saw a big ball in the park. The bird was a big, and the bird. She saw the bird to the tree.
+A little bird came to the house. It was very happy. The bird was sad. It was very happy and happy. The bird was very sad. The bird was very happy. The bird was happy and happy.
+The moral of the story is to be careful.
+
+sample 3: Once upon a time there, there was a little girl named Lily. She loved to play with her toy. It would play with her toys.
+One day, the bird saw a big, shiny and a big, a little girl named Lily. She had a lot of the house. She was very happy and had a good friend.
+"Hi, I am a little girl?" she said, "I want to help you help you help you can keep the other people. I can you."
+The little girl said, "Yes, you can use my friend, but we can't fly."
+The boy said, "I am sorry. I can help you." The man was very happy. The man was very happy.
+The moral of the story is that sharing is not to be fun.
+

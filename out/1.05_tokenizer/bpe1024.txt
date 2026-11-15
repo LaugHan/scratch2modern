@@ -1,0 +1,23 @@
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 39936 (32768 in wte and lm_head)
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.4251 | val bpb 1.7554step   256 /  4096 | train loss 3.7621 | val bpb 1.7010step   384 /  4096 | train loss 3.6854 | val bpb 1.6646step   512 /  4096 | train loss 3.6451 | val bpb 1.6509step   640 /  4096 | train loss 3.6118 | val bpb 1.6361step   768 /  4096 | train loss 3.5725 | val bpb 1.6212step   896 /  4096 | train loss 3.5412 | val bpb 1.6029step  1024 /  4096 | train loss 3.5114 | val bpb 1.5931step  1152 /  4096 | train loss 3.4969 | val bpb 1.5818step  1280 /  4096 | train loss 3.4752 | val bpb 1.5755step  1408 /  4096 | train loss 3.4348 | val bpb 1.5677step  1536 /  4096 | train loss 3.4443 | val bpb 1.5617step  1664 /  4096 | train loss 3.4258 | val bpb 1.5567step  1792 /  4096 | train loss 3.4106 | val bpb 1.5523step  1920 /  4096 | train loss 3.3929 | val bpb 1.5442step  2048 /  4096 | train loss 3.3883 | val bpb 1.5433step  2176 /  4096 | train loss 3.3783 | val bpb 1.5364step  2304 /  4096 | train loss 3.3590 | val bpb 1.5349step  2432 /  4096 | train loss 3.3616 | val bpb 1.5320step  2560 /  4096 | train loss 3.3631 | val bpb 1.5274step  2688 /  4096 | train loss 3.3454 | val bpb 1.5246step  2816 /  4096 | train loss 3.3430 | val bpb 1.5213step  2944 /  4096 | train loss 3.3551 | val bpb 1.5181step  3072 /  4096 | train loss 3.3289 | val bpb 1.5154step  3200 /  4096 | train loss 3.3154 | val bpb 1.5131step  3328 /  4096 | train loss 3.3183 | val bpb 1.5099step  3456 /  4096 | train loss 3.3105 | val bpb 1.5078step  3584 /  4096 | train loss 3.2925 | val bpb 1.5049step  3712 /  4096 | train loss 3.2959 | val bpb 1.5033step  3840 /  4096 | train loss 3.2913 | val bpb 1.5021step  3968 /  4096 | train loss 3.2884 | val bpb 1.4994step  4096 /  4096 | train loss 3.2726 | val bpb 1.4982
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Lily. She loved to play with her toy.
+One day, a little girl came to the day, she saw her mom. She saw her toys and said, "Benny, I am so here you!" Doed the bush. She was very happy. She said, "That is not a biggange!" she said. She was so they were another.
+Sue was so happy. She could not very happy. She said, "I'm sorry, I want to have to help you. I will talk, but you. I will replious you. You are you can help you."
+Thenger and the big boats. He says, "Thank you, my friend!" They are cool. He is okay.
+The little girl is a big tree. She says, "Thank younger. She is okay, and the kind. She takes. It is a right. She is a big, and mater. She put the bunny and felt sad.
+Lily and the door, Lily was a big tree. She had a big tree. She was
+
+sample 2: Once upon a time, there was a big, there was a cookies. The town, he saw a big and wanted to join.
+One day, a little girl named Sue went to the park. Sue wanted to go back to the big dog.
+Lily's mom said, "Hello you, I have to be a big stuck. I have to the park! I am a big, and show you, but you." The old and Sue was ey. They all lived happily ever after. They were happy and not know what to play with the tir.
+One day, they found a little boy named Sue, "I am a big, but you can't sleep it." Tim said, "Hi, but I am sorry, what happened. The bree are happy!"
+Then't want to the piece. He was very happy. He said, "What!"
+The little girl was not want to the rabbit. She was happy and played with her of her mouted. She put the cuts. Sue was very happy.
+After playing, Lily was sad. She said, "Thank you, but I could not being you.
+
+sample 3: One there was a little bird named Tim, "Yes, but well. It is a big, but it is not like you can't for it.
+Tim, the birds for the humbereaky. He was so happy and played with his friends. They were so much fun and played with their friends. They were happy and surprised.
+

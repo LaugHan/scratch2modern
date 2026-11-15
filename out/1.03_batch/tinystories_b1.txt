@@ -1,0 +1,13 @@
+num docs: 27629
+vocab size: 89
+train tokens: 19882286, val tokens: 2213008
+num params: 10016
+batch size: 1, steps: 16384
+step   512 / 16384 | train loss 2.4469step  1024 / 16384 | train loss 2.3373step  1536 / 16384 | train loss 2.3279step  2048 / 16384 | train loss 2.3158step  2560 / 16384 | train loss 2.3039step  3072 / 16384 | train loss 2.2810step  3584 / 16384 | train loss 2.2711step  4096 / 16384 | train loss 2.2483step  4608 / 16384 | train loss 2.2149step  5120 / 16384 | train loss 2.1608step  5632 / 16384 | train loss 2.1211step  6144 / 16384 | train loss 2.0953step  6656 / 16384 | train loss 2.0663step  7168 / 16384 | train loss 2.0249step  7680 / 16384 | train loss 2.0062step  8192 / 16384 | train loss 1.9888step  8704 / 16384 | train loss 1.9729step  9216 / 16384 | train loss 1.9470step  9728 / 16384 | train loss 1.9326step 10240 / 16384 | train loss 1.9198step 10752 / 16384 | train loss 1.8958step 11264 / 16384 | train loss 1.8751step 11776 / 16384 | train loss 1.8726step 12288 / 16384 | train loss 1.8548step 12800 / 16384 | train loss 1.8411step 13312 / 16384 | train loss 1.8193step 13824 / 16384 | train loss 1.8103step 14336 / 16384 | train loss 1.7963step 14848 / 16384 | train loss 1.7930step 15360 / 16384 | train loss 1.7832step 15872 / 16384 | train loss 1.7647step 16384 / 16384 | train loss 1.7649
+--- inference (new, hallucinated stories) ---
+sample 1: kxe time had was to the ooore the bug the to doot play and ay sand the and the ound with to play a hower had the the was ay friend saile and amed big friends and the skit are sto o to the he the reat beart to cat maing cal in funt the bird the pay the it 
+
+sample 2: kxean and and dand the salll a big the to he to the sord. The sanked saw ant to he house her a haw s was with the to she and barkerd to want he found carn and said, "Whe said fund the to the ping hat big the sto and the big fely have ay and the to to the 
+
+sample 3: kxe timere a big and were to the sad say and Sue lite and stoy to to was a sto the for happped in and big the to he and the he sto sand and and a the the big the in tro said not and the and the loou the the his lit the bat he the to cat and sand the dit t
+

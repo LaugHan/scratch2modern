@@ -1,0 +1,18 @@
+# data
+data/
+input.txt
+
+# checkpoints
+*.pt
+*.bin
+
+# python
+__pycache__/
+.venv/
+
+# os
+.DS_Store
+
+# 计划草稿（不公开）
+plan.md
+plan.v0.md

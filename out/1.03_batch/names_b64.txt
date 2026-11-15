@@ -1,0 +1,27 @@
+num docs: 32033
+vocab size: 27
+train tokens: 205281, val tokens: 22867
+num params: 4192
+batch size: 64, steps: 256
+step     8 /   256 | train loss 2.9999step    16 /   256 | train loss 2.6989step    24 /   256 | train loss 2.5704step    32 /   256 | train loss 2.5383step    40 /   256 | train loss 2.5145step    48 /   256 | train loss 2.4801step    56 /   256 | train loss 2.4420step    64 /   256 | train loss 2.3798step    72 /   256 | train loss 2.4001step    80 /   256 | train loss 2.3887step    88 /   256 | train loss 2.3862step    96 /   256 | train loss 2.3630step   104 /   256 | train loss 2.3669step   112 /   256 | train loss 2.3698step   120 /   256 | train loss 2.3519step   128 /   256 | train loss 2.3428step   136 /   256 | train loss 2.3556step   144 /   256 | train loss 2.3446step   152 /   256 | train loss 2.3394step   160 /   256 | train loss 2.3301step   168 /   256 | train loss 2.3267step   176 /   256 | train loss 2.3360step   184 /   256 | train loss 2.3223step   192 /   256 | train loss 2.3245step   200 /   256 | train loss 2.3294step   208 /   256 | train loss 2.3120step   216 /   256 | train loss 2.2954step   224 /   256 | train loss 2.2946step   232 /   256 | train loss 2.3013step   240 /   256 | train loss 2.3025step   248 /   256 | train loss 2.2763step   256 /   256 | train loss 2.2886
+--- inference (new, hallucinated names) ---
+sample  1: jalyn
+sample  2: annyle
+sample  3: adinia
+sample  4: brrian
+sample  5: ameer
+sample  6: arynna
+sample  7: sanne
+sample  8: aylis
+sample  9: kaina
+sample 10: kyare
+sample 11: keyler
+sample 12: leran
+sample 13: alevin
+sample 14: baren
+sample 15: manne
+sample 16: kariy
+sample 17: arayan
+sample 18: elian
+sample 19: marien
+sample 20: kavin

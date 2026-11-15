@@ -1,0 +1,2 @@
+step,tokens,text_bytes,time,lr,train_loss,train_bpb,val_bpb,grad_norm_mean,grad_norm_max,clipped_frac
+0,0,0,0,0.04,,3.248176,3.243927,,,

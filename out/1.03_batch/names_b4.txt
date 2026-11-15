@@ -1,0 +1,27 @@
+num docs: 32033
+vocab size: 27
+train tokens: 205281, val tokens: 22867
+num params: 4192
+batch size: 4, steps: 4096
+step   128 /  4096 | train loss 2.6000step   256 /  4096 | train loss 2.4766step   384 /  4096 | train loss 2.4128step   512 /  4096 | train loss 2.4111step   640 /  4096 | train loss 2.4055step   768 /  4096 | train loss 2.3809step   896 /  4096 | train loss 2.3636step  1024 /  4096 | train loss 2.3297step  1152 /  4096 | train loss 2.3471step  1280 /  4096 | train loss 2.3444step  1408 /  4096 | train loss 2.3386step  1536 /  4096 | train loss 2.3204step  1664 /  4096 | train loss 2.3269step  1792 /  4096 | train loss 2.3229step  1920 /  4096 | train loss 2.3126step  2048 /  4096 | train loss 2.3027step  2176 /  4096 | train loss 2.3083step  2304 /  4096 | train loss 2.2947step  2432 /  4096 | train loss 2.2881step  2560 /  4096 | train loss 2.2741step  2688 /  4096 | train loss 2.2752step  2816 /  4096 | train loss 2.2816step  2944 /  4096 | train loss 2.2634step  3072 /  4096 | train loss 2.2617step  3200 /  4096 | train loss 2.2732step  3328 /  4096 | train loss 2.2627step  3456 /  4096 | train loss 2.2365step  3584 /  4096 | train loss 2.2346step  3712 /  4096 | train loss 2.2386step  3840 /  4096 | train loss 2.2326step  3968 /  4096 | train loss 2.2167step  4096 /  4096 | train loss 2.2117
+--- inference (new, hallucinated names) ---
+sample  1: jalyn
+sample  2: annyle
+sample  3: adilia
+sample  4: devian
+sample  5: ania
+sample  6: lasysia
+sample  7: sanne
+sample  8: avan
+sample  9: rina
+sample 10: aylyn
+sample 11: anitze
+sample 12: darise
+sample 13: railyn
+sample 14: mackar
+sample 15: lenne
+sample 16: kani
+sample 17: lana
+sample 18: alena
+sample 19: anton
+sample 20: kalina

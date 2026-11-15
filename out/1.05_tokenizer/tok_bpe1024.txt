@@ -1,0 +1,5 @@
+merge    1: b' ' + b't' -> b' t' (577468 times)
+merge  257: b'h' + b'ing' -> b'hing' (8949 times)
+merge  513: b' th' + b'an' -> b' than' (3235 times)
+merge  767: b'b' + b'it' -> b'bit' (1730 times)
+bpe1024: vocab 1024, train tokens 6284662, val tokens 129133

@@ -1,0 +1,260 @@
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: sgd, lr 2, state: 0 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.8797 | val bpb 1.8606step   256 /  4096 | train loss 3.8644 | val bpb 1.7013step   384 /  4096 | train loss 3.6791 | val bpb 1.6587step   512 /  4096 | train loss 3.6064 | val bpb 1.6246step   640 /  4096 | train loss 3.5531 | val bpb 1.6028step   768 /  4096 | train loss 3.5033 | val bpb 1.5812step   896 /  4096 | train loss 3.4737 | val bpb 1.5676step  1024 /  4096 | train loss 3.4176 | val bpb 1.5377step  1152 /  4096 | train loss 3.3551 | val bpb 1.5328step  1280 /  4096 | train loss 3.3239 | val bpb 1.4974step  1408 /  4096 | train loss 3.2965 | val bpb 1.4876step  1536 /  4096 | train loss 3.2597 | val bpb 1.4843step  1664 /  4096 | train loss 3.2371 | val bpb 1.4703step  1792 /  4096 | train loss 3.1970 | val bpb 1.4500step  1920 /  4096 | train loss 3.1810 | val bpb 1.4600step  2048 /  4096 | train loss 3.1507 | val bpb 1.4391step  2176 /  4096 | train loss 3.1253 | val bpb 1.4323step  2304 /  4096 | train loss 3.1086 | val bpb 1.4138step  2432 /  4096 | train loss 3.0838 | val bpb 1.4058step  2560 /  4096 | train loss 3.0669 | val bpb 1.3924step  2688 /  4096 | train loss 3.0507 | val bpb 1.3894step  2816 /  4096 | train loss 3.0366 | val bpb 1.3780step  2944 /  4096 | train loss 3.0062 | val bpb 1.3726step  3072 /  4096 | train loss 2.9950 | val bpb 1.3621step  3200 /  4096 | train loss 2.9859 | val bpb 1.3588step  3328 /  4096 | train loss 2.9607 | val bpb 1.3515step  3456 /  4096 | train loss 2.9441 | val bpb 1.3509step  3584 /  4096 | train loss 2.9466 | val bpb 1.3379step  3712 /  4096 | train loss 2.9246 | val bpb 1.3348step  3840 /  4096 | train loss 2.9221 | val bpb 1.3294step  3968 /  4096 | train loss 2.9104 | val bpb 1.3259step  4096 /  4096 | train loss 2.8981 | val bpb 1.3242
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there lived a little girl named Lily. She loved to play with her family. One day, Lily and Lily was very happy. She was very happy. She was very happy.
+Lily went to the park to the park and started to play with her friends. She saw the bager. She wanted to help her friend, Lily.
+Lily's mom saw Benny and said, "What is you. It is puppo there!" She said. She made a painting. She said, "You are a big and a big, Lily. I can't worry, Lily. It is my toy. We can have to be careful."
+Lily and dad said, "I'm glad you. I am sorry."
+Lily and Lily and Ben and Ben and Ben and Lily and Ben. They are happy. They are sorry and share their mom. They are happy. They say sorry. They are happy. They are happy. They learned that they are not good friends.
+
+sample 2: Once upon a time, there was a big sigious cat named Kitty. She loved to play with her friends. She would play with her toy rolls. She had a long.
+One day, Sally saw a big dog named Tim thought it was a big dog. The dog was very cald. Tim was very happy. Tim was very happy. They played with the toy.
+At of the dog, Sam were happy and they played together in the dog and had lots of fun. They played together every day. They played with the dog and had so much fun and had lots of fun.
+
+sample 3: Once upon a time, there was a little boy named Tim. Tim loved to play with his toy with his toy. He liked his toy car. One day, Tim saw a big red ball. He saw a big, bary. He wanted to help the carry.
+Tim's mom said, "Don't want to help you help me?" Tim and said, "Yes, Tim. He wanted to play with his mom. But you can play with me?" Tim smiled and said, "You go home, Tim. You are very happy. You can play with you. Spot. You have to be fun."
+Spot and Tim was happy. He said, "Yes, I can't have to be careful."
+Tim and Tim and Tom and Sam was happy and his mommy and dad. They played with the ball all day. They played together all day.
+
+
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: sgd, lr 2, state: 0 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.8638 | val bpb 1.8510step   256 /  4096 | train loss 3.8720 | val bpb 1.7104step   384 /  4096 | train loss 3.6901 | val bpb 1.6548step   512 /  4096 | train loss 3.5982 | val bpb 1.6213step   640 /  4096 | train loss 3.5345 | val bpb 1.5977step   768 /  4096 | train loss 3.4856 | val bpb 1.5904step   896 /  4096 | train loss 3.4513 | val bpb 1.5667step  1024 /  4096 | train loss 3.3967 | val bpb 1.5371step  1152 /  4096 | train loss 3.3546 | val bpb 1.5152step  1280 /  4096 | train loss 3.3101 | val bpb 1.5043step  1408 /  4096 | train loss 3.2781 | val bpb 1.4938step  1536 /  4096 | train loss 3.2471 | val bpb 1.4714step  1664 /  4096 | train loss 3.2229 | val bpb 1.4571step  1792 /  4096 | train loss 3.1923 | val bpb 1.4434step  1920 /  4096 | train loss 3.1577 | val bpb 1.4456step  2048 /  4096 | train loss 3.1297 | val bpb 1.4202step  2176 /  4096 | train loss 3.1047 | val bpb 1.4102step  2304 /  4096 | train loss 3.0836 | val bpb 1.4082step  2432 /  4096 | train loss 3.0691 | val bpb 1.3902step  2560 /  4096 | train loss 3.0368 | val bpb 1.3823step  2688 /  4096 | train loss 3.0349 | val bpb 1.3931step  2816 /  4096 | train loss 3.0126 | val bpb 1.3703step  2944 /  4096 | train loss 2.9906 | val bpb 1.3652step  3072 /  4096 | train loss 2.9815 | val bpb 1.3528step  3200 /  4096 | train loss 2.9503 | val bpb 1.3475step  3328 /  4096 | train loss 2.9412 | val bpb 1.3409step  3456 /  4096 | train loss 2.9157 | val bpb 1.3347step  3584 /  4096 | train loss 2.9165 | val bpb 1.3291step  3712 /  4096 | train loss 2.8954 | val bpb 1.3239step  3840 /  4096 | train loss 2.8980 | val bpb 1.3199step  3968 /  4096 | train loss 2.8800 | val bpb 1.3168step  4096 /  4096 | train loss 2.8809 | val bpb 1.3144
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little boy named Tim. Tim loved to play with his friends. Tim and his friends were very happy. They played together.
+
+sample 2: Once upon a time, there was a little girl named Lucy. She had a friend, the small bird named Tim. Tim loved to play with his friends. One day, Tim went to the park to play with his ball with his friends. Tim was sad because he did not find something fun.
+Tim wanted to help his friends. They were very happy to play with the ball. They played together every day. Tim and played with their toys. But then, something unexpected happened. The car was not fun. Tim was sad. He did not want to play with the ball.
+Tim's mommy's mom said, "Yes, I will have fun!" Tim was happy. They learned to be careful with the day on the ball. Tim and the ball and the ball and said, "Thank you, Tim! I love you, Tim! This is that here tom. You are depy. You are very good."
+Tim and Sam was happy. He pickly and Sam were scared and they were happy to seek. They said, "Thank you, Tim. We can play together." Tim and Tim and Sam learned that he still have a great day. They learned to be careful.
+
+sample 3: Once upon a time, there was a little girl named Sally. She loved to play with her mom and play with her mom and grass. One day, she saw a little girl named Sue was very sad and said, "I want to play with it." Sue looked at the park. Sue. Sue's mom said, "I can I will help you too."
+"Yes, let's play with it. Tim. "Yes, let's play with your room." Sue said, "Yes, let's okay?" Sue said.
+St the she needed, and shouthind the sell. She said, "Yes, we can please?" Sue said, "Yes, I can have the mone, I can make it. I love you like the please, Sue!" Sue laughed and said, "Yes, let's play with the began to play with the roll. This is the babbit. I love you." They played together and had lots of fun.
+
+
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: momentum, lr 0.707, state: 138240 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.3218 | val bpb 1.6976step   256 /  4096 | train loss 3.6278 | val bpb 1.6291step   384 /  4096 | train loss 3.4976 | val bpb 1.5685step   512 /  4096 | train loss 3.3817 | val bpb 1.5135step   640 /  4096 | train loss 3.2966 | val bpb 1.4842step   768 /  4096 | train loss 3.2324 | val bpb 1.4598step   896 /  4096 | train loss 3.1927 | val bpb 1.4402step  1024 /  4096 | train loss 3.1433 | val bpb 1.4161step  1152 /  4096 | train loss 3.0900 | val bpb 1.4040step  1280 /  4096 | train loss 3.0637 | val bpb 1.3878step  1408 /  4096 | train loss 3.0483 | val bpb 1.3751step  1536 /  4096 | train loss 3.0109 | val bpb 1.3642step  1664 /  4096 | train loss 2.9906 | val bpb 1.3541step  1792 /  4096 | train loss 2.9464 | val bpb 1.3474step  1920 /  4096 | train loss 2.9465 | val bpb 1.3314step  2048 /  4096 | train loss 2.9100 | val bpb 1.3285step  2176 /  4096 | train loss 2.8913 | val bpb 1.3213step  2304 /  4096 | train loss 2.8761 | val bpb 1.3117step  2432 /  4096 | train loss 2.8601 | val bpb 1.3029step  2560 /  4096 | train loss 2.8392 | val bpb 1.2942step  2688 /  4096 | train loss 2.8279 | val bpb 1.2846step  2816 /  4096 | train loss 2.8084 | val bpb 1.2792step  2944 /  4096 | train loss 2.7849 | val bpb 1.2730step  3072 /  4096 | train loss 2.7734 | val bpb 1.2667step  3200 /  4096 | train loss 2.7647 | val bpb 1.2581step  3328 /  4096 | train loss 2.7342 | val bpb 1.2530step  3456 /  4096 | train loss 2.7155 | val bpb 1.2513step  3584 /  4096 | train loss 2.7195 | val bpb 1.2386step  3712 /  4096 | train loss 2.6946 | val bpb 1.2324step  3840 /  4096 | train loss 2.6918 | val bpb 1.2250step  3968 /  4096 | train loss 2.6700 | val bpb 1.2207step  4096 /  4096 | train loss 2.6572 | val bpb 1.2169
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Sue. She had a big pile party and made a big bush. Sue loved to play with her friends and play with.
+One day, Tom and Tom went to the park with her mom. He saw a big tree with a big red ball. Tom said, "Hi, Tom! You are very nice!" Tom said, "I am sorry, Tom, Tom. But I can't find you. I am too high."
+Tom and Tom was scared. They did not know what to do. He said, "I want to be bravelve you. We can't fly." Tom was very sad. He thought for Tom. Tom was a toy too. He wanted to help Max and said, "I can't be fun. I will play with you."
+Tom and Tom were sad and sad. He said, "I can't play with you." Tom was sad, but he could not find his toy. He said, "I will help you."
+Tom went to the toy. He said, "You must to the toy, Tom. We can play with you." They both laughed and played together. They had fun in the ball
+
+sample 2: ies, a girl named Lily. She liked to smile and play in the park. They had a ball, and the balls. She loved to run and jump, jump, and it began to the balloon.
+One day, a little girl named Sue found a big box. She was very happy and asked her mom if she said, "Can you help me, but I have to make a dirty in the yard. You are aday, like my toy?" The boy said, "Yes, I want to see if you have a surprise. It is a basket. They are very happy.
+The girl and his mom went to her mom. She said, "Hi, the flag and I amazing you can borrow!"
+After a while, the bunny was time for the bunny. She started to bubble and said, "Thank you, Mom. Mr. Mr. I will do it and the bunny was so happy. I have a mouth. I will be nice to cries. All the gift the bear and the bear felt better. The bear said, "You are so big
+
+sample 3: Once upon a time, there was a little boy named Tim. Tim loved to play with his ball. He would play with it. He was very happy. He had a fun playing in the park.
+One day, Tim saw a big bird named Tim was not a big, very sad. Tim said, "I want to help you, Tim?" Tim said, "I want to play with you?" Tim said, "Yes, Tim. I can play with you!" Tim said, "Yes, I can help you."
+Tim was happy and said, "Thank you, Tim. He was so happy! You are wined, and pungive and used to be friends.
+
+
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: momentum, lr 0.707, state: 138240 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.4042 | val bpb 1.6962step   256 /  4096 | train loss 3.6269 | val bpb 1.6205step   384 /  4096 | train loss 3.4963 | val bpb 1.5680step   512 /  4096 | train loss 3.3793 | val bpb 1.5201step   640 /  4096 | train loss 3.2967 | val bpb 1.4895step   768 /  4096 | train loss 3.2246 | val bpb 1.4565step   896 /  4096 | train loss 3.1861 | val bpb 1.4376step  1024 /  4096 | train loss 3.1309 | val bpb 1.4247step  1152 /  4096 | train loss 3.0933 | val bpb 1.4022step  1280 /  4096 | train loss 3.0560 | val bpb 1.3916step  1408 /  4096 | train loss 3.0388 | val bpb 1.3759step  1536 /  4096 | train loss 3.0058 | val bpb 1.3635step  1664 /  4096 | train loss 2.9818 | val bpb 1.3513step  1792 /  4096 | train loss 2.9647 | val bpb 1.3450step  1920 /  4096 | train loss 2.9323 | val bpb 1.3327step  2048 /  4096 | train loss 2.9044 | val bpb 1.3230step  2176 /  4096 | train loss 2.8829 | val bpb 1.3158step  2304 /  4096 | train loss 2.8681 | val bpb 1.3109step  2432 /  4096 | train loss 2.8591 | val bpb 1.3029step  2560 /  4096 | train loss 2.8350 | val bpb 1.2987step  2688 /  4096 | train loss 2.8306 | val bpb 1.2906step  2816 /  4096 | train loss 2.8089 | val bpb 1.2790step  2944 /  4096 | train loss 2.7898 | val bpb 1.2716step  3072 /  4096 | train loss 2.7769 | val bpb 1.2649step  3200 /  4096 | train loss 2.7496 | val bpb 1.2556step  3328 /  4096 | train loss 2.7421 | val bpb 1.2549step  3456 /  4096 | train loss 2.7156 | val bpb 1.2450step  3584 /  4096 | train loss 2.7128 | val bpb 1.2362step  3712 /  4096 | train loss 2.6920 | val bpb 1.2309step  3840 /  4096 | train loss 2.6879 | val bpb 1.2257step  3968 /  4096 | train loss 2.6672 | val bpb 1.2204step  4096 /  4096 | train loss 2.6647 | val bpb 1.2166
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Lily. She loved to play with her mom, and her mommy. One day, she found a big red ball. She wanted to play with the ball.
+Then, the cat saw a big tree. Lily was very sad. She did not want to play with her friends. She wanted to play with it.
+Lily told her to be careful with her friends, but she did not want to be fun to play with her. She said, "Wow, what to do. I do you do?"
+Lily and Ben looked around and said, "I'm sorry, Lily. I amble friendly. I want to play with you?"
+Lily and Tom nodded. They played with the ball and laughed and said, "Yes, let's play with the ball!"
+They went home and the ball and the ball. They had a lot of fun. They were very happy and had a big, red ball. They had lots of fun. The ball was a big ball and the ball. They were very happy.
+
+sample 2: Once upon a time, there was a big, there lived a little boy named Tim. Tim loved to play with his friends. One day, Tim went to the park to play with his friends.
+Tim asked his mom, "Can we play with the park?" Tim said, "Yes, you can help me." Tim was happy and thanked the boy and said, "Thank you, Tim! I can have lots of fun."
+Tim was happy to see the park. He said, "Thank you, Tim. You are my friend." Tim smiled and said, "Thank you, Tim. I love you, Tim. I love you." They played and played with the ball.
+
+sample 3: Once upon a time, there was a little girl named Mia. She loved to play on the slide. One day, she saw her friend, a little girl named Lily. She wanted to play with her toys.
+Lily saw her toy car. She wanted to reach it. She asked her mom, "Can I play with it?" she asked her mom, "Yes, please?"
+Lily took the door and put the door and started to pick it. She was so happy. She was very happy and thanked her mom.
+Lily's mom and dad were very happy. She said, "Thank you, Lily. You are very miservous. You are a good friend."
+Jilly told her mom to be happy and said, "Thank you, mom, Lily. I love you, can help you."
+Lily smiled and said, "You are not a baby. I'm sorry, I didn't know, Lily. I told you what you not me. I will find you. I have a new friend." Lily said, "You are a good friend."
+Lily and Ben. They both laughed and had a new friend. They played together in the puddle. They had so
+
+
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: adam, lr 0.01, state: 276480 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.0196 | val bpb 1.6489step   256 /  4096 | train loss 3.4992 | val bpb 1.5516step   384 /  4096 | train loss 3.3144 | val bpb 1.4831step   512 /  4096 | train loss 3.2008 | val bpb 1.4385step   640 /  4096 | train loss 3.1175 | val bpb 1.3986step   768 /  4096 | train loss 3.0433 | val bpb 1.3775step   896 /  4096 | train loss 3.0085 | val bpb 1.3552step  1024 /  4096 | train loss 2.9582 | val bpb 1.3382step  1152 /  4096 | train loss 2.9081 | val bpb 1.3276step  1280 /  4096 | train loss 2.8898 | val bpb 1.3112step  1408 /  4096 | train loss 2.8739 | val bpb 1.3055step  1536 /  4096 | train loss 2.8440 | val bpb 1.2903step  1664 /  4096 | train loss 2.8282 | val bpb 1.2836step  1792 /  4096 | train loss 2.7932 | val bpb 1.2773step  1920 /  4096 | train loss 2.7898 | val bpb 1.2664step  2048 /  4096 | train loss 2.7580 | val bpb 1.2583step  2176 /  4096 | train loss 2.7414 | val bpb 1.2531step  2304 /  4096 | train loss 2.7300 | val bpb 1.2466step  2432 /  4096 | train loss 2.7165 | val bpb 1.2411step  2560 /  4096 | train loss 2.6985 | val bpb 1.2341step  2688 /  4096 | train loss 2.6942 | val bpb 1.2310step  2816 /  4096 | train loss 2.6814 | val bpb 1.2250step  2944 /  4096 | train loss 2.6570 | val bpb 1.2169step  3072 /  4096 | train loss 2.6500 | val bpb 1.2126step  3200 /  4096 | train loss 2.6452 | val bpb 1.2076step  3328 /  4096 | train loss 2.6209 | val bpb 1.2022step  3456 /  4096 | train loss 2.6038 | val bpb 1.1964step  3584 /  4096 | train loss 2.6141 | val bpb 1.1923step  3712 /  4096 | train loss 2.5948 | val bpb 1.1870step  3840 /  4096 | train loss 2.5909 | val bpb 1.1819step  3968 /  4096 | train loss 2.5796 | val bpb 1.1785step  4096 /  4096 | train loss 2.5668 | val bpb 1.1767
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Lily. She had a toy cartoon. Lily liked to play with her toy car. Lily was very happy to have his mom.
+One day, Lily and her mom went to the park with her mom. She saw her mom and dad. She wanted to show her mom. She said, "Mom, Lily. She said Max. She was very happy to see what it was. She had a toy car in the millage. She wanted to help her mom. She said, "Mom, I have it. I will be a very good."
+Mom said, "Let's try to help me find the toy car!" Lily said. "It's my matter!" Lily was happy. She hugged Lily and said, "You are not good."
+Lily, Lily and Lily were very happy. They played together and played together all day. They had lots of fun. They had fun.
+Lily and Max were happy to have a lot of fun. They played together and had fun. After a while, they went home, they both had a lot of fun. Lily's mom was happy and said, "Thank you, Lily. You are a good friend.
+
+sample 2: Tom and Lily were playing in the park. The kids loved to play with the big, and the kids. They were very happy. They played with their toys and had lots of fun.
+
+sample 3: Aigcor named Bobo. He lived in a small house with his mom. He loved to play in the park. One day, he found a big, red ball.
+"Look, can I play with the ball."
+"Hi, you can I have a new ball!" said. "I will help you. Leo!" So, they went to the park to play with the ball.
+"Hello, the ball is not there?" said.
+Tim went to the park. He was very happy. He had a new ball and started to spray the ball. Tim was happy and he couldn't wait to find their ball.
+Suddenly, Tim heard a loud noise. He did not want to make the ball. He did not want to play. He was sad and scared. He could not go away, but he did not listen. He did not want to play with it.
+Tim's friend, Sam. They played with the ball and had a lot of fun. They had a fun day. Tim was very happy to have a lot.
+
+
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: adam, lr 0.01, state: 276480 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.0181 | val bpb 1.6491step   256 /  4096 | train loss 3.4885 | val bpb 1.5417step   384 /  4096 | train loss 3.3087 | val bpb 1.4805step   512 /  4096 | train loss 3.1826 | val bpb 1.4320step   640 /  4096 | train loss 3.0955 | val bpb 1.3961step   768 /  4096 | train loss 3.0263 | val bpb 1.3738step   896 /  4096 | train loss 2.9947 | val bpb 1.3528step  1024 /  4096 | train loss 2.9465 | val bpb 1.3392step  1152 /  4096 | train loss 2.9107 | val bpb 1.3238step  1280 /  4096 | train loss 2.8761 | val bpb 1.3134step  1408 /  4096 | train loss 2.8612 | val bpb 1.3050step  1536 /  4096 | train loss 2.8347 | val bpb 1.2917step  1664 /  4096 | train loss 2.8183 | val bpb 1.2810step  1792 /  4096 | train loss 2.7995 | val bpb 1.2748step  1920 /  4096 | train loss 2.7733 | val bpb 1.2665step  2048 /  4096 | train loss 2.7533 | val bpb 1.2599step  2176 /  4096 | train loss 2.7340 | val bpb 1.2520step  2304 /  4096 | train loss 2.7218 | val bpb 1.2441step  2432 /  4096 | train loss 2.7173 | val bpb 1.2423step  2560 /  4096 | train loss 2.6883 | val bpb 1.2363step  2688 /  4096 | train loss 2.6951 | val bpb 1.2306step  2816 /  4096 | train loss 2.6784 | val bpb 1.2252step  2944 /  4096 | train loss 2.6611 | val bpb 1.2188step  3072 /  4096 | train loss 2.6509 | val bpb 1.2121step  3200 /  4096 | train loss 2.6274 | val bpb 1.2063step  3328 /  4096 | train loss 2.6231 | val bpb 1.2034step  3456 /  4096 | train loss 2.6003 | val bpb 1.1965step  3584 /  4096 | train loss 2.6006 | val bpb 1.1910step  3712 /  4096 | train loss 2.5859 | val bpb 1.1879step  3840 /  4096 | train loss 2.5851 | val bpb 1.1840step  3968 /  4096 | train loss 2.5690 | val bpb 1.1801step  4096 /  4096 | train loss 2.5678 | val bpb 1.1778
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Lily. She had a big, pretty bird, and a big dog named Max. She loved to play with his friends. One day, Lily and her mom said, "Look, I found a big red ball!"
+Max said, "Yes, I can help you." Lily said, "I can help you, but we can play with your ball?"
+Lily and Ben said, "Yes, you can play together!" Lily said, "I will help you!"
+Lily and Lily's mom went to the park. She saw many things, but they could not find the ball. She wanted to be friends. She tried to make a big, but it was very happy. She said, "Thank you, Lily." So, and Lily went to the park to play with the ball.
+Lily and Ben felt a ball. They were very happy. They played and had lots of fun. They played together and had fun together. They had a great time to go home.
+
+sample 2: Once upon a time, there was a little boy named Tim. Tim loved to play with his friends. They did not know what was inside. Tim was very excited and he could not play in the park.
+One day, Tim saw a big tree. He wanted to fly and play with it. But the cat was too bigger. The cat said, "I want to help you, Tim?" Tim said, "I want to play with the cat. I am strong and push. I want to help you." Tim and his mom went to the park.
+Tim and Sam were very surprised. They went to the park. They found a big castle. Tim was happy and said, "Thank you, Tim, Tim, and the cat." Tim and Sam were happy.
+
+sample 3: Once upon a time, there was a little girl named Sue. Sue loved to play with her toy. One day, Tim saw a big tree. She wanted to play with it.
+Sue said, "Let's play with your toy." Sue was very happy. She said, "Thank you, Sue?" Sue thought for a mom. She didn't give up to her toy and said, "I will help you, Sue. I will help you." Sue tried to buy, but Sue was not careful. The realizzy. Sue was sad and said, "I want to play with your toy car." Sue was very sad, but she had no one perfect.
+Sue took the toy bush, Sue's mom told her mom about the toy car and said, "I am scared, Tim. I know we can help you, Sue." Sue and Sue made a big, but Sue was surprised. She said, "I am a light, Sue. Sue, and Sue's mom said, "I will help you to be careful." Sue and Sue were very sad. They did not want to be scared. Sue was very sad and happy. They played with the ball and had a
+
+
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: adamw, lr 0.01, state: 276480 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.0214 | val bpb 1.6515step   256 /  4096 | train loss 3.5127 | val bpb 1.5605step   384 /  4096 | train loss 3.3395 | val bpb 1.4936step   512 /  4096 | train loss 3.2341 | val bpb 1.4532step   640 /  4096 | train loss 3.1594 | val bpb 1.4223step   768 /  4096 | train loss 3.0914 | val bpb 1.4008step   896 /  4096 | train loss 3.0606 | val bpb 1.3824step  1024 /  4096 | train loss 3.0129 | val bpb 1.3617step  1152 /  4096 | train loss 2.9665 | val bpb 1.3534step  1280 /  4096 | train loss 2.9481 | val bpb 1.3406step  1408 /  4096 | train loss 2.9358 | val bpb 1.3303step  1536 /  4096 | train loss 2.9059 | val bpb 1.3220step  1664 /  4096 | train loss 2.8906 | val bpb 1.3129step  1792 /  4096 | train loss 2.8600 | val bpb 1.3069step  1920 /  4096 | train loss 2.8572 | val bpb 1.2923step  2048 /  4096 | train loss 2.8250 | val bpb 1.2878step  2176 /  4096 | train loss 2.8097 | val bpb 1.2832step  2304 /  4096 | train loss 2.7972 | val bpb 1.2742step  2432 /  4096 | train loss 2.7832 | val bpb 1.2720step  2560 /  4096 | train loss 2.7663 | val bpb 1.2632step  2688 /  4096 | train loss 2.7579 | val bpb 1.2556step  2816 /  4096 | train loss 2.7452 | val bpb 1.2499step  2944 /  4096 | train loss 2.7158 | val bpb 1.2430step  3072 /  4096 | train loss 2.7085 | val bpb 1.2360step  3200 /  4096 | train loss 2.6974 | val bpb 1.2313step  3328 /  4096 | train loss 2.6713 | val bpb 1.2220step  3456 /  4096 | train loss 2.6499 | val bpb 1.2152step  3584 /  4096 | train loss 2.6547 | val bpb 1.2085step  3712 /  4096 | train loss 2.6275 | val bpb 1.2013step  3840 /  4096 | train loss 2.6247 | val bpb 1.1938step  3968 /  4096 | train loss 2.6026 | val bpb 1.1886step  4096 /  4096 | train loss 2.5882 | val bpb 1.1848
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there lived a little girl named Sue. She had a big box in his room. One day, she found a big box in the box. She was so happy.
+Sue was so happy! She had a big red toys and the box. She had a lot of fun. She was so happy that she couldn't belong to her toy. Then, she had a big box of toys.
+Sue's mom saw the box and said, "The old man, I can help you find it, but I will be friends."
+The man said, "I am very brave. I am not nice. I'm sorry for you. You are not nice. That is not a problem. I am sorry for you. I want to help you."
+The man sisterfly dog missed his tail and remembered his mother. He was very happy. He said, "Thank you, Remy, Remy, Remy! I will help you."
+The moral of the story is that you should always be kind and be kind to others.
+
+sample 2: Once upon a time, there was a little girl named Lily. She loved to dream and play in the park. She was very happy.
+One day, Lily went to the park with her mom and dad. They played the park and had a great day. The morning, Lily was so happy to be happy and they couldn't be scared anymore. They played together and had a great time.
+At the end of the day, Lily and the gunner. They were happy and had fun together. They played together all day and had lots of fun.
+
+sample 3: ive and Jane went to the park. He saw a big bird. The bird was very happy. He wanted to see what was. He thought it was a very fun.
+"Help. It is a good idea," said, "Wow, I want to play with you."
+The bird said, "I want to help you." They both wanted to play with the bird.
+The bird said, "I am a gift, I want to go home!" The bird said, "I will help you. I can help you." The bird was happy and see the bird was not nice. The bird was happy and happy.
+
+
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: adamw, lr 0.01, state: 276480 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.0200 | val bpb 1.6528step   256 /  4096 | train loss 3.5048 | val bpb 1.5502step   384 /  4096 | train loss 3.3383 | val bpb 1.4931step   512 /  4096 | train loss 3.2184 | val bpb 1.4499step   640 /  4096 | train loss 3.1380 | val bpb 1.4181step   768 /  4096 | train loss 3.0712 | val bpb 1.3940step   896 /  4096 | train loss 3.0407 | val bpb 1.3743step  1024 /  4096 | train loss 2.9966 | val bpb 1.3602step  1152 /  4096 | train loss 2.9655 | val bpb 1.3493step  1280 /  4096 | train loss 2.9328 | val bpb 1.3383step  1408 /  4096 | train loss 2.9204 | val bpb 1.3335step  1536 /  4096 | train loss 2.8947 | val bpb 1.3182step  1664 /  4096 | train loss 2.8784 | val bpb 1.3099step  1792 /  4096 | train loss 2.8642 | val bpb 1.2999step  1920 /  4096 | train loss 2.8384 | val bpb 1.2936step  2048 /  4096 | train loss 2.8175 | val bpb 1.2878step  2176 /  4096 | train loss 2.7978 | val bpb 1.2817step  2304 /  4096 | train loss 2.7859 | val bpb 1.2701step  2432 /  4096 | train loss 2.7803 | val bpb 1.2674step  2560 /  4096 | train loss 2.7522 | val bpb 1.2638step  2688 /  4096 | train loss 2.7548 | val bpb 1.2536step  2816 /  4096 | train loss 2.7341 | val bpb 1.2462step  2944 /  4096 | train loss 2.7152 | val bpb 1.2378step  3072 /  4096 | train loss 2.7027 | val bpb 1.2322step  3200 /  4096 | train loss 2.6746 | val bpb 1.2255step  3328 /  4096 | train loss 2.6658 | val bpb 1.2194step  3456 /  4096 | train loss 2.6406 | val bpb 1.2121step  3584 /  4096 | train loss 2.6362 | val bpb 1.2043step  3712 /  4096 | train loss 2.6148 | val bpb 1.1988step  3840 /  4096 | train loss 2.6076 | val bpb 1.1926step  3968 /  4096 | train loss 2.5881 | val bpb 1.1863step  4096 /  4096 | train loss 2.5830 | val bpb 1.1824
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Lily. She loved to play with her friends. She was very happy and said, "Thank you, mommy. I love you, Lily, you can you help me?" she asked.
+One day, a little girl named Sue went to the park. She saw a big tree with a big ball. She wanted to play with her mom. She thought it would be fun to make the best and make a new friend. She found a big, a big tree.
+Lily and her friend, a little girl named Lily. She asked her what was. Lily was very excited. She asked her mom and said, "Why are you sad?"
+Lily and Lily said, "I want to play with me?" Lily said. But Lily and Lily nodded and said, "I will remember what is. I have to be careful. I want to play with you."
+Lily and Ben cry, and Ben were happy. They both wanted to play with the ball. They played together and had fun. They played together and had fun together. They had fun.
+
+sample 2: One day, a dog named Spot went to the park with his friend, a big dog named Max. Max loved to play with his friends. He wanted to play with his friends.
+One day, Max saw a big, held a big box. He wanted to play with his friends, but they could not find it. The box was sad, but he was scared anymore.
+Max saw the box. It was a big, red ball in the park. He wanted to play with the ball. Max had a lot of fun. Max said, "I want to play with me?"
+Max was pulled and said, "I want to play with me. Can I play with my ball?" The ball looked at the ball. Max was surprised and said, "Yes, I can fly away, I will help you."
+Max and his friends. They played with the ball, and had lots of fun. They were happy. They played together in the park. They had so much fun and laughed. They were happy and thanked each other.
+
+sample 3: Once upon a time, there was a big, a little boy named Tim. He loved to eat the mole. One day, he found a big tree and wanted to play with his toy car.
+Tim went to the park to play with his toy car. He saw a big, red balloon. Tim was very happy and said, "Thank you, Tim! You are a good friend. We can do it. And that is not on you. And you dolls.
+
+
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: lion, lr 0.00125, state: 138240 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.8422 | val bpb 1.7682step   256 /  4096 | train loss 3.6998 | val bpb 1.6374step   384 /  4096 | train loss 3.5168 | val bpb 1.5763step   512 /  4096 | train loss 3.3988 | val bpb 1.5186step   640 /  4096 | train loss 3.2775 | val bpb 1.4694step   768 /  4096 | train loss 3.1766 | val bpb 1.4311step   896 /  4096 | train loss 3.1154 | val bpb 1.4005step  1024 /  4096 | train loss 3.0505 | val bpb 1.3774step  1152 /  4096 | train loss 2.9866 | val bpb 1.3616step  1280 /  4096 | train loss 2.9646 | val bpb 1.3461step  1408 /  4096 | train loss 2.9407 | val bpb 1.3355step  1536 /  4096 | train loss 2.9037 | val bpb 1.3202step  1664 /  4096 | train loss 2.8854 | val bpb 1.3110step  1792 /  4096 | train loss 2.8518 | val bpb 1.3000step  1920 /  4096 | train loss 2.8449 | val bpb 1.2929step  2048 /  4096 | train loss 2.8169 | val bpb 1.2849step  2176 /  4096 | train loss 2.8001 | val bpb 1.2789step  2304 /  4096 | train loss 2.7876 | val bpb 1.2715step  2432 /  4096 | train loss 2.7758 | val bpb 1.2683step  2560 /  4096 | train loss 2.7622 | val bpb 1.2624step  2688 /  4096 | train loss 2.7595 | val bpb 1.2563step  2816 /  4096 | train loss 2.7488 | val bpb 1.2536step  2944 /  4096 | train loss 2.7261 | val bpb 1.2488step  3072 /  4096 | train loss 2.7232 | val bpb 1.2439step  3200 /  4096 | train loss 2.7183 | val bpb 1.2394step  3328 /  4096 | train loss 2.6960 | val bpb 1.2354step  3456 /  4096 | train loss 2.6843 | val bpb 1.2312step  3584 /  4096 | train loss 2.6960 | val bpb 1.2286step  3712 /  4096 | train loss 2.6801 | val bpb 1.2254step  3840 /  4096 | train loss 2.6825 | val bpb 1.2214step  3968 /  4096 | train loss 2.6692 | val bpb 1.2192step  4096 /  4096 | train loss 2.6605 | val bpb 1.2178
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Lily. She loved to play with her family. One day, Lily saw a big, red ball. She was very happy and said, "I can help you, I like you. I am very fun."
+Lily was very happy. She said, "Thank you, Lily. It's not want to pick it."
+Lily was so happy. She wanted to help her friend, but she was so happy. She said, "Thank you, Lily. I will be careful with it."
+Lily and Tom looked at the ball. She said, "Thank you, Lily. You are my ball to eat."
+Lily and Ben nodded. She said, "I'm sorry, Lily. I will give you a big hug. I will be very happy."
+Anna and Ben nodded. They both laughed and laughed and played with the ball. They had fun and had a lot of fun. They were happy.
+
+sample 2: Once upon a time, there was a little boy named Tim. Tim loved to play with his friends. One day, Tim saw a big, red ball near a big tree. The bird was sad because he had a big ball. Tim was very loud.
+Tim saw a big tree with a book. He was very happy. The bird was so happy. The bird told the bird that the ball was not push anymore. Tim and Tim were very happy and wanted to play with his friend, Tim. They all had a great day at the big puddle and went back home.
+
+sample 3: One day, a little girl named Lily went to the park. She saw a big, red ball with a big ball. She saw the ball in the sky. Lily was very happy.
+"Thank you, Lily, Ben, Ben. Billy did not like the ball. He was not a little boy. He wanted to play with his ball. He said, "No, it is not a bad end, but I am not a good friend. You are a good friend."
+Lily and Ben did not listen. They went to the park and gave them. They were happy to see the ball and cars. They all became good friends. They were happy.
+
+
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: lion, lr 0.00125, state: 138240 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.8601 | val bpb 1.7741step   256 /  4096 | train loss 3.7129 | val bpb 1.6410step   384 /  4096 | train loss 3.5298 | val bpb 1.5804step   512 /  4096 | train loss 3.4001 | val bpb 1.5211step   640 /  4096 | train loss 3.2794 | val bpb 1.4745step   768 /  4096 | train loss 3.1856 | val bpb 1.4395step   896 /  4096 | train loss 3.1291 | val bpb 1.4108step  1024 /  4096 | train loss 3.0632 | val bpb 1.3889step  1152 /  4096 | train loss 3.0159 | val bpb 1.3711step  1280 /  4096 | train loss 2.9718 | val bpb 1.3535step  1408 /  4096 | train loss 2.9509 | val bpb 1.3393step  1536 /  4096 | train loss 2.9172 | val bpb 1.3280step  1664 /  4096 | train loss 2.8997 | val bpb 1.3179step  1792 /  4096 | train loss 2.8741 | val bpb 1.3083step  1920 /  4096 | train loss 2.8473 | val bpb 1.3020step  2048 /  4096 | train loss 2.8280 | val bpb 1.2940step  2176 /  4096 | train loss 2.8096 | val bpb 1.2895step  2304 /  4096 | train loss 2.7995 | val bpb 1.2809step  2432 /  4096 | train loss 2.7965 | val bpb 1.2772step  2560 /  4096 | train loss 2.7715 | val bpb 1.2723step  2688 /  4096 | train loss 2.7771 | val bpb 1.2678step  2816 /  4096 | train loss 2.7607 | val bpb 1.2616step  2944 /  4096 | train loss 2.7481 | val bpb 1.2571step  3072 /  4096 | train loss 2.7413 | val bpb 1.2519step  3200 /  4096 | train loss 2.7226 | val bpb 1.2484step  3328 /  4096 | train loss 2.7185 | val bpb 1.2452step  3456 /  4096 | train loss 2.6984 | val bpb 1.2409step  3584 /  4096 | train loss 2.7036 | val bpb 1.2377step  3712 /  4096 | train loss 2.6925 | val bpb 1.2348step  3840 /  4096 | train loss 2.6931 | val bpb 1.2324step  3968 /  4096 | train loss 2.6816 | val bpb 1.2300step  4096 /  4096 | train loss 2.6834 | val bpb 1.2285
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Lily. She had a big hill. The little girl was very happy. She had a great time, she would go to the park.
+One day, Lily saw a big, a little girl named Mia. She was in her room. Mia wanted to play with her toys. She looked at the woods and said, "Hi, Mia, let's play with her toys?"
+Mia said, "Yes, you can play with the toys."
+Mia and the car started to laugh. She was so happy again. She hugged her carried and said, "Thank you, what can you, Mia. You are not a good day. I will help you."
+Mia and Lily were both enough. She wanted to help her mom. She said, "I don't know wonderful, not happy. I can't be a good friend. I will help you. I can't find a fun. You are very good friend. I want to play with you."
+Lily and Ben felt happy and said, "You are not a good soup of meange. You are not good friends. You are a little girl.
+
+sample 2: Once upon a time, there was a little boy named Tim. Tim liked to play with his friends. One day, Tim was very happy. He went to the park with his mom and dad.
+As they walked, Tim saw a big, red ball, a big red ball. The ball was very happy. They ran to the ball and saw a big ball. The ball was very happy and said, "Thank you, Tim. It's ball is the ball. The ball was happy and thanked the best of friends.
+
+sample 3: Once upon a time, there was a little girl named Lily. She had a big smile. Lily loved to play with her toys. One day, she saw her mom and said, "Can I write?"
+Lily said, "Yes, I can you."
+Lily and the sunny day, Lily was very happy. They played all day long. They had lots of fun. But then, a big red bird came over and told her that she could help her mom.
+Lily and Lily was very happy. She said, "Thank you, Ben, please," she said. "I'm sorry, mom. I'm sorry to go to the park. I was not a good friendly. I will do not may the pink. I want to play with you, Ben. You are a yummy. I don't want to play with you. You have to share the toys. You are acorden. You are hot and sorry. You are sorry. You did not know the colorful. You have to be careful. I will be good to me and sleep the bananance. You are not nice."
+Ben and Ben say. They are very happy. They
+
+
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: muon, lr 0.02, state: 248832 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.0067 | val bpb 1.6300step   256 /  4096 | train loss 3.4442 | val bpb 1.5201step   384 /  4096 | train loss 3.2400 | val bpb 1.4507step   512 /  4096 | train loss 3.1211 | val bpb 1.4029step   640 /  4096 | train loss 3.0422 | val bpb 1.3731step   768 /  4096 | train loss 2.9808 | val bpb 1.3524step   896 /  4096 | train loss 2.9490 | val bpb 1.3309step  1024 /  4096 | train loss 2.9009 | val bpb 1.3147step  1152 /  4096 | train loss 2.8574 | val bpb 1.3070step  1280 /  4096 | train loss 2.8398 | val bpb 1.2911step  1408 /  4096 | train loss 2.8263 | val bpb 1.2830step  1536 /  4096 | train loss 2.7992 | val bpb 1.2691step  1664 /  4096 | train loss 2.7810 | val bpb 1.2638step  1792 /  4096 | train loss 2.7506 | val bpb 1.2546step  1920 /  4096 | train loss 2.7493 | val bpb 1.2497step  2048 /  4096 | train loss 2.7212 | val bpb 1.2403step  2176 /  4096 | train loss 2.7021 | val bpb 1.2352step  2304 /  4096 | train loss 2.6919 | val bpb 1.2305step  2432 /  4096 | train loss 2.6811 | val bpb 1.2249step  2560 /  4096 | train loss 2.6631 | val bpb 1.2172step  2688 /  4096 | train loss 2.6591 | val bpb 1.2129step  2816 /  4096 | train loss 2.6478 | val bpb 1.2075step  2944 /  4096 | train loss 2.6233 | val bpb 1.2021step  3072 /  4096 | train loss 2.6151 | val bpb 1.1976step  3200 /  4096 | train loss 2.6088 | val bpb 1.1919step  3328 /  4096 | train loss 2.5864 | val bpb 1.1860step  3456 /  4096 | train loss 2.5710 | val bpb 1.1809step  3584 /  4096 | train loss 2.5814 | val bpb 1.1762step  3712 /  4096 | train loss 2.5608 | val bpb 1.1713step  3840 /  4096 | train loss 2.5604 | val bpb 1.1667step  3968 /  4096 | train loss 2.5444 | val bpb 1.1634step  4096 /  4096 | train loss 2.5335 | val bpb 1.1613
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Tom. Tom was very sad because she didn't know how to make the girl. She wanted to play with it.
+One day, the cat saw a big, a little girl named Lily. Lily was very happy. She wanted to help her friend, Tom, but she did not know what to do.
+Tom started to cry. He said, "I don't know, but you have a fun to make the birds." Tom smiled and said, "You're welcome, Tom. You can't be too. I can't find anything."
+Tom made the bird feel better. He said, "Thank you, kids. You are a good idea. I will help you help you."
+Tom and Tom did not have to go with the bird. They played with the birds and made it feel better. They had a fun day.
+
+sample 2: Once upon a time, there was a little girl named Lucy. She loved to play with her toys. One day, she found a big, red ball. She had a lot of fun. She was very happy with her friends.
+At the end of the day, Lucy and her friends went to look at the park. They saw a big, soft treat, red ball. The ball was very hot. Lucy was very happy.
+The moral of the story is to always be kind and helpful." The moral of the story is that even if you can be nice to others.
+
+sample 3: Once upon a time, there was a little boy named Tim. Tim loved to play with his friends, and his friends. They played with the other kids. Tim was very happy and played together every day.
+One day, Tim and his friends were playing in the park. They were very happy and played together. The morning, the day, Tim was very happy. The morning was a big, and the vioice cream. Tim was very happy and wanted to help him.
+Tim and Tim was very happy. They played together every day. Tim and the sun went home with his friends. They were very happy. The moral of the story is that it's important to be fun and have fun.
+
+
+tokenizer: bpe1024, vocab size: 1024, train tokens: 6284662, val tokens: 129133
+num params: 138240 (98304 in wte and lm_head)
+optimizer: muon, lr 0.02, state: 248832 numbers
+bytes per token: 3.16
+step   128 /  4096 | train loss 4.0173 | val bpb 1.6326step   256 /  4096 | train loss 3.4418 | val bpb 1.5127step   384 /  4096 | train loss 3.2490 | val bpb 1.4505step   512 /  4096 | train loss 3.1248 | val bpb 1.4078step   640 /  4096 | train loss 3.0394 | val bpb 1.3725step   768 /  4096 | train loss 2.9767 | val bpb 1.3556step   896 /  4096 | train loss 2.9484 | val bpb 1.3351step  1024 /  4096 | train loss 2.9038 | val bpb 1.3169step  1152 /  4096 | train loss 2.8703 | val bpb 1.3071step  1280 /  4096 | train loss 2.8371 | val bpb 1.2963step  1408 /  4096 | train loss 2.8251 | val bpb 1.2883step  1536 /  4096 | train loss 2.7998 | val bpb 1.2751step  1664 /  4096 | train loss 2.7837 | val bpb 1.2673step  1792 /  4096 | train loss 2.7617 | val bpb 1.2587step  1920 /  4096 | train loss 2.7398 | val bpb 1.2519step  2048 /  4096 | train loss 2.7206 | val bpb 1.2460step  2176 /  4096 | train loss 2.7012 | val bpb 1.2355step  2304 /  4096 | train loss 2.6899 | val bpb 1.2296step  2432 /  4096 | train loss 2.6897 | val bpb 1.2280step  2560 /  4096 | train loss 2.6597 | val bpb 1.2239step  2688 /  4096 | train loss 2.6682 | val bpb 1.2151step  2816 /  4096 | train loss 2.6492 | val bpb 1.2102step  2944 /  4096 | train loss 2.6320 | val bpb 1.2038step  3072 /  4096 | train loss 2.6238 | val bpb 1.1980step  3200 /  4096 | train loss 2.6044 | val bpb 1.1932step  3328 /  4096 | train loss 2.5964 | val bpb 1.1888step  3456 /  4096 | train loss 2.5749 | val bpb 1.1827step  3584 /  4096 | train loss 2.5760 | val bpb 1.1781step  3712 /  4096 | train loss 2.5559 | val bpb 1.1731step  3840 /  4096 | train loss 2.5592 | val bpb 1.1690step  3968 /  4096 | train loss 2.5419 | val bpb 1.1658step  4096 /  4096 | train loss 2.5428 | val bpb 1.1632
+--- inference (new, hallucinated stories) ---
+sample 1: Once upon a time, there was a little girl named Lily. She had a big, red ball. She was very happy and said, "I know that it can't stop it. I want to play with you."
+One day, Lily and Tom found a big, bush. It was a big, shiny rock and pretty rocks. The rock was very happy and thanked the rock. Sue was always really happy that she learned that even more careful when it is important to before.
+
+sample 2: Once upon a time, there was a little girl named Lily. She lived in a small house with her mom. She had a big, red ball top of the park.
+One day, Lily was playing with her mom. She saw her friend, Tom the ball. She wanted to be friends with her mom. He took the ball. Tom's mom said, "Wow, it's time, I am a funny cat!"
+So, she went to the big park. They saw a big tree. The cat was very happy. The cat had a big stick. They played with the ball and had a fun day.
+
+sample 3: Once upon a time, there was a big, red, a little girl named Lily. Lily loved to play with her toys. One day, Lily saw a big tree. It was a big tree. Lily wanted to play with her friends.
+Lily was sad and said, "Maybe you can wear my toy. I want to hurt you. Mr. You can't find it."
+Lily and Tom went to the park. They played with their friends. They played together and had lots of fun. They had a lot of fun. They were very happy and had a fun day.
+
+
