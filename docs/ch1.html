@@ -5,117 +5,91 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>第一章 训练 · scratch2modern</title>
 <meta name="description" content="第一章：模型不动，只改怎么训练。">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
-<script>addEventListener('DOMContentLoaded', () => window.hljs && hljs.highlightAll());</script>
+<script>
+addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
+function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.open = open); }
+</script>
 </head>
 <body>
-<nav class="nav"><div class="wrap">
-<a class="brand" href="./">scratch<span>2</span>modern</a>
-<div class="nav-links"><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></div>
-</div></nav>
-<main>
-<div class="wrap">
-<header class="ch-head">
-  <div class="eyebrow">第一章</div>
-  <h1>训练</h1>
-  <p class="lead">模型结构不动，只改怎么训练。从纯 Python 的 microgpt 出发，一步步换上 PyTorch、GPU、更好的 tokenizer 和优化器、低精度与编译，看每一步让训练快了多少、好了多少。</p>
-  <div class="toc"><a href="#s1.01"><b>1.01</b>microgpt</a><span><b>1.02</b>PyTorch</span><span><b>1.03</b>Batch</span><span><b>1.04</b>GPU</span><span><b>1.05</b>Tokenizer</span><span><b>1.06</b>优化器</span><span><b>1.07</b>学习率调度</span><span><b>1.08</b>数值精度</span><span><b>1.09</b>工程加速</span><span><b>1.10</b>训练细节</span><span><b>1.11</b>回顾</span></div>
-</header>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
+<div class="wrap layout">
+<aside class="side"><div class="ch">第一章 · 训练</div><ol><li><a href="#s-101"><span class="sn">1.01</span>microgpt</a><ol><li><a href="#b-data">数据</a></li><li><a href="#b-tokenizer">Tokenizer</a></li><li><a href="#b-autograd">自动求导</a></li><li><a href="#b-params">参数</a></li><li><a href="#b-ops">基本运算</a></li><li><a href="#b-model">模型</a></li><li><a href="#b-adam">Adam</a></li><li><a href="#b-train">训练循环</a></li><li><a href="#b-sample">生成</a></li><li><a href="#r-101">运行结果</a></li></ol></li><li><span class="off"><span class="sn">1.02</span>PyTorch</span></li><li><span class="off"><span class="sn">1.03</span>Batch</span></li><li><span class="off"><span class="sn">1.04</span>GPU</span></li><li><span class="off"><span class="sn">1.05</span>Tokenizer</span></li><li><span class="off"><span class="sn">1.06</span>优化器</span></li><li><span class="off"><span class="sn">1.07</span>学习率调度</span></li><li><span class="off"><span class="sn">1.08</span>数值精度</span></li><li><span class="off"><span class="sn">1.09</span>工程加速</span></li><li><span class="off"><span class="sn">1.10</span>训练细节</span></li><li><span class="off"><span class="sn">1.11</span>回顾</span></li></ol></aside>
+<main class="content">
+<section id="s-101">
+<div class="ch-intro">第一章 · 训练</div>
+<h2>1.01 microgpt</h2>
 
-<article class="lesson" id="s1.01">
-  <header>
-    <div class="eyebrow">1.01</div>
-    <h2>microgpt</h2>
-    <p>两百行纯 Python 写成的完整 GPT，也是之后所有实验的起点。</p>
-  </header>
+<pre class="out"><span class="dim">$ python train.py
+num docs: 32033
+vocab size: 27
+num params: 4192
+step 1000 / 1000 | loss 2.6497
+--- inference (new, hallucinated names) ---</span>
+<span class="cols"><span>sample  1: kamon</span><span>sample  2: ann</span><span>sample  3: karai</span><span>sample  4: jaire</span><span>sample  5: <span class=new>vialan</span></span><span>sample  6: <span class=new>karia</span></span><span>sample  7: <span class=new>yeran</span></span><span>sample  8: anna</span><span>sample  9: areli</span><span>sample 10: kaina</span><span>sample 11: <span class=new>konna</span></span><span>sample 12: keylen</span><span>sample 13: <span class=new>liole</span></span><span>sample 14: <span class=new>alerin</span></span><span>sample 15: <span class=new>earan</span></span><span>sample 16: <span class=new>lenne</span></span><span>sample 17: kana</span><span>sample 18: lara</span><span>sample 19: <span class=new>alela</span></span><span>sample 20: anton</span></span></pre>
+<p class="cap">这是我们要读懂的第一个模型训练完的输出：4192 个参数，在 CPU 上训练 109 秒，编出了 20 个名字。标色的 9 个在训练数据里没有出现过。</p>
 
-  <div class="term">
-    <div class="bar"><i></i><i></i><i></i><em>python train.py</em></div>
-    <pre><span class="dim">num docs: 32033</span>
-<span class="dim">vocab size: 27</span>
-<span class="dim">num params: 4192</span>
-<span class="dim">step 1000 / 1000 | loss 2.6497</span>
-<span class="dim">--- inference (new, hallucinated names) ---</span>
-<span class="cols"><span>sample  1: kamon</span><span>sample  2: ann</span><span>sample  3: karai</span><span>sample  4: jaire</span><span>sample  5: <span class="hl">vialan</span></span><span>sample  6: <span class="hl">karia</span></span><span>sample  7: <span class="hl">yeran</span></span><span>sample  8: anna</span><span>sample  9: areli</span><span>sample 10: kaina</span><span>sample 11: <span class="hl">konna</span></span><span>sample 12: keylen</span><span>sample 13: <span class="hl">liole</span></span><span>sample 14: <span class="hl">alerin</span></span><span>sample 15: <span class="hl">earan</span></span><span>sample 16: <span class="hl">lenne</span></span><span>sample 17: kana</span><span>sample 18: lara</span><span>sample 19: <span class="hl">alela</span></span><span>sample 20: anton</span></span></pre>
-  </div>
-  <div class="term-cap">一个 4192 个参数的模型，在 CPU 上训练 109 秒后编出的名字。橙色的 9 个在训练数据里没有出现过。</div>
+<p>它来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>：一个两百行的 Python 文件，不依赖任何库，自动求导、Transformer、Adam、采样全是手写的。文件开头写着 <span class="quote">“This file is the complete algorithm. Everything else is just efficiency.”</span></p>
 
-  <h3>从哪来</h3>
-  <div class="prose">
-    <p><a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a> 是 Andrej Karpathy 写的一个单文件程序。它不依赖任何库，用纯 Python 实现了训练和使用 GPT 所需的全部算法：自动求导、Transformer、Adam、采样，都是手写的。文件开头的注释是：</p>
-    <p style="border-left:2px solid var(--accent);padding-left:14px;font-style:italic">This file is the complete algorithm. Everything else is just efficiency.</p>
-  </div>
+<p>我们拿它当起点，原因有三个：</p>
+<ol class="plain">
+  <li>它是完整的。从读数据到生成文本，训练和使用一个 GPT 需要的东西都在，结构就是 GPT-2 的简化版。</li>
+  <li>它是透明的。没有一行藏在库里，每个数、每一次运算都看得见。</li>
+  <li>它只有算法。没有为了速度或效果额外加的东西，之后我们每加一样，都能单独看出它的作用。</li>
+</ol>
 
-  <h3>为什么从它开始</h3>
-  <div class="why">
-    <div><b>完整</b><p>数据、tokenizer、模型、自动求导、优化器、采样，一样不缺。它能训练、能生成，结构就是 GPT-2 的简化版。</p></div>
-    <div><b>透明</b><p>没有一行藏在库里。每个数都是一个 Python 对象，每一次加法、乘法都看得见。想知道某一步在做什么，读代码就行。</p></div>
-    <div><b>只有算法</b><p>没有任何为了速度或效果额外加的东西。之后每加一样，都能单独测出它的作用，不会和别的改动混在一起。</p></div>
-  </div>
+<p>下面按文件的顺序把代码分成 9 块贴出来。原来的英文注释换成了中文，记日志的几行去掉了，完整文件在 <a href="https://github.com/LaugHan/scratch2modern/blob/main/src/1.01_microgpt/train.py">GitHub</a>。<b>强烈建议打开编辑器，跟着手敲一遍。</b>敲的时候你会停下来想“这一行为什么这样写”，而这些地方读的时候很容易一眼滑过去。</p>
 
-  <h3>对照代码读一遍</h3>
-  <div class="prose"><p>按文件顺序，左边是做法和原因，右边是对应的原代码（省去了我们加的几行日志）。</p></div>
-  <div class="walk">
-<div class="step">
-<div class="anno"><h4>数据<small>L21–28</small></h4>
-<p>32033 个英文名字，每行一个，来自 Karpathy 的 makemore 项目。每个名字就是一篇“文档”，训练前打乱顺序。</p>
-<p>名字很短，最长 15 个字母，规律却很明显，一个很小的模型很快就能学到东西。</p></div>
-<div class="src"><pre><code class="language-python"># Let there be a Dataset `docs`: list[str] of documents (e.g. a list of names)
+<div class="tools"><button onclick="setAll(false)">全部折叠</button><button onclick="setAll(true)">全部展开</button></div>
+<details class="blk" open id="b-data"><summary><span class="bn">1</span><span class="bt">数据</span><span class="bd">读入 32033 个英文名字</span></summary><pre><code class="language-python">import os
+import math
+import random
+random.seed(42)  # 固定随机种子：初始化、打乱、采样每次都一样，结果可以复现
+
+# 每行一个名字，每个名字就是一篇&quot;文档&quot;
+data_path = &#x27;names.txt&#x27;
 if not os.path.exists(data_path):
     import urllib.request
     names_url = &#x27;https://raw.githubusercontent.com/karpathy/makemore/988aa59/names.txt&#x27;
     urllib.request.urlretrieve(names_url, data_path)
 docs = [line.strip() for line in open(data_path) if line.strip()]
-random.shuffle(docs)
-print(f&quot;num docs: {len(docs)}&quot;)</code></pre></div>
-</div>
-<div class="step">
-<div class="anno"><h4>Tokenizer<small>L30–34</small></h4>
-<p>模型只能处理数字，要先把文本切成小块（<b>token</b>）并编号。microgpt 用最简单的<b>字符级</b>切法：一个字母一个 token，26 个字母编号 0–25。</p>
-<p>另有一个特殊 token <b>BOS</b>（编号 26），加在名字两头：开头的表示“开始了”，结尾的让模型学会“什么时候停”。词表共 27 个，<code>emma</code> → <code>[26, 4, 12, 12, 0, 26]</code>。</p></div>
-<div class="src"><pre><code class="language-python"># Let there be a Tokenizer to translate strings to sequences of integers (&quot;tokens&quot;) and back
-uchars = sorted(set(&#x27;&#x27;.join(docs))) # unique characters in the dataset become token ids 0..n-1
-BOS = len(uchars) # token id for a special Beginning of Sequence (BOS) token
-vocab_size = len(uchars) + 1 # total number of unique tokens, +1 is for BOS
-print(f&quot;vocab size: {vocab_size}&quot;)</code></pre></div>
-</div>
-<div class="step">
-<div class="anno"><h4>自动求导<small>L36–79</small></h4>
-<p>训练要知道每个参数往哪边调，即损失对每个参数的导数（<b>梯度</b>）。microgpt 自己实现了自动求导：</p>
-<ul>
-<li>每个标量包成一个 <code>Value</code>，记录值、梯度、由哪些数算来，以及对它们的局部导数。</li>
-<li>每个运算返回新的 <code>Value</code> 并写好局部导数：<code>a*b</code> 是 <code>(b, a)</code>，<code>log x</code> 是 <code>1/x</code>。</li>
-<li><code>backward</code> 先拓扑排序，再从损失往回走，把“局部导数 × 上游梯度”累加到来源上，这就是链式法则。用 <code>+=</code> 是因为一个数可能被多处用到。</li>
-</ul>
-<p>PyTorch 的 autograd 做的是同一件事，只不过节点是整个张量。</p></div>
-<div class="src"><pre><code class="language-python"># Let there be Autograd to recursively apply the chain rule through a computation graph
+random.shuffle(docs)  # 打乱顺序，训练时按顺序往下取
+print(f&quot;num docs: {len(docs)}&quot;)</code></pre></details>
+<details class="blk" open id="b-tokenizer"><summary><span class="bn">2</span><span class="bt">Tokenizer</span><span class="bd">把文字变成编号</span></summary><pre><code class="language-python"># 字符级：数据里出现过的每个字符就是一个 token，a..z 编号 0..25
+uchars = sorted(set(&#x27;&#x27;.join(docs)))
+# 特殊 token BOS，编号 26，加在每个名字的两头：
+# 开头的告诉模型&quot;开始了&quot;，结尾的让模型学会&quot;什么时候停&quot;
+BOS = len(uchars)
+vocab_size = len(uchars) + 1  # 词表一共 27 个
+print(f&quot;vocab size: {vocab_size}&quot;)</code></pre></details>
+<details class="blk" open id="b-autograd"><summary><span class="bn">3</span><span class="bt">自动求导</span><span class="bd">每个数记住自己从哪来，反向时按链式法则求梯度</span></summary><pre><code class="language-python"># 每个标量都是一个 Value。做运算时，结果记住自己由哪几个数算来、对它们的局部导数是多少。
+# 算完 loss 以后从它往回走，就能得到 loss 对每个参数的导数（梯度）。
 class Value:
-    __slots__ = (&#x27;data&#x27;, &#x27;grad&#x27;, &#x27;_children&#x27;, &#x27;_local_grads&#x27;) # Python optimization for memory usage
+    __slots__ = (&#x27;data&#x27;, &#x27;grad&#x27;, &#x27;_children&#x27;, &#x27;_local_grads&#x27;)  # 省内存
 
     def __init__(self, data, children=(), local_grads=()):
-        self.data = data                # scalar value of this node calculated during forward pass
-        self.grad = 0                   # derivative of the loss w.r.t. this node, calculated in backward pass
-        self._children = children       # children of this node in the computation graph
-        self._local_grads = local_grads # local derivative of this node w.r.t. its children
+        self.data = data                 # 前向算出的值
+        self.grad = 0                    # loss 对它的导数，反向时填入
+        self._children = children        # 它由哪几个 Value 算来
+        self._local_grads = local_grads  # 它对每个 child 的局部导数
 
     def __add__(self, other):
         other = other if isinstance(other, Value) else Value(other)
+        # c = a + b：c 对 a、b 的局部导数都是 1
         return Value(self.data + other.data, (self, other), (1, 1))
 
     def __mul__(self, other):
         other = other if isinstance(other, Value) else Value(other)
+        # c = a * b：c 对 a 的局部导数是 b，对 b 的是 a
         return Value(self.data * other.data, (self, other), (other.data, self.data))
 
+    # 幂、log、exp、relu 同理，各自写好局部导数
     def __pow__(self, other): return Value(self.data**other, (self,), (other * self.data**(other-1),))
     def log(self): return Value(math.log(self.data), (self,), (1/self.data,))
     def exp(self): return Value(math.exp(self.data), (self,), (math.exp(self.data),))
     def relu(self): return Value(max(0, self.data), (self,), (float(self.data &gt; 0),))
+    # 减法、除法等都化成上面几种运算
     def __neg__(self): return self * -1
     def __radd__(self, other): return self + other
     def __sub__(self, other): return self + (-other)
@@ -125,6 +99,7 @@ class Value:
     def __rtruediv__(self, other): return other * self**-1
 
     def backward(self):
+        # 拓扑排序：保证处理一个节点时，所有用到它的节点都已经处理完
         topo = []
         visited = set()
         def build_topo(v):
@@ -134,196 +109,153 @@ class Value:
                     build_topo(child)
                 topo.append(v)
         build_topo(self)
-        self.grad = 1
+        self.grad = 1  # loss 对自己的导数是 1
+        # 从 loss 往回走：child 的梯度 += 局部导数 × 上游梯度，这就是链式法则
+        # 用 += 是因为同一个数可能被多处用到，各处传回的梯度要加起来
         for v in reversed(topo):
             for child, local_grad in zip(v._children, v._local_grads):
-                child.grad += local_grad * v.grad</code></pre></div>
-</div>
-<div class="step">
-<div class="anno"><h4>参数<small>L81–97</small></h4>
-<p><b>1 层，宽度 16，4 个头</b>（每头 4 维），上下文最长 16：最长的名字 15 个字母，再加一个 BOS。</p>
-<ul>
-<li><code>wte</code> token 嵌入 27×16，<code>wpe</code> 位置嵌入 16×16，<code>lm_head</code> 输出层 27×16；</li>
-<li>注意力 4 个 16×16 矩阵，MLP 两个 16×64 矩阵。</li>
-</ul>
-<p>合计 <b>4192 个参数</b>，全部从 N(0, 0.08²) 随机初始化。</p></div>
-<div class="src"><pre><code class="language-python"># Initialize the parameters, to store the knowledge of the model
-n_layer = 1     # depth of the transformer neural network (number of layers)
-n_embd = 16     # width of the network (embedding dimension)
-block_size = 16 # maximum context length of the attention window (note: the longest name is 15 characters)
-n_head = 4      # number of attention heads
-head_dim = n_embd // n_head # derived dimension of each head
+                child.grad += local_grad * v.grad</code></pre></details>
+<details class="blk" open id="b-params"><summary><span class="bn">4</span><span class="bt">参数</span><span class="bd">4192 个随机初始化的数</span></summary><pre><code class="language-python">n_layer = 1      # 层数
+n_embd = 16      # 宽度：每个 token 用 16 个数表示
+block_size = 16  # 最长上下文：最长的名字 15 个字母，再加一个 BOS
+n_head = 4       # 注意力头数
+head_dim = n_embd // n_head  # 每个头 4 维
+# 所有参数从 N(0, 0.08²) 随机取值
 matrix = lambda nout, nin, std=0.08: [[Value(random.gauss(0, std)) for _ in range(nin)] for _ in range(nout)]
+# wte：token 嵌入，每个 token 一行；wpe：位置嵌入，每个位置一行；lm_head：输出层，16 维 → 27 个得分
 state_dict = {&#x27;wte&#x27;: matrix(vocab_size, n_embd), &#x27;wpe&#x27;: matrix(block_size, n_embd), &#x27;lm_head&#x27;: matrix(vocab_size, n_embd)}
 for i in range(n_layer):
+    # 注意力：q、k、v 三个投影，加一个输出投影
     state_dict[f&#x27;layer{i}.attn_wq&#x27;] = matrix(n_embd, n_embd)
     state_dict[f&#x27;layer{i}.attn_wk&#x27;] = matrix(n_embd, n_embd)
     state_dict[f&#x27;layer{i}.attn_wv&#x27;] = matrix(n_embd, n_embd)
     state_dict[f&#x27;layer{i}.attn_wo&#x27;] = matrix(n_embd, n_embd)
+    # MLP：16 → 64 → 16
     state_dict[f&#x27;layer{i}.mlp_fc1&#x27;] = matrix(4 * n_embd, n_embd)
     state_dict[f&#x27;layer{i}.mlp_fc2&#x27;] = matrix(n_embd, 4 * n_embd)
-params = [p for mat in state_dict.values() for row in mat for p in row] # flatten params into a single list[Value]
-print(f&quot;num params: {len(params)}&quot;)</code></pre></div>
-</div>
-<div class="step">
-<div class="anno"><h4>基本运算<small>L101–113</small></h4>
-<p><b>linear</b>：矩阵乘向量，没有偏置。</p>
-<p><b>softmax</b>：把一组数变成加起来为 1 的概率。先减去最大值再取指数，结果不变，但不会因为 exp 太大而溢出。</p>
-<p><b>rmsnorm</b>：把向量缩放到均方根为 1，让数值不随层层累加而失控。和 GPT-2 的 LayerNorm 相比，不减均值，也没有可学习的缩放和偏置。</p></div>
-<div class="src"><pre><code class="language-python">def linear(x, w):
+params = [p for mat in state_dict.values() for row in mat for p in row]  # 摊平成一个列表，方便逐个更新
+print(f&quot;num params: {len(params)}&quot;)  # 4192</code></pre></details>
+<details class="blk" open id="b-ops"><summary><span class="bn">5</span><span class="bt">基本运算</span><span class="bd">linear、softmax、rmsnorm</span></summary><pre><code class="language-python"># 结构照 GPT-2，做了三处简化：LayerNorm 换成 RMSNorm，去掉所有 bias，GeLU 换成 ReLU
+
+# 矩阵乘向量：w 的每一行和 x 做点积，没有 bias
+def linear(x, w):
     return [sum(wi * xi for wi, xi in zip(wo, x)) for wo in w]
 
+# 把一组数变成和为 1 的概率：取指数变成正数，再除以总和
+# 先减去最大值：结果不变，但 exp 不会因为数太大而溢出
 def softmax(logits):
     max_val = max(val.data for val in logits)
     exps = [(val - max_val).exp() for val in logits]
     total = sum(exps)
     return [e / total for e in exps]
 
+# 把向量缩放到均方根为 1，数值不会随着层层累加而失控
+# 和 LayerNorm 相比，不减均值，也没有可学习的缩放和偏置
 def rmsnorm(x):
     ms = sum(xi * xi for xi in x) / len(x)
     scale = (ms + 1e-5) ** -0.5
-    return [xi * scale for xi in x]</code></pre></div>
-</div>
-<div class="step">
-<div class="anno"><h4>模型<small>L99–151</small></h4>
-<p>一次处理<b>一个位置</b>：输入当前 token 和位置，输出 27 个 <b>logits</b>，即词表里每个 token 作为下一个的得分。</p>
-<ul>
-<li><b>嵌入</b>：token 向量加位置向量。</li>
-<li><b>注意力</b>：当前位置的 q 和之前每个位置的 k 做点积，除以 √4，softmax 成权重，再对 v 加权求和，就是从前文取回的信息。k、v 存进 <code>keys</code>/<code>values</code> 给后面的位置用；位置是一个个往后算的，天然看不到未来，不需要 mask。4 个头各算一遍，拼起来再过 <code>wo</code>。</li>
-<li><b>MLP</b>：16 → 64 → ReLU → 16，在当前位置上加工信息。</li>
-<li>每块先 rmsnorm（<b>pre-norm</b>），结果加回输入（<b>残差</b>）。</li>
-</ul>
-<p>和 GPT-2 的差别写在注释里：RMSNorm 代替 LayerNorm，去掉所有 bias，ReLU 代替 GeLU。</p></div>
-<div class="src"><pre><code class="language-python"># Define the model architecture: a function mapping tokens and parameters to logits over what comes next
-# Follow GPT-2, blessed among the GPTs, with minor differences: layernorm -&gt; rmsnorm, no biases, GeLU -&gt; ReLU
-
+    return [xi * scale for xi in x]</code></pre></details>
+<details class="blk" open id="b-model"><summary><span class="bn">6</span><span class="bt">模型</span><span class="bd">嵌入 → 注意力 → MLP → 输出</span></summary><pre><code class="language-python"># 一次处理一个位置：输入当前 token 和它的位置，输出 27 个得分（logits），表示下一个 token 是谁
+# keys、values 里存着之前每个位置算出的 k、v，供当前位置的注意力使用
 def gpt(token_id, pos_id, keys, values):
-    tok_emb = state_dict[&#x27;wte&#x27;][token_id] # token embedding
-    pos_emb = state_dict[&#x27;wpe&#x27;][pos_id] # position embedding
-    x = [t + p for t, p in zip(tok_emb, pos_emb)] # joint token and position embedding
-    x = rmsnorm(x) # note: not redundant due to backward pass via the residual connection
+    tok_emb = state_dict[&#x27;wte&#x27;][token_id]  # 查表得到 token 向量
+    pos_emb = state_dict[&#x27;wpe&#x27;][pos_id]    # 查表得到位置向量
+    x = [t + p for t, p in zip(tok_emb, pos_emb)]  # 两者相加
+    x = rmsnorm(x)  # 后面的残差会把这个 x 原样加回去，所以这一次归一化不是多余的
 
     for li in range(n_layer):
-        # 1) Multi-head Attention block
+        # 1) 注意力：从前文里取回有用的信息
         x_residual = x
-        x = rmsnorm(x)
-        q = linear(x, state_dict[f&#x27;layer{li}.attn_wq&#x27;])
-        k = linear(x, state_dict[f&#x27;layer{li}.attn_wk&#x27;])
-        v = linear(x, state_dict[f&#x27;layer{li}.attn_wv&#x27;])
+        x = rmsnorm(x)  # pre-norm：先归一化，再进入这一块
+        q = linear(x, state_dict[f&#x27;layer{li}.attn_wq&#x27;])  # 我要找什么
+        k = linear(x, state_dict[f&#x27;layer{li}.attn_wk&#x27;])  # 我这里有什么
+        v = linear(x, state_dict[f&#x27;layer{li}.attn_wv&#x27;])  # 我能提供什么
+        # 存下来给后面的位置用。位置是一个个往后算的，当前位置只看得到自己和之前的位置，不需要 mask
         keys[li].append(k)
         values[li].append(v)
         x_attn = []
-        for h in range(n_head):
+        for h in range(n_head):  # 4 个头各自独立算一遍
             hs = h * head_dim
             q_h = q[hs:hs+head_dim]
             k_h = [ki[hs:hs+head_dim] for ki in keys[li]]
             v_h = [vi[hs:hs+head_dim] for vi in values[li]]
+            # q 和每个位置的 k 做点积，越大说明那个位置越相关
+            # 除以 √head_dim：维度越大点积越大，不除的话 softmax 会几乎只选中一个位置
             attn_logits = [sum(q_h[j] * k_h[t][j] for j in range(head_dim)) / head_dim**0.5 for t in range(len(k_h))]
-            attn_weights = softmax(attn_logits)
-            head_out = [sum(attn_weights[t] * v_h[t][j] for t in range(len(v_h))) for j in range(head_dim)]
-            x_attn.extend(head_out)
+            attn_weights = softmax(attn_logits)  # 变成和为 1 的权重
+            head_out = [sum(attn_weights[t] * v_h[t][j] for t in range(len(v_h))) for j in range(head_dim)]  # 按权重对 v 求和
+            x_attn.extend(head_out)  # 4 个头拼回 16 维
         x = linear(x_attn, state_dict[f&#x27;layer{li}.attn_wo&#x27;])
-        x = [a + b for a, b in zip(x, x_residual)]
-        # 2) MLP block
+        x = [a + b for a, b in zip(x, x_residual)]  # 残差：结果加回输入，这一块只需学&quot;改动多少&quot;
+        # 2) MLP：在当前位置上加工信息
         x_residual = x
         x = rmsnorm(x)
-        x = linear(x, state_dict[f&#x27;layer{li}.mlp_fc1&#x27;])
-        x = [xi.relu() for xi in x]
-        x = linear(x, state_dict[f&#x27;layer{li}.mlp_fc2&#x27;])
-        x = [a + b for a, b in zip(x, x_residual)]
+        x = linear(x, state_dict[f&#x27;layer{li}.mlp_fc1&#x27;])  # 16 → 64
+        x = [xi.relu() for xi in x]  # 负数变 0。没有这个非线性，两次矩阵乘法合起来还是一次
+        x = linear(x, state_dict[f&#x27;layer{li}.mlp_fc2&#x27;])  # 64 → 16
+        x = [a + b for a, b in zip(x, x_residual)]  # 残差
 
-    logits = linear(x, state_dict[&#x27;lm_head&#x27;])
-    return logits</code></pre></div>
-</div>
-<div class="step">
-<div class="anno"><h4>Adam<small>L153–156</small></h4>
-<p>每个参数维护两个滑动平均：梯度 <b>m</b> 和梯度平方 <b>v</b>。更新方向用 m/√v：m 把方向平滑，不被单步噪声带偏；除以 √v 把每个参数的步长归一化，梯度天生大或小的参数都以合适的速度移动。</p>
-<p>学习率 0.01；β1 = 0.85、β2 = 0.99，比常见的 0.9 / 0.999 小，平均的窗口更短。</p></div>
-<div class="src"><pre><code class="language-python"># Let there be Adam, the blessed optimizer and its buffers
+    logits = linear(x, state_dict[&#x27;lm_head&#x27;])  # 16 → 27
+    return logits</code></pre></details>
+<details class="blk" open id="b-adam"><summary><span class="bn">7</span><span class="bt">Adam</span><span class="bd">优化器的状态</span></summary><pre><code class="language-python"># 每个参数记两个滑动平均：m 是梯度的平均，让方向更稳；v 是梯度平方的平均，用来把步长归一化
+# β1、β2 决定平均的窗口长短，这里比常见的 0.9 / 0.999 小，窗口更短
 learning_rate, beta1, beta2, eps_adam = 0.01, 0.85, 0.99, 1e-8
-m = [0.0] * len(params) # first moment buffer
-v = [0.0] * len(params) # second moment buffer</code></pre></div>
-</div>
-<div class="step">
-<div class="anno"><h4>训练循环<small>L158–198</small></h4>
-<ul>
-<li>每步取<b>一个名字</b>（batch = 1），按顺序往下取。</li>
-<li>逐个位置前向，损失是 <b>−log p</b>（p 是模型给正确的下一个 token 的概率），对所有位置取平均。</li>
-<li><code>backward</code> 得到 4192 个梯度；学习率从 0.01 <b>线性降到 0</b>；Adam 更新时除以 1 − β<sup>t</sup>，修正 m、v 从 0 起步时偏小的问题；最后梯度清零。</li>
-</ul>
-<p>1000 步只用到 1000 个名字，约为数据的 3%。</p></div>
-<div class="src"><pre><code class="language-python"># Repeat in sequence
-num_steps = 1000 # number of training steps
+m = [0.0] * len(params)
+v = [0.0] * len(params)</code></pre></details>
+<details class="blk" open id="b-train"><summary><span class="bn">8</span><span class="bt">训练循环</span><span class="bd">前向、反向、更新，重复 1000 步</span></summary><pre><code class="language-python">num_steps = 1000
 for step in range(num_steps):
 
-    # Take single document, tokenize it, surround it with BOS special token on both sides
+    # 每步取一个名字，两头加上 BOS：emma → [BOS, e, m, m, a, BOS]
     doc = docs[step % len(docs)]
     tokens = [BOS] + [uchars.index(ch) for ch in doc] + [BOS]
-    n = min(block_size, len(tokens) - 1)
+    n = min(block_size, len(tokens) - 1)  # 要预测的位置数
 
-    # Forward the token sequence through the model, building up the computation graph all the way to the loss
+    # 前向：从左往右，每个位置预测下一个 token
     keys, values = [[] for _ in range(n_layer)], [[] for _ in range(n_layer)]
     losses = []
     for pos_id in range(n):
         token_id, target_id = tokens[pos_id], tokens[pos_id + 1]
         logits = gpt(token_id, pos_id, keys, values)
         probs = softmax(logits)
-        loss_t = -probs[target_id].log()
+        loss_t = -probs[target_id].log()  # 给正确答案的概率越高，loss 越小
         losses.append(loss_t)
-    loss = (1 / n) * sum(losses) # final average loss over the document sequence. May yours be low.
+    loss = (1 / n) * sum(losses)  # 对所有位置取平均
 
-    # Backward the loss, calculating the gradients with respect to all model parameters
+    # 反向：一次调用，4192 个参数的梯度全部算好
     loss.backward()
 
-    # Adam optimizer update: update the model parameters based on the corresponding gradients
-    lr_t = learning_rate * (1 - step / num_steps) # linear learning rate decay
+    # 更新
+    lr_t = learning_rate * (1 - step / num_steps)  # 学习率从 0.01 线性降到 0
     for i, p in enumerate(params):
         m[i] = beta1 * m[i] + (1 - beta1) * p.grad
         v[i] = beta2 * v[i] + (1 - beta2) * p.grad ** 2
+        # m、v 从 0 开始累积，前几步偏小，除以 1 - β^t 补回来
         m_hat = m[i] / (1 - beta1 ** (step + 1))
         v_hat = v[i] / (1 - beta2 ** (step + 1))
-        p.data -= lr_t * m_hat / (v_hat ** 0.5 + eps_adam)
-        p.grad = 0</code></pre></div>
-</div>
-<div class="step">
-<div class="anno"><h4>生成<small>L200–216</small></h4>
-<p>从 BOS 开始，每次按概率抽一个 token，作为下一步的输入，抽到 BOS 就停。</p>
-<p>logits 先除以<b>温度</b> 0.5 再做 softmax：分布变尖，高概率的字母更容易被选中，生成的名字更像样，变化也更少。</p></div>
-<div class="src"><pre><code class="language-python"># Inference: may the model babble back to us
-temperature = 0.5 # in (0, 1], control the &quot;creativity&quot; of generated text, low to high
+        p.data -= lr_t * m_hat / (v_hat ** 0.5 + eps_adam)  # 沿 m/√v 的反方向走一步
+        p.grad = 0  # 梯度清零，下一步重新累加
+
+    print(f&quot;step {step+1:4d} / {num_steps:4d} | loss {loss.data:.4f}&quot;, end=&#x27;\r&#x27;)</code></pre></details>
+<details class="blk" open id="b-sample"><summary><span class="bn">9</span><span class="bt">生成</span><span class="bd">从 BOS 开始一个个往后抽</span></summary><pre><code class="language-python">temperature = 0.5  # 先把 logits 除以它再 softmax。小于 1 让分布更尖：名字更像样，变化也更少
 print(&quot;\n--- inference (new, hallucinated names) ---&quot;)
 for sample_idx in range(20):
     keys, values = [[] for _ in range(n_layer)], [[] for _ in range(n_layer)]
-    token_id = BOS
+    token_id = BOS  # 从 BOS 开始
     sample = []
     for pos_id in range(block_size):
         logits = gpt(token_id, pos_id, keys, values)
         probs = softmax([l / temperature for l in logits])
-        token_id = random.choices(range(vocab_size), weights=[p.data for p in probs])[0]
-        if token_id == BOS:
+        token_id = random.choices(range(vocab_size), weights=[p.data for p in probs])[0]  # 按概率抽一个
+        if token_id == BOS:  # 抽到 BOS，名字结束
             break
         sample.append(uchars[token_id])
-    print(f&quot;sample {sample_idx+1:2d}: {&#x27;&#x27;.join(sample)}&quot;)</code></pre></div>
-</div>
-  </div>
+    print(f&quot;sample {sample_idx+1:2d}: {&#x27;&#x27;.join(sample)}&quot;)</code></pre></details>
 
-  <h3>microgpt 的做法</h3>
-  <div class="prose"><p>把上面的选择列在一起。右边一列是第一章里改动它的那一节；结构上的改动留到第二章。</p></div>
-  <div class="table-scroll"><table class="spec">
-    <thead><tr><th>部件</th><th>microgpt</th><th>在哪里改</th></tr></thead>
-    <tbody><tr><td>数据</td><td>32033 个英文名字</td><td><span class="to">1.03</span></td></tr><tr><td>Tokenizer</td><td>字符级，词表 27</td><td><span class="to">1.05</span></td></tr><tr><td>规模</td><td>1 层、宽 16、4 头、上下文 16，共 4192 参数</td><td><span class="to">1.05 · 第二章</span></td></tr><tr><td>结构</td><td>GPT-2 简化版：RMSNorm、无 bias、ReLU</td><td><span class="to later">第二章</span></td></tr><tr><td>初始化</td><td>N(0, 0.08²)</td><td><span class="to">1.10</span></td></tr><tr><td>优化器</td><td>Adam，β1 0.85，β2 0.99</td><td><span class="to">1.06</span></td></tr><tr><td>学习率</td><td>0.01，线性衰减到 0，无 warmup</td><td><span class="to">1.07</span></td></tr><tr><td>Batch</td><td>每步 1 个名字</td><td><span class="to">1.03</span></td></tr><tr><td>数值精度</td><td>Python float（64 位）</td><td><span class="to">1.08</span></td></tr><tr><td>执行</td><td>纯 Python 标量运算，单线程 CPU</td><td><span class="to">1.02 · 1.04 · 1.09</span></td></tr><tr><td>正则与稳定</td><td>无 weight decay、dropout、梯度裁剪</td><td><span class="to">1.10</span></td></tr></tbody>
-  </table></div>
-
-  <h3>跑起来</h3>
-  <div class="kpis">
-    <div class="kpi"><div class="n">4192</div><div class="l">参数</div></div>
-    <div class="kpi"><div class="n">109<small>s</small></div><div class="l">训练 1000 步，共 7170 个 token</div></div>
-    <div class="kpi"><div class="n">66<small>token/s</small></div><div class="l">单线程 CPU</div></div>
-    <div class="kpi"><div class="n">2.32</div><div class="l">最后 50 步平均 loss（随机猜 3.30）</div></div>
-  </div>
-  <div class="results">
-    <figure>
-      <svg class="chart" viewBox="0 0 640 300" role="img" aria-label="microgpt 训练 1000 步的 loss 曲线">
+<h3 id="r-101">运行结果</h3>
+<p>原样跑 1000 步，单线程 CPU 上用了 109 秒。每步一个名字，一共读了 7170 个 token。</p>
+<div class="res">
+  <figure>
+    <svg class="chart" viewBox="0 0 640 300" role="img" aria-label="microgpt 训练 1000 步的 loss 曲线">
 <line class="grid" x1="44" x2="624" y1="210.8" y2="210.8"/>
 <text class="tick" x="36" y="214.8" text-anchor="end">2.0</text>
 <line class="grid" x1="44" x2="624" y1="112.4" y2="112.4"/>
@@ -341,20 +273,18 @@ for sample_idx in range(20):
 <line class="ref" x1="44" x2="624" y1="83.3" y2="83.3"/>
 <text class="lab" x="620" y="76.3" text-anchor="end">随机猜：ln 27 ≈ 3.30</text>
 </svg>
-      <figcaption>每一步的训练 loss。灰线是单步的值，粗线是最近 50 步的平均，虚线是随机猜（ln 27）。</figcaption>
-    </figure>
-    <div class="prose">
-      <p><b>loss 降到了随机猜以下。</b>开始时约 3.4，比随机猜还差一点：随机初始化的模型不是均匀地猜，而是带着偏好猜错。前 200 步下降很快，之后在 2.4–2.5 徘徊；最后 200 步学习率趋近 0，又降到 2.3 左右。</p>
-      <p><b>单步 loss 抖得厉害</b>，上下约 ±0.7。每步只看一个名字，而名字之间难度差别很大。</p>
-      <p><b>学到了名字的样子。</b>生成的 20 个名字里有 9 个是训练数据里没有的，但读起来都像英文名字。</p>
-      <p><b>但很慢。</b>每一次加法、乘法都要创建一个 Python 对象、记录它的来历，真正的算术只占很小一部分。每秒 66 个 token，够学会名字，却撑不起更大的数据和成百次的对照实验。</p>
-    </div>
+    <div class="fig-cap">每一步的训练 loss。灰线是单步的值，粗线是最近 50 步的平均，虚线是瞎猜的水平 ln 27 ≈ 3.30。</div>
+  </figure>
+  <div>
+    <p>loss 从 3.4 左右降到 2.3 左右。对 27 个 token 均匀瞎猜，loss 是 ln 27 ≈ 3.30；刚开始的模型比瞎猜还差一点，因为随机初始化的模型不是均匀地猜，而是带着偏好猜错。</p>
+    <p>前 200 步降得很快，之后在 2.4 到 2.5 之间徘徊，最后 200 步学习率接近 0，又降了一点。灰线抖得厉害，因为每步只看一个名字，名字之间难度差别很大。</p>
+    <p>学到的东西就是开头那 20 个名字，没见过的也像英文名字。代价是慢：每秒只能处理 66 个 token。每一次加法、乘法都要创建一个 Python 对象、记下它的来历，真正的算术只占很小一部分。</p>
   </div>
-
-  <div class="next-up"><span><b>下一节 · 1.02 PyTorch</b>：把标量换成张量</span><span style="color:var(--muted)">写作中</span></div>
-</article>
 </div>
+<div class="nextsec">下一节：1.02 PyTorch（写作中）</div>
+</section>
 </main>
-<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。所有实验代码和日志见 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
+</div>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
 </body>
 </html>

@@ -4,27 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>scratch2modern</title>
-<meta name="description" content="从 microgpt 出发，一次加一样东西，用实验一步步构建现代大语言模型。">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="description" content="从 microgpt 出发，一步步搭出现代大语言模型，每一步都有对照实验。">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<nav class="nav"><div class="wrap">
-<a class="brand" href="./">scratch<span>2</span>modern</a>
-<div class="nav-links"><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></div>
-</div></nav>
-<main>
-<div class="wrap">
-<section class="hero">
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
+<main class="wrap">
+<section class="home-hero">
   <div>
-    <div class="eyebrow">从零构建现代大语言模型</div>
-    <h1>从 200 行的 GPT<br><span>到现代大模型</span></h1>
-    <p class="lead">以 Karpathy 的 microgpt 为起点，一次只加一样东西。每个部件都配一组对照实验：它解决什么问题，带来多少提升，在什么条件下根本不起作用。</p>
-    <div class="ctas"><a class="btn primary" href="ch1.html">开始阅读第一章 →</a><a class="btn" href="https://github.com/LaugHan/scratch2modern">GitHub</a></div>
+    <h1>scratch2modern</h1>
+    <p class="sub">从 microgpt 出发，一步步搭出现代大语言模型</p>
+    <p>我们从 Karpathy 的 microgpt 开始。它只有两百行纯 Python，是一个完整的 GPT，只是很小，也很慢。之后每一节只往上加一样东西：换成 PyTorch、搬上 GPU、换一个优化器……然后用实验看看它到底带来了什么。</p>
+    <p>每个结论都有对照实验：一次只改一个变量，学习率各自调好再比，多跑几个随机种子看波动。有的改动让训练快了几十倍，有的让模型明显变好，也有的在我们这个规模上没有用，那就去找它在什么条件下才有用。</p>
+    <p>每一节对应仓库里一个能直接运行的脚本，和上一节 diff 一下就是这一节的全部改动。建议边读边跑，自己改改参数。</p>
+    <div class="btns"><a class="btn solid" href="ch1.html">从第一章开始</a><a class="btn" href="https://github.com/LaugHan/scratch2modern">GitHub</a></div>
   </div>
-  <div class="hero-fig">
+  <figure style="margin:0">
     <svg class="chart" viewBox="0 0 560 360" role="img" aria-label="第一章：训练时间和验证集 bpb 的变化">
 <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="currentColor" stroke-width="1.5"/></marker></defs>
 <line class="grid" x1="46" x2="546" y1="316.0" y2="316.0"/><text class="tick" x="38" y="320.0" text-anchor="end">1.0</text>
@@ -55,47 +50,18 @@
 <circle class="pt" cx="102.5" cy="286.0" r="5"/>
 <text class="plab" x="102.5" y="308.0" text-anchor="middle">⑥ 编译 + CUDA Graph</text>
 </svg>
-    <div class="cap">第一章的主线。同一个 1 层 GPT、同样的数据，训练时间从 93.5 秒降到 4.0 秒，bpb 从 2.52 降到 1.18（越往左下越好）。每一步都是一节，各有对照实验。</div>
-  </div>
+    <div class="fig-cap">第一章要走的路。同一个 1 层 GPT，每一步改一样东西：训练时间从 93.5 秒降到 4.0 秒，验证集 bpb（越低越好）从 2.52 降到 1.18。</div>
+  </figure>
 </section>
 
-<div class="stats">
-  <div class="stat"><div class="n">200 行</div><div class="l">起点：纯 Python、零依赖的 microgpt</div></div>
-  <div class="stat"><div class="n">≈ 20 万倍</div><div class="l">第一章结束时的训练吞吐提升</div></div>
-  <div class="stat"><div class="n">268 次</div><div class="l">第一章跑过的训练</div></div>
-  <div class="stat"><div class="n">单卡</div><div class="l">所有实验都能在一张 GPU 上复现</div></div>
-</div>
-
-<section class="section">
-  <h2>怎么做</h2>
-  <p class="intro">大模型的训练配方里有几十个部件，各有论文、各有默认值。我们关心的是：拿掉它会怎样，加上它又换来了什么。</p>
-  <div class="how">
-    <div><h3>一次只改一处</h3><p>每一节是一个能单独运行的脚本。和上一节 diff，就是这一节的全部改动。</p>
-<pre><code><span style="color:var(--muted)">  def linear(x, w):</span>
-<span style="color:#c2410c">-     return [sum(wi * xi for ...) for wo in w]</span>
-<span style="color:#15803d">+     return w @ x</span></code></pre></div>
-    <div><h3>每个结论都有实验</h3><p>只改一个变量，训练量按 token 对齐。优化器、调度各自扫学习率，取最好的再比；多个随机种子看波动，差距小于波动的算打平。</p></div>
-    <div><h3>小模型和大模型对照</h3><p>玩具规模上看到的，不一定在大模型上成立。每一节都对照真实大模型的做法，说清楚哪些结论能推广，哪些不能，为什么。</p></div>
-  </div>
-</section>
-
-<section class="section" id="chapters" style="padding-top:0">
-  <h2>章节</h2>
-  <p class="intro">每章是一条主线，章内按“加一样东西”分成若干节。</p>
-  <div class="chapters">
-    <a class="chapter" href="ch1.html">
-      <span class="badge live">1.01 已上线</span>
-      <div class="no">第一章</div><h3>训练</h3>
-      <p>模型不动，只改怎么训练。从纯 Python 出发，换上 PyTorch 和 GPU，再比较 tokenizer、优化器、学习率调度、数值精度和各种工程加速。</p>
-      <div class="tags"><span>PyTorch</span><span>batch</span><span>GPU</span><span>BPE</span><span>Adam / Muon</span><span>WSD</span><span>bf16 / fp8</span><span>torch.compile</span><span>CUDA Graph</span><span>weight decay</span></div>
-    </a>
-    <div class="chapter dim"><span class="badge soon">规划中</span><div class="no">第二章</div><h3>模型结构</h3><p>模型变深、变大以后，结构要怎么改，才能训得动、训得好。</p></div>
-    <div class="chapter dim"><span class="badge soon">规划中</span><div class="no">第三章</div><h3>后训练</h3><p>预训练得到的模型只会续写。怎样让它听懂指令、按要求回答。</p></div>
-    <div class="chapter dim"><span class="badge soon">规划中</span><div class="no">Infra</div><h3>显存、通信与并行</h3><p>一张卡放不下、算不完的时候，训练怎样铺到多张卡上。</p></div>
-  </div>
-</section>
+<div class="sec-title" id="chapters">章节</div>
+<div class="chlist">
+  <a class="row" href="ch1.html"><span class="no">第一章</span><h3>训练</h3><p>模型不动，只改怎么训练：PyTorch、batch、GPU、tokenizer、优化器、学习率调度、数值精度、工程加速、训练细节。</p><span class="st on">已写到 1.01</span></a>
+  <div class="row dim"><span class="no">第二章</span><h3>模型结构</h3><p>模型变深、变大以后，结构要怎么改。</p><span class="st">规划中</span></div>
+  <div class="row dim"><span class="no">第三章</span><h3>后训练</h3><p>让只会续写的模型听懂指令。</p><span class="st">规划中</span></div>
+  <div class="row dim"><span class="no">Infra</span><h3>显存、通信与并行</h3><p>一张卡放不下、算不完的时候怎么办。</p><span class="st">规划中</span></div>
 </div>
 </main>
-<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。所有实验代码和日志见 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
 </body>
 </html>
