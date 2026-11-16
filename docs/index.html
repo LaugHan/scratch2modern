@@ -13,10 +13,11 @@
 <section class="home-hero">
   <div>
     <h1>scratch2modern</h1>
-    <p class="sub">从 microgpt 出发，一步步搭出现代大语言模型</p>
-    <p>我们从 Karpathy 的 microgpt 开始。它只有两百行纯 Python，是一个完整的 GPT，只是很小，也很慢。之后每一节只往上加一样东西：换成 PyTorch、搬上 GPU、换一个优化器……然后用实验看看它到底带来了什么。</p>
-    <p>每个结论都有对照实验：一次只改一个变量，学习率各自调好再比，多跑几个随机种子看波动。有的改动让训练快了几十倍，有的让模型明显变好，也有的在我们这个规模上没有用，那就去找它在什么条件下才有用。</p>
-    <p>每一节对应仓库里一个能直接运行的脚本，和上一节 diff 一下就是这一节的全部改动。建议边读边跑，自己改改参数。</p>
+    <p class="sub">从一个 200 行的 GPT 出发，一步步搭出现代大模型。每一步都有实验。</p>
+    <p>起点是 Karpathy 的 microgpt。它只有 200 行纯 Python，不依赖任何库，从读数据、自动求导、模型，到训练和推理，一个完整的 GPT 都在里面。但它也只是最简单的版本：一层，很小，在 CPU 上慢慢跑。</p>
+    <p>从它到现代大模型，中间隔着大量训练技巧、结构改动和后训练算法，而且每年都有新的冒出来。这么多东西，哪些是真的有用？我们把它们拆开，一次只加一样，再拿去和你直觉上觉得对的做法、和曾经或现在流行的做法放在一起比，用实验看看到底差在哪。</p>
+    <p>所有实验都在仓库里，拉下来就能跑。你也可以换成自己的数据，或者去验证我们没覆盖到的细节。</p>
+    <p>所有实验都在单卡上完成，模型始终是 toy 规模。有些结论在这个规模下会和原始报告不一致，遇到的时候我们会单独说明。</p>
     <div class="btns"><a class="btn solid" href="ch1.html">从第一章开始</a><a class="btn" href="https://github.com/LaugHan/scratch2modern">GitHub</a></div>
   </div>
   <figure style="margin:0">
@@ -61,6 +62,13 @@
   <div class="row dim"><span class="no">第三章</span><h3>后训练</h3><p>让只会续写的模型听懂指令。</p><span class="st">规划中</span></div>
   <div class="row dim"><span class="no">Infra</span><h3>显存、通信与并行</h3><p>一张卡放不下、算不完的时候怎么办。</p><span class="st">规划中</span></div>
 </div>
+<div class="sec-title" id="about">写在前面</div>
+<section class="about">
+<p>坦白地讲，我没有到达教学别人的水平，我也只是初学者。看到网络上纷杂的信息，每次都感觉很嗨，但是很快就忘记了。跟人聊起来，貌似能说一些名词，但实际上我什么细节也说不出来。这种像隔着一层雾一样看待模型的感觉，让我觉得很不舒服。我也曾经从各种教程学习，但是我总觉得犹如隔靴搔痒，教程里也有让我觉得困惑的地方，我始终感觉不能理解，或者很快就忘记。</p>
+<p>直到看到 microgpt，从头到尾清晰的代码，让我清晰地看到最原始的 LLM 是怎么被构建出来的。我觉得深受启发，也想做一个足够清晰的项目。</p>
+<p>之前的教程我觉得不够清晰的原因，是我总有迷迷糊糊的概念，我没有清晰地搞懂我就推进不了，或者推进了我也觉得心里有东西悬着。可能它们都默认读者有较高的前置知识，或者已经忘记了小白是怎么想的，所以我读着会难受。于是我打算从小白的视角出发，做一个足够详细、有实验支撑的项目，from scratch to modern。</p>
+<p>我写不出那么优雅的代码，并且可能在构建 modern model 的时候，一些代码也难以写得很优美。不过我尽可能从我自己就能够清晰理解的角度，把整个 modern model 讲清楚，不要隔靴搔痒。</p>
+</section>
 </main>
 <footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
 </body>
