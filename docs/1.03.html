@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.03 Batch · scratch2modern</title>
+<meta name="description" content="1.03：一次算一整批。">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>
+addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
+function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.open = open); }
+</script>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
+<div class="wrap layout">
+<aside class="side"><div class="ch"><a href="./#chapters">第一章 · 训练</a></div><ol><li><a href="1.01.html"><span class="sn">1.01</span>microgpt</a></li><li><a href="1.02.html"><span class="sn">1.02</span>PyTorch</a></li><li><a class="cur" href="1.03.html"><span class="sn">1.03</span>Batch</a><ol><li><a href="#batch">batch 是什么</a></li><li><a href="#ts">TinyStories</a></li><li><a href="#b3-model">模型</a></li><li><a href="#b3-loss">loss</a></li><li><a href="#b3-data">取数据</a></li><li><a href="#setup">实验怎么比</a></li><li><a href="#r-103">运行结果</a></li><li><a href="#malloc">为什么越大越慢</a></li></ol></li><li><a href="1.04.html"><span class="sn">1.04</span>GPU</a></li><li><a href="1.05.html"><span class="sn">1.05</span>Tokenizer</a></li><li><span class="off"><span class="sn">1.06</span>优化器</span></li><li><span class="off"><span class="sn">1.07</span>学习率调度</span></li><li><span class="off"><span class="sn">1.08</span>数值精度</span></li><li><span class="off"><span class="sn">1.09</span>工程加速</span></li><li><span class="off"><span class="sn">1.10</span>训练细节</span></li><li><span class="off"><span class="sn">1.11</span>回顾</span></li></ol></aside>
+<main class="content">
+<section>
+<div class="ch-intro">第一章 · 训练</div>
+<h2>1.03 Batch</h2>
+
+<p>上一节最后我们发现，时间大部分花在调用上，而不是计算上。现在每次调用只处理一个 token：16 个数进去，16 个数出来。既然每次调用的开销差不多是固定的，那一次多喂一些数据进去，同样的开销就能算更多的东西。这就是 batch。</p>
+
+<figure style="margin:0" class="small-fig"><svg class="chart" viewBox="0 0 640 184" role="img" aria-label="names 上每秒处理的 token 数">
+<text class="lab" x="140" y="22" text-anchor="end">1.02 逐个 token</text>
+<rect class="bar1" x="150" y="6" width="3.2" height="22" rx="3"/>
+<text class="val" x="161.2" y="22">1.7k</text>
+<text class="lab" x="140" y="56" text-anchor="end">batch 1</text>
+<rect class="bar2" x="150" y="40" width="26.0" height="22" rx="3"/>
+<text class="val" x="184.0" y="56">13.6k</text>
+<text class="lab" x="140" y="90" text-anchor="end">batch 4</text>
+<rect class="bar2" x="150" y="74" width="87.3" height="22" rx="3"/>
+<text class="val" x="245.3" y="90">45.6k</text>
+<text class="lab" x="140" y="124" text-anchor="end">batch 16</text>
+<rect class="bar2" x="150" y="108" width="222.8" height="22" rx="3"/>
+<text class="val" x="380.8" y="124">116.3k</text>
+<text class="lab" x="140" y="158" text-anchor="end">batch 64</text>
+<rect class="bar2" x="150" y="142" width="380.0" height="22" rx="3"/>
+<text class="val" x="538.0" y="158">198.4k</text>
+</svg></figure>
+<p class="cap">在 names 上，每秒能训练多少个 token。1.02 一个 token 一个 token 地算，每秒约 1.7k；一次算一整批，batch 64 时到了 198k，快了将近 120 倍。</p>
+
+<div class="arch-row" id="batch">
+  <div>
+    <p>batch 有两个方向：</p>
+    <ol class="plain">
+      <li>一段文本里的所有位置一起算。原来每个位置都要单独调用一次模型，现在整段长度为 T 的文本一次送进去。</li>
+      <li>很多段文本一起算。一次送进去 B 段，输入的形状就从一个 token 变成了 <code>(B, T)</code>。</li>
+    </ol>
+    <p>第一个方向会带来一个问题。所有位置一起算的时候，注意力能看到整段文本，前面的位置就能偷看到后面的答案。原来一个个算的时候不存在这个问题，因为后面的 token 还没送进来。所以要加一个因果 mask（causal mask）：每个位置只能看自己和前面的位置。画出来是一个下三角，比如右图里，第二个 m 能看到 BOS、e、m 和它自己，看不到后面的 a。</p>
+  </div>
+  <figure><svg class="chart mask" viewBox="0 0 310 256" role="img" aria-label="因果 mask：每个位置只能看到自己和前面的位置">
+<text class="tick" x="190.0" y="14" text-anchor="middle">被看的位置</text>
+<text class="lab" x="110.0" y="38" text-anchor="middle">BOS</text>
+<text class="lab" x="80" y="71.0" text-anchor="end">BOS</text>
+<rect class="mk-on" x="92" y="48" width="36" height="36" rx="4"/>
+<rect class="mk-off" x="132" y="48" width="36" height="36" rx="4"/>
+<rect class="mk-off" x="172" y="48" width="36" height="36" rx="4"/>
+<rect class="mk-off" x="212" y="48" width="36" height="36" rx="4"/>
+<rect class="mk-off" x="252" y="48" width="36" height="36" rx="4"/>
+<text class="lab" x="150.0" y="38" text-anchor="middle">e</text>
+<text class="lab" x="80" y="111.0" text-anchor="end">e</text>
+<rect class="mk-on" x="92" y="88" width="36" height="36" rx="4"/>
+<rect class="mk-on" x="132" y="88" width="36" height="36" rx="4"/>
+<rect class="mk-off" x="172" y="88" width="36" height="36" rx="4"/>
+<rect class="mk-off" x="212" y="88" width="36" height="36" rx="4"/>
+<rect class="mk-off" x="252" y="88" width="36" height="36" rx="4"/>
+<text class="lab" x="190.0" y="38" text-anchor="middle">m</text>
+<text class="lab" x="80" y="151.0" text-anchor="end">m</text>
+<rect class="mk-on" x="92" y="128" width="36" height="36" rx="4"/>
+<rect class="mk-on" x="132" y="128" width="36" height="36" rx="4"/>
+<rect class="mk-on" x="172" y="128" width="36" height="36" rx="4"/>
+<rect class="mk-off" x="212" y="128" width="36" height="36" rx="4"/>
+<rect class="mk-off" x="252" y="128" width="36" height="36" rx="4"/>
+<text class="lab" x="230.0" y="38" text-anchor="middle">m</text>
+<text class="lab" x="80" y="191.0" text-anchor="end">m</text>
+<rect class="mk-on" x="92" y="168" width="36" height="36" rx="4"/>
+<rect class="mk-on" x="132" y="168" width="36" height="36" rx="4"/>
+<rect class="mk-on" x="172" y="168" width="36" height="36" rx="4"/>
+<rect class="mk-on" x="212" y="168" width="36" height="36" rx="4"/>
+<rect class="mk-off" x="252" y="168" width="36" height="36" rx="4"/>
+<text class="lab" x="270.0" y="38" text-anchor="middle">a</text>
+<text class="lab" x="80" y="231.0" text-anchor="end">a</text>
+<rect class="mk-on" x="92" y="208" width="36" height="36" rx="4"/>
+<rect class="mk-on" x="132" y="208" width="36" height="36" rx="4"/>
+<rect class="mk-on" x="172" y="208" width="36" height="36" rx="4"/>
+<rect class="mk-on" x="212" y="208" width="36" height="36" rx="4"/>
+<rect class="mk-on" x="252" y="208" width="36" height="36" rx="4"/>
+<text class="tick" x="14" y="146.0" text-anchor="middle" transform="rotate(-90 14 146.0)">当前位置</text>
+</svg></figure>
+</div>
+
+<p id="ts">这一节还换了一个数据集。names 里最长的名字才 15 个字母，用不上长的上下文，batch 在 T 这个方向上也展不开。所以我们加上了 TinyStories：微软在 2023 年发布的一个数据集，是用 GPT-3.5 和 GPT-4 写的英文小故事，只用三四岁小孩能懂的词。我们用的是它的验证集文件，一共 27629 篇故事、约 2200 万个字符，每篇的中位数是 719 个字符。上下文长度 T 设成 256。比如这样一篇：</p>
+<div class="story">One morning, a cat named Tom woke up. He felt happy because the sun was shining. Tom wanted to start his day, so he did a big stretch. He stretched his legs, his back, and his tail. It felt easy and good. Tom went outside to play. He saw his friend, a dog named Max……</div>
+
+<p>下面是代码上的三处主要改动，左边是 1.02，右边是 1.03。完整文件在 <a href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.03_batch">GitHub</a>。</p>
+<div class="tools"><button onclick="setAll(false)">全部折叠</button><button onclick="setAll(true)">全部展开</button></div>
+<details class="blk" open id="b3-model"><summary><span class="bn">1</span><span class="bt">模型</span><span class="bd">一次算整个 (B, T)</span></summary><p>原来 <code>gpt()</code> 每次只吃一个 token，前面位置的 k、v 要存进列表里留给后面用。现在一次吃进整个 <code>(B, T)</code>，所有位置的 q、k、v 一起算出来，形状是 <code>(B, H, T, D)</code>：B 段文本、H 个头、T 个位置、每个头 D 维。</p>
+<p><code>q @ k.transpose(-2, -1)</code> 一次算出每个位置对每个位置的得分，形状 <code>(B, H, T, T)</code>。<code>masked_fill</code> 把不该看的位置（mask 里是 False 的）填成负无穷，经过 softmax 以后，e 的负无穷次方是 0，这些位置的权重就是 0。<code>causal_mask</code> 用 <code>torch.tril</code> 生成，就是上面那个下三角。</p><div class="pair stack"><div><div class="pl">1.02</div><pre><code class="language-python">def gpt(token_id, pos_id, keys, values):
+    tok_emb = state_dict[&#x27;wte&#x27;][token_id]
+    pos_emb = state_dict[&#x27;wpe&#x27;][pos_id]
+    ...
+    q = linear(x, state_dict[f&#x27;layer{li}.attn_wq&#x27;])
+    k = linear(x, state_dict[f&#x27;layer{li}.attn_wk&#x27;])
+    v = linear(x, state_dict[f&#x27;layer{li}.attn_wv&#x27;])
+    keys[li].append(k)
+    values[li].append(v)
+    q_h = q.view(n_head, 1, head_dim)
+    k_h = torch.stack(keys[li]).view(-1, n_head, head_dim).transpose(0, 1)
+    v_h = torch.stack(values[li]).view(-1, n_head, head_dim).transpose(0, 1)
+    attn_logits = q_h @ k_h.transpose(1, 2) / head_dim**0.5
+    attn_weights = softmax(attn_logits)
+    x_attn = (attn_weights @ v_h).view(n_embd)</code></pre></div><div><div class="pl">1.03</div><pre><code class="language-python">causal_mask = torch.tril(torch.ones(block_size, block_size, dtype=torch.bool))
+
+def gpt(idx):
+    B, T = idx.shape
+    tok_emb = state_dict[&#x27;wte&#x27;][idx]       # (B, T, C)
+    pos_emb = state_dict[&#x27;wpe&#x27;][:T]        # (T, C)
+    ...
+    q = linear(x, state_dict[f&#x27;layer{li}.attn_wq&#x27;]).view(B, T, n_head, head_dim).transpose(1, 2)  # (B, H, T, D)
+    k = linear(x, state_dict[f&#x27;layer{li}.attn_wk&#x27;]).view(B, T, n_head, head_dim).transpose(1, 2)  # (B, H, T, D)
+    v = linear(x, state_dict[f&#x27;layer{li}.attn_wv&#x27;]).view(B, T, n_head, head_dim).transpose(1, 2)  # (B, H, T, D)
+    attn_logits = q @ k.transpose(-2, -1) / head_dim**0.5                                          # (B, H, T, T)
+    attn_logits = attn_logits.masked_fill(~causal_mask[:T, :T], float(&#x27;-inf&#x27;))
+    attn_weights = softmax(attn_logits)
+    x_attn = (attn_weights @ v).transpose(1, 2).reshape(B, T, n_embd)                              # (B, T, C)</code></pre></div></div></details>
+<details class="blk" open id="b3-loss"><summary><span class="bn">2</span><span class="bt">loss</span><span class="bd">去掉逐个位置的循环</span></summary><p>原来要一个位置一个位置地调用模型，把每个位置的 loss 收集起来再平均。现在模型一次给出所有位置的概率，形状 <code>(B, T, vocab)</code>，<code>gather</code> 按目标编号，从每个位置的概率里取出正确答案那一项，取 log 再平均就是 loss。</p><div class="pair"><div><div class="pl">1.02</div><pre><code class="language-python">keys, values = [[] for _ in range(n_layer)], [[] for _ in range(n_layer)]
+losses = []
+for pos_id in range(n):
+    token_id, target_id = tokens[pos_id], tokens[pos_id + 1]
+    logits = gpt(token_id, pos_id, keys, values)
+    probs = softmax(logits)
+    loss_t = -probs[target_id].log()
+    losses.append(loss_t)
+loss = torch.stack(losses).mean()</code></pre></div><div><div class="pl">1.03</div><pre><code class="language-python">def loss_fn(x, y):
+    probs = softmax(gpt(x))                                  # (B, T, vocab)
+    return -probs.gather(-1, y.unsqueeze(-1)).log().mean()
+
+x, y = get_batch(train_data, batch_size)
+loss = loss_fn(x, y)</code></pre></div></div></details>
+<details class="blk" open id="b3-data"><summary><span class="bn">3</span><span class="bt">取数据</span><span class="bd">从一个名字，变成随机截 B 段</span></summary><p>原来每一步取一个名字。现在先把所有文本首尾相接，中间用 BOS 隔开，拼成一条很长的序列，前 90% 训练，后 10% 验证。每一步随机挑 B 个起点，各截一段长度为 T 的窗口作为输入 x；把同一个窗口往后错一位，就是每个位置要猜的下一个 token，也就是 y。</p><div class="pair"><div><div class="pl">1.02</div><pre><code class="language-python">doc = docs[step % len(docs)]
+tokens = [BOS] + [uchars.index(ch) for ch in doc] + [BOS]
+n = min(block_size, len(tokens) - 1)</code></pre></div><div><div class="pl">1.03</div><pre><code class="language-python">def encode(docs):
+    return torch.tensor([t for doc in docs for t in [BOS] + [stoi[ch] for ch in doc]] + [BOS])
+n_train = int(0.9 * len(docs))
+train_data, val_data = encode(docs[:n_train]), encode(docs[n_train:])
+
+def get_batch(data, batch_size):
+    ix = torch.randint(len(data) - block_size, (batch_size,))
+    x = torch.stack([data[i:i + block_size] for i in ix])
+    y = torch.stack([data[i + 1:i + block_size + 1] for i in ix])
+    return x, y</code></pre></div></div></details>
+
+<p style="margin-top:22px">另外几处小改动：<code>linear</code> 写成了 <code>x @ w.T</code>，因为 batch 那几维现在放在最前面；<code>rmsnorm</code> 只在最后一维（每个 token 的 16 个数）上求平均。</p>
+
+<p id="setup">实验怎么比：batch 取 1、4、16、64，两个数据集都跑一遍。batch 越大，每一步看到的 token 越多，所以为了公平，所有 batch 训练的总 token 数相同，names 是 2<sup>18</sup> ≈ 26 万，TinyStories 是 2<sup>22</sup> ≈ 420 万，batch 越大，步数越少（batch 1 是 16384 步，batch 64 只有 256 步）。学习率都固定是 0.01。比较的是验证集上的 loss。</p>
+
+<h3 id="r-103">运行结果</h3>
+<p>先看速度。在 names 上，batch 越大越快，batch 64 是 batch 1 的 15 倍：张量很小，时间主要花在调用上，batch 越大，同样的调用摊到的 token 越多。但在 TinyStories 上正好反过来，batch 1 每秒 44.9k 个 token，batch 64 只有 11.6k。原因放在最后补充。</p>
+
+<div class="res">
+  <figure><svg class="chart" viewBox="0 0 680 300" role="img" aria-label="TinyStories 上不同 batch 的验证集 loss 随训练 token 数的变化">
+<line class="grid" x1="44" x2="610" y1="233.4" y2="233.4"/><text class="tick" x="36" y="237.4" text-anchor="end">1.75</text>
+<line class="grid" x1="44" x2="610" y1="189.1" y2="189.1"/><text class="tick" x="36" y="193.1" text-anchor="end">2.00</text>
+<line class="grid" x1="44" x2="610" y1="144.9" y2="144.9"/><text class="tick" x="36" y="148.9" text-anchor="end">2.25</text>
+<line class="grid" x1="44" x2="610" y1="100.6" y2="100.6"/><text class="tick" x="36" y="104.6" text-anchor="end">2.50</text>
+<line class="grid" x1="44" x2="610" y1="56.3" y2="56.3"/><text class="tick" x="36" y="60.3" text-anchor="end">2.75</text>
+<line class="grid" x1="44" x2="610" y1="12.0" y2="12.0"/><text class="tick" x="36" y="16.0" text-anchor="end">3.00</text>
+<text class="tick" x="44.0" y="278" text-anchor="middle">0M</text>
+<text class="tick" x="185.5" y="278" text-anchor="middle">1M</text>
+<text class="tick" x="327.0" y="278" text-anchor="middle">2M</text>
+<text class="tick" x="468.5" y="278" text-anchor="middle">3M</text>
+<text class="tick" x="610.0" y="278" text-anchor="middle">4M</text>
+<text class="tick" x="327" y="296" text-anchor="middle">训练过的 token 数</text>
+<polyline class="s1" points="44.0,12.0 61.7,126.3 79.4,130.1 97.1,134.5 114.8,137.6 132.4,139.0 150.1,143.9 167.8,146.6 185.5,152.0 203.2,160.9 220.9,168.1 238.6,174.5 256.2,176.0 273.9,183.9 291.6,187.3 309.3,191.6 327.0,196.9 344.7,195.0 362.4,202.6 380.1,205.5 397.8,210.1 415.4,209.3 433.1,210.9 450.8,215.2 468.5,218.4 486.2,220.6 503.9,223.6 521.6,225.6 539.2,228.0 556.9,228.6 574.6,230.8 592.3,232.8 610.0,233.7"/>
+<polyline class="s2" points="44.0,12.0 61.7,125.7 79.4,132.1 97.1,135.2 114.8,136.4 132.4,138.5 150.1,142.1 167.8,145.3 185.5,149.1 203.2,156.7 220.9,164.4 238.6,171.6 256.2,175.0 273.9,183.0 291.6,187.3 309.3,189.1 327.0,195.1 344.7,198.5 362.4,201.4 380.1,202.5 397.8,204.3 415.4,207.6 433.1,209.3 450.8,212.0 468.5,213.5 486.2,215.5 503.9,217.5 521.6,219.0 539.2,220.8 556.9,222.1 574.6,223.6 592.3,224.9 610.0,225.7"/>
+<polyline class="s3" points="44.0,12.0 61.7,108.2 79.4,125.3 97.1,131.1 114.8,133.7 132.4,134.8 150.1,135.5 167.8,136.7 185.5,137.5 203.2,137.7 220.9,138.4 238.6,138.8 256.2,141.0 273.9,140.0 291.6,142.0 309.3,142.8 327.0,144.0 344.7,144.2 362.4,145.9 380.1,146.7 397.8,147.9 415.4,150.0 433.1,151.5 450.8,152.2 468.5,155.0 486.2,156.2 503.9,157.9 521.6,159.2 539.2,160.3 556.9,161.7 574.6,162.3 592.3,162.8 610.0,163.4"/>
+<polyline class="s4" points="44.0,12.0 61.7,12.0 79.4,67.6 97.1,96.3 114.8,111.5 132.4,119.1 150.1,123.5 167.8,126.5 185.5,128.5 203.2,130.0 220.9,131.2 238.6,132.5 256.2,133.5 273.9,134.4 291.6,135.1 309.3,135.5 327.0,136.1 344.7,136.3 362.4,136.9 380.1,137.5 397.8,137.6 415.4,137.7 433.1,138.4 450.8,138.9 468.5,139.2 486.2,139.3 503.9,139.8 521.6,139.9 539.2,140.1 556.9,140.3 574.6,140.4 592.3,140.6 610.0,140.6"/>
+<text class="lab" x="616" y="144.6">b64 2.27</text>
+<text class="lab" x="616" y="167.4">b16 2.15</text>
+<text class="lab" x="616" y="229.7">b4 1.79</text>
+<text class="lab" x="616" y="244.7">b1 1.75</text>
+</svg>
+    <div class="fig-cap">TinyStories 上的验证集 loss。四条线训练的总 token 数相同，颜色越深 batch 越小，线尾标着最终的 loss。</div>
+  </figure>
+  <div>
+    <p>再看 loss。同样的 token 数下，并不是 batch 越大越好。在 TinyStories 上，所有 batch 都很快降到 2.3 左右，然后停住；batch 1 和 4 后来突破了这个平台，降到 1.75 和 1.79；batch 16 到末尾才开始往下走；batch 64 一直停在平台上。</p>
+    <p>2.3 左右大致是"只靠前一两个字符猜下一个"的水平。突破它，意味着模型开始用注意力去看更远的上下文。batch 越大，更新的次数越少，batch 64 一共只更新了 256 次，还没来得及学会这一步，训练就结束了。</p>
+    <p>names 上差别小得多，batch 1 到 16 都在 2.24 到 2.26，只有 batch 64 差一些，是 2.31。</p>
+  </div>
+</div>
+<p>还有一点要注意：学习率对所有 batch 都固定是 0.01。通常 batch 越大，合适的学习率也越大，所以大 batch 吃亏，有一部分是学习率造成的。</p>
+<p>batch 1 训练完，生成的故事是这样的。能看出一些常见的词，比如 the、and、said，但还连不成句子：</p>
+<div class="story" style="font-family:var(--mono);font-size:13px">kxe time had was to the ooore the bug the to doot play and ay sand the and the ound with to play a hower had the the was ay friend saile and amed big friends and the skit are sto o to the he the reat beart to cat maing cal in funt the bird the pay the it</div>
+
+<p id="malloc" style="margin-top:18px">最后补充一点：为什么 TinyStories 上 batch 越大反而越慢？注意力要算每个位置对每个位置的权重，这是一个 B × 4 × 256 × 256 的矩阵，batch 16 时已经超过 32 MB。Linux 上的内存分配器（glibc 的 malloc）遇到这么大的一块，会直接向操作系统要新的内存页，用完马上还回去，下一次再重新要。每次拿到新页，都要先触发缺页中断、把整页清零，这部分开销比计算本身还大。在一个单独的测试里，把这个阈值调大以后，batch 64 每步从 1463 毫秒降到了 403 毫秒。但即便如此，CPU 上每个 token 还是要约 22 微秒，batch 再大也没有帮助：CPU 没有多少调用开销可以摊，它是真的算不过来了。</p>
+
+<div class="nextsec"><a href="1.02.html">上一节：1.02 PyTorch</a> · <a href="1.04.html">下一节：1.04 GPU</a></div>
+</section>
+</main>
+</div>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
+</body>
+</html>

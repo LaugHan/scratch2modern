@@ -15,7 +15,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <body>
 <header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
 <div class="wrap layout">
-<aside class="side"><div class="ch"><a href="./#chapters">第一章 · 训练</a></div><ol><li><a href="1.01.html"><span class="sn">1.01</span>microgpt</a></li><li><a class="cur" href="1.02.html"><span class="sn">1.02</span>PyTorch</a><ol><li><a href="#torch">PyTorch 是什么</a></li><li><a href="#why">为什么要换</a></li><li><a href="#b2-autograd">自动求导</a></li><li><a href="#b2-ops">基本运算</a></li><li><a href="#b2-attn">多头注意力</a></li><li><a href="#b2-adam">Adam 更新</a></li><li><a href="#newlines">新加的三行</a></li><li><a href="#r-102">运行结果</a></li><li><a href="#fast">为什么快</a></li></ol></li><li><span class="off"><span class="sn">1.03</span>Batch</span></li><li><span class="off"><span class="sn">1.04</span>GPU</span></li><li><span class="off"><span class="sn">1.05</span>Tokenizer</span></li><li><span class="off"><span class="sn">1.06</span>优化器</span></li><li><span class="off"><span class="sn">1.07</span>学习率调度</span></li><li><span class="off"><span class="sn">1.08</span>数值精度</span></li><li><span class="off"><span class="sn">1.09</span>工程加速</span></li><li><span class="off"><span class="sn">1.10</span>训练细节</span></li><li><span class="off"><span class="sn">1.11</span>回顾</span></li></ol></aside>
+<aside class="side"><div class="ch"><a href="./#chapters">第一章 · 训练</a></div><ol><li><a href="1.01.html"><span class="sn">1.01</span>microgpt</a></li><li><a class="cur" href="1.02.html"><span class="sn">1.02</span>PyTorch</a><ol><li><a href="#torch">PyTorch 是什么</a></li><li><a href="#why">为什么要换</a></li><li><a href="#b2-autograd">自动求导</a></li><li><a href="#b2-ops">基本运算</a></li><li><a href="#b2-attn">多头注意力</a></li><li><a href="#b2-adam">Adam 更新</a></li><li><a href="#newlines">新加的三行</a></li><li><a href="#r-102">运行结果</a></li><li><a href="#fast">为什么快</a></li></ol></li><li><a href="1.03.html"><span class="sn">1.03</span>Batch</a></li><li><a href="1.04.html"><span class="sn">1.04</span>GPU</a></li><li><a href="1.05.html"><span class="sn">1.05</span>Tokenizer</a></li><li><span class="off"><span class="sn">1.06</span>优化器</span></li><li><span class="off"><span class="sn">1.07</span>学习率调度</span></li><li><span class="off"><span class="sn">1.08</span>数值精度</span></li><li><span class="off"><span class="sn">1.09</span>工程加速</span></li><li><span class="off"><span class="sn">1.10</span>训练细节</span></li><li><span class="off"><span class="sn">1.11</span>回顾</span></li></ol></aside>
 <main class="content">
 <section>
 <div class="ch-intro">第一章 · 训练</div>
@@ -211,7 +211,7 @@ torch.set_num_threads(1)</code></pre>
 </div>
 <p id="fast" style="margin-top:18px">最后补充一点：PyTorch 到底快在哪？要注意，两边做的乘法和加法一样多，算术本身一次都没有省，省下的是"调用"的次数。在 microgpt 里，每一次加法、乘法都是一次 Python 调用：新建一个对象，检查类型，记下它从哪来，这些开销比算术本身大得多。训练第一个名字时，前向就要建将近六万个 Value，反向还要再挨个走一遍。PyTorch 把一整个矩阵运算打包成一次调用，里面的几百次乘加在 C++ 里一口气算完，同样这一步，前向加反向一共只有一千六百次左右的调用。调用少了几十倍，时间也就少了 25 倍。</p>
 <p>不过，即使在 PyTorch 里，每次调用也有两三微秒的固定开销，而一个 16×16 的矩阵乘向量，真正算起来只要几十纳秒。所以现在的时间，大部分仍然花在调用上，而不是计算上。</p>
-<div class="nextsec"><a href="1.01.html">上一节：1.01 microgpt</a> · 下一节：1.03 Batch（写作中）</div>
+<div class="nextsec"><a href="1.01.html">上一节：1.01 microgpt</a> · <a href="1.03.html">下一节：1.03 Batch</a></div>
 </section>
 </main>
 </div>

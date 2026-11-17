@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.04 GPU · scratch2modern</title>
+<meta name="description" content="1.04：把训练搬到 GPU 上。">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>
+addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
+function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.open = open); }
+</script>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
+<div class="wrap layout">
+<aside class="side"><div class="ch"><a href="./#chapters">第一章 · 训练</a></div><ol><li><a href="1.01.html"><span class="sn">1.01</span>microgpt</a></li><li><a href="1.02.html"><span class="sn">1.02</span>PyTorch</a></li><li><a href="1.03.html"><span class="sn">1.03</span>Batch</a></li><li><a class="cur" href="1.04.html"><span class="sn">1.04</span>GPU</a><ol><li><a href="#gpu">GPU 是什么</a></li><li><a href="#code104">代码</a></li><li><a href="#timing">计时的坑</a></li><li><a href="#r-104">运行结果</a></li><li><a href="#sweep">batch 一直加大</a></li><li><a href="#deep">深入：7%</a></li></ol></li><li><a href="1.05.html"><span class="sn">1.05</span>Tokenizer</a></li><li><span class="off"><span class="sn">1.06</span>优化器</span></li><li><span class="off"><span class="sn">1.07</span>学习率调度</span></li><li><span class="off"><span class="sn">1.08</span>数值精度</span></li><li><span class="off"><span class="sn">1.09</span>工程加速</span></li><li><span class="off"><span class="sn">1.10</span>训练细节</span></li><li><span class="off"><span class="sn">1.11</span>回顾</span></li></ol></aside>
+<main class="content">
+<section>
+<div class="ch-intro">第一章 · 训练</div>
+<h2>1.04 GPU</h2>
+
+<p>上一节在 CPU 上，TinyStories 的 batch 越大反而越慢。就算把内存分配的问题解决掉，CPU 每个 token 也要约 22 微秒，它是真的算不过来了。要算得更快，就得换一种硬件：GPU。</p>
+
+<figure style="margin:0" class="small-fig"><svg class="chart" viewBox="0 0 660 288" role="img" aria-label="TinyStories 上 CPU 和 GPU 每秒训练的 token 数">
+<rect class="bar1" x="90" y="4" width="14" height="10" rx="2"/><text class="lab" x="110" y="13">CPU（1.03）</text>
+<rect class="bar2" x="220" y="4" width="14" height="10" rx="2"/><text class="lab" x="240" y="13">GPU</text>
+<text class="lab" x="78" y="57" text-anchor="end">batch 1</text>
+<rect class="bar1" x="90" y="32" width="19.8" height="20" rx="3"/>
+<text class="val" x="117.8" y="47">44.9k</text>
+<rect class="bar2" x="90" y="56" width="35.1" height="20" rx="3"/>
+<text class="val" x="133.1" y="71">79.5k  ×1.8</text>
+<text class="lab" x="78" y="119" text-anchor="end">batch 4</text>
+<rect class="bar1" x="90" y="94" width="13.5" height="20" rx="3"/>
+<text class="val" x="111.5" y="109">30.5k</text>
+<rect class="bar2" x="90" y="118" width="124.3" height="20" rx="3"/>
+<text class="val" x="222.3" y="133">281.2k  ×9.2</text>
+<text class="lab" x="78" y="181" text-anchor="end">batch 16</text>
+<rect class="bar1" x="90" y="156" width="5.4" height="20" rx="3"/>
+<text class="val" x="103.4" y="171">12.3k</text>
+<rect class="bar2" x="90" y="180" width="331.6" height="20" rx="3"/>
+<text class="val" x="429.6" y="195">750.4k  ×61.1</text>
+<text class="lab" x="78" y="243" text-anchor="end">batch 64</text>
+<rect class="bar1" x="90" y="218" width="5.1" height="20" rx="3"/>
+<text class="val" x="103.1" y="233">11.6k</text>
+<rect class="bar2" x="90" y="242" width="420.0" height="20" rx="3"/>
+<text class="val" x="518.0" y="257">950.4k  ×81.9</text>
+</svg></figure>
+<p class="cap">TinyStories 上每秒训练的 token 数。batch 1 时，GPU 只比 CPU 快 1.8 倍；batch 64 时，快了 82 倍。</p>
+
+<p id="gpu">GPU 本来是为画图设计的：屏幕上几百万个像素，每个像素的算法都一样，只是数据不同。所以它的思路和 CPU 正好相反。CPU 只有几十个核，每个核都很强，擅长一件接一件地做复杂的事；GPU 有上万个简单的核，擅长同时对一大块数据做同样的运算。矩阵乘法、逐元素运算，正好都是这种活。我们用的是一张 RTX 5880 Ada，14080 个核，48 GB 显存。</p>
+<p>用 GPU 有两个代价。一是数据要先从内存搬到 GPU 自己的显存上。二是 GPU 不会自己决定下一步算什么，要由 CPU 一个一个地把运算发过去，每个运算在 GPU 上叫一个 kernel，每发一个都有固定的启动开销，在这张卡上约 5 微秒。</p>
+
+<p id="code104">代码上的改动很少，就是告诉 PyTorch 把东西放在哪里：</p>
+<pre class="solo"><code class="language-python">device = &#x27;cuda:0&#x27;
+
+# 参数和 mask 一开始就建在 GPU 上，之后一直不动
+matrix = lambda nout, nin, std=0.08: torch.tensor(
+    [[random.gauss(0, std) for _ in range(nin)] for _ in range(nout)],
+    device=device, requires_grad=True)
+causal_mask = torch.tril(torch.ones(block_size, block_size, dtype=torch.bool, device=device))
+
+def get_batch(data, batch_size):
+    ix = torch.randint(len(data) - block_size, (batch_size,))
+    x = torch.stack([data[i:i + block_size] for i in ix])
+    y = torch.stack([data[i + 1:i + block_size + 1] for i in ix])
+    return x.to(device), y.to(device)  # 每一步在 CPU 上抽好，再拷到 GPU</code></pre>
+<p>参数和 mask 一开始就建在 GPU 上，之后一直待在显存里。数据每一步还是在 CPU 上抽，再拷过去，所以和 1.03 用的数据完全相同。计算也仍然用 float64。这张卡的 float64 速度只有 float32 的 1/64，不过下面会看到，在我们这个模型上，瓶颈其实不在算力上。</p>
+
+<p id="timing">还有一个容易踩的坑：计时。GPU 是异步执行的，Python 把 kernel 发出去以后马上就返回了，并不等它算完。所以停表之前，必须先等 GPU 算完这一步。<code>.item()</code> 要把数从 GPU 拿回来，会自动等，把它挪到停表之前就行：</p>
+<div class="pair"><div><div class="pl">错误</div><pre><code class="language-python">loss = loss_fn(x, y)
+loss.backward()
+...  # Adam 更新
+train_time += time.perf_counter() - t0
+train_losses.append(loss.item())</code></pre></div><div><div class="pl">正确</div><pre><code class="language-python">loss = loss_fn(x, y)
+loss.backward()
+...  # Adam 更新
+train_losses.append(loss.item())  # .item() 要等 GPU 把这一步算完
+train_time += time.perf_counter() - t0</code></pre></div></div>
+<p>我们一开始就踩了这个坑，batch 64 的速度被高估了近 3 倍：算出来每秒 269 万个 token，实际只有 95 万。</p>
+
+<h3 id="r-104">运行结果</h3>
+<p>四个 batch 的 loss 和 1.03 完全一致，精确到小数点后 4 位，GPU 只改变了速度。</p>
+<p>batch 越大，GPU 快得越多。每一步大约要发 280 个 kernel。batch 1 时，每步 3.2 毫秒，GPU 真正在算的只有 1.3 毫秒，其余时间都在等 CPU 一个接一个地发 kernel；batch 加到 16，每步也才 5.5 毫秒，同样的时间算了 16 倍的数据。CPU 正好相反，它没有多少启动开销可以分摊，batch 再大也没用。</p>
+
+<div class="res" id="sweep">
+  <figure><svg class="chart" viewBox="0 0 680 290" role="img" aria-label="GPU 上 batch 从 1 加到 2048 时每秒训练的 token 数">
+<line class="grid" x1="52" x2="660" y1="250.0" y2="250.0"/><text class="tick" x="44" y="254.0" text-anchor="end">0.0M</text>
+<line class="grid" x1="52" x2="660" y1="171.3" y2="171.3"/><text class="tick" x="44" y="175.3" text-anchor="end">0.4M</text>
+<line class="grid" x1="52" x2="660" y1="92.7" y2="92.7"/><text class="tick" x="44" y="96.7" text-anchor="end">0.8M</text>
+<line class="grid" x1="52" x2="660" y1="14.0" y2="14.0"/><text class="tick" x="44" y="18.0" text-anchor="end">1.2M</text>
+<text class="tick" x="52.0" y="268" text-anchor="middle">1</text>
+<text class="tick" x="157.0" y="268" text-anchor="middle">4</text>
+<text class="tick" x="261.9" y="268" text-anchor="middle">16</text>
+<text class="tick" x="366.9" y="268" text-anchor="middle">64</text>
+<text class="tick" x="471.9" y="268" text-anchor="middle">256</text>
+<text class="tick" x="576.8" y="268" text-anchor="middle">1024</text>
+<text class="tick" x="356" y="286" text-anchor="middle">batch（对数坐标）</text>
+<line class="ref" x1="314.4" x2="314.4" y1="14" y2="250"/>
+<text class="lab" x="306.4" y="26" text-anchor="end">拐点 ≈ batch 32</text>
+<polyline class="avg" points="52.0,231.6 104.5,213.3 135.2,196.0 157.0,190.2 187.7,170.2 209.4,157.3 240.1,83.2 261.9,80.8 292.6,66.2 314.4,43.0 345.1,43.8 366.9,44.0 397.6,35.8 419.4,34.9 450.1,31.6 471.9,32.5 502.6,30.6 524.3,31.4 555.0,30.4 576.8,30.8 607.5,31.0 629.3,31.1"/>
+<circle class="pt" cx="52.0" cy="231.6" r="3.5"/>
+<circle class="pt" cx="104.5" cy="213.3" r="3.5"/>
+<circle class="pt" cx="135.2" cy="196.0" r="3.5"/>
+<circle class="pt" cx="157.0" cy="190.2" r="3.5"/>
+<circle class="pt" cx="187.7" cy="170.2" r="3.5"/>
+<circle class="pt" cx="209.4" cy="157.3" r="3.5"/>
+<circle class="pt" cx="240.1" cy="83.2" r="3.5"/>
+<circle class="pt" cx="261.9" cy="80.8" r="3.5"/>
+<circle class="pt" cx="292.6" cy="66.2" r="3.5"/>
+<circle class="pt" cx="314.4" cy="43.0" r="3.5"/>
+<circle class="pt" cx="345.1" cy="43.8" r="3.5"/>
+<circle class="pt" cx="366.9" cy="44.0" r="3.5"/>
+<circle class="pt" cx="397.6" cy="35.8" r="3.5"/>
+<circle class="pt" cx="419.4" cy="34.9" r="3.5"/>
+<circle class="pt" cx="450.1" cy="31.6" r="3.5"/>
+<circle class="pt" cx="471.9" cy="32.5" r="3.5"/>
+<circle class="pt" cx="502.6" cy="30.6" r="3.5"/>
+<circle class="pt" cx="524.3" cy="31.4" r="3.5"/>
+<circle class="pt" cx="555.0" cy="30.4" r="3.5"/>
+<circle class="pt" cx="576.8" cy="30.8" r="3.5"/>
+<circle class="pt" cx="607.5" cy="31.0" r="3.5"/>
+<circle class="pt" cx="629.3" cy="31.1" r="3.5"/>
+<text class="lab" x="135.2" y="128.1">启动开销：batch 加大几乎免费</text>
+<text class="lab" x="419.4" y="63.2">显存带宽：吞吐停在约 110 万</text>
+</svg>
+    <div class="fig-cap">单独测速：batch 从 1 一直加到 2048（3072 时显存放不下），只测速度，不训练。</div>
+  </figure>
+  <div>
+    <p>那 batch 一直加大会怎样？吞吐分成三段。先是线性上涨：batch 很小时，每步耗时几乎不变，GPU 在等 CPU，batch 加大几乎是免费的。然后在 batch 32 左右拐平，从这里开始，GPU 算的时间超过了 CPU 发指令的时间。最后是平台：每步耗时和 batch 成正比，吞吐停在每秒约 110 万个 token，一直到显存放不下都不再变。</p>
+    <p>过了拐点，瓶颈变成了显存带宽：batch 翻倍，要在显存和计算单元之间搬的数据也翻倍，时间就跟着翻倍。</p>
+  </div>
+</div>
+<p>吞吐最高，也不等于训练效果最好。在 GPU 上，batch 64 只用 4.4 秒就训练完了，但更新次数少，loss 停在 2.27；batch 4 用了 15 秒，loss 到了 1.79。对这个模型来说，batch 32 已经拿到了几乎全部的吞吐，再加大只会让每步更慢、更新次数更少。</p>
+
+
+<details class="blk" id="deep"><summary><span class="bn">+</span><span class="bt">深入</span><span class="bd">为什么最快也只用到了 GPU 峰值的 7%</span></summary>
+<p>衡量"用满了硬件没有"，常用的指标是 MFU（Model FLOPs Utilization，模型算力利用率）：实际每秒做的运算次数，除以硬件理论上每秒能做的运算次数。我们的模型每个 token 训练一次要约 7.6 万次浮点运算，乘上每秒的 token 数，就是实际的运算速度。这张卡 float64 的峰值约 1.08 万亿次每秒，算下来 batch 64 的 MFU 只有 6.7%，扫到最大 batch 也只有 7.8%。大模型训练常见的 MFU 在 30% 到 50%。</p>
+<p>差距不在算力，而在搬数据。GPU 每次运算都要先从显存把数读出来，算完再写回去。这张卡的显存带宽约 840 GB/s，float64 算力约 1 万亿次每秒，所以每读写 1 个字节，至少要做 1.3 次运算，算力才不会闲着。这个比例叫算术强度。我们的模型很窄，每个头只有 4 维，注意力那个 B × 4 × 256 × 256 的大矩阵上，softmax、mask、除法这些逐元素运算，每读写 1 个字节只做约 0.1 次运算，GPU 大部分时间都在等数据。</p>
+<p>用 profiler 拆开 batch 64 的一步（17 ms）：约 8.5 ms 花在逐元素运算上，约 6.8 ms 花在矩阵乘法上。注意力矩阵约 134 MB，8.5 ms × 840 GB/s ≈ 7 GB，相当于把这个矩阵来回搬了约 50 次。而按运算量算，这一整步只需要约 1.2 ms。所以 MFU 低，不是因为 float64 慢，而是这个模型每搬一个字节只做很少的计算。</p>
+</details>
+
+
+<div class="nextsec"><a href="1.03.html">上一节：1.03 Batch</a> · <a href="1.05.html">下一节：1.05 Tokenizer</a></div>
+</section>
+</main>
+</div>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
+</body>
+</html>

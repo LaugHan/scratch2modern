@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.05 Tokenizer · scratch2modern</title>
+<meta name="description" content="1.05：换一种方式把文本切成 token。">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>
+addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
+function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.open = open); }
+</script>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
+<div class="wrap layout">
+<aside class="side"><div class="ch"><a href="./#chapters">第一章 · 训练</a></div><ol><li><a href="1.01.html"><span class="sn">1.01</span>microgpt</a></li><li><a href="1.02.html"><span class="sn">1.02</span>PyTorch</a></li><li><a href="1.03.html"><span class="sn">1.03</span>Batch</a></li><li><a href="1.04.html"><span class="sn">1.04</span>GPU</a></li><li><a class="cur" href="1.05.html"><span class="sn">1.05</span>Tokenizer</a><ol><li><a href="#tok">四种切法</a></li><li><a href="#bpe">BPE</a></li><li><a href="#bpb">bpb</a></li><li><a href="#r-105">运行结果</a></li><li><a href="#split">BPE 好在哪</a></li></ol></li><li><span class="off"><span class="sn">1.06</span>优化器</span></li><li><span class="off"><span class="sn">1.07</span>学习率调度</span></li><li><span class="off"><span class="sn">1.08</span>数值精度</span></li><li><span class="off"><span class="sn">1.09</span>工程加速</span></li><li><span class="off"><span class="sn">1.10</span>训练细节</span></li><li><span class="off"><span class="sn">1.11</span>回顾</span></li></ol></aside>
+<main class="content">
+<section>
+<div class="ch-intro">第一章 · 训练</div>
+<h2>1.05 Tokenizer</h2>
+
+<p>到目前为止，模型都是一个字符一个 token。前面训练出来的故事还读不通：模型每一步只猜一个字母，一个单词要一个字母一个字母地拼出来，光一个 the 就要连着猜对三次。那能不能换一种切法，让一个 token 装下更多的内容？</p>
+
+<div class="duo">
+  <div><div class="pl">一个字符一个 token</div><div class="story">limed and the and saided ig the toy to a and her and the sto the marked and happy in the the kne a had band the dother belly it the wanted to the to the happy. &quot;Wher and and a and and little had bight the dis wen to the mon the wanted to the om the the a</div></div>
+  <div><div class="pl">BPE，4096 种 token</div><div class="story">One day, a little boy named Tim went to a big, a big cat named Tim. Tim was very happy. He loved to play with his friends. He had a toy car. Tim wanted to help him to learn a toy. He said, &quot;Hi, you, I want to play with you, Lily. The cat was very happy. They had fun.</div></div>
+</div>
+<p class="cap">同样的模型、同样的训练步数，只换了 tokenizer，生成的故事。右边的情节还有点乱，但已经是能读的句子了。</p>
+
+<p id="tok">把文本切成 token 的那一步叫 tokenize，做这件事的程序就叫 tokenizer。这一节对比四种：</p>
+<ol class="plain">
+  <li>char：一个字符一个 token，就是我们一直在用的。词表是数据里出现过的 89 个字符。</li>
+  <li>byte：一个字节一个 token，词表固定是 256 个。任何语言的文本都能编码，不会遇到没见过的字符。</li>
+  <li>BPE：从 256 个字节出发，把经常一起出现的 token 合并成新 token。我们在 TinyStories 上自己训练，词表取 512、1024、4096 三种大小。</li>
+  <li>gpt2：OpenAI 在网页文本上训练的 BPE，词表 50257 个。</li>
+</ol>
+
+<p id="bpe">BPE（Byte Pair Encoding）的想法很简单：数一数整个训练文本里，哪两个相邻的 token 一起出现的次数最多，就把它们合并成一个新 token，加进词表；然后再数，再合并，一直到词表达到想要的大小。在 TinyStories 上，最先学到的几次合并是（␣ 表示空格）：</p>
+<div class="toks"><span>␣ + t → ␣t</span><span>h + e → he</span><span>␣ + a → ␣a</span><span>␣ + s → ␣s</span><span>␣ + w → ␣w</span><span>␣t + he → ␣the</span></div>
+<p>第一次合并的空格加 t，在训练文本里出现了 57.7 万次。合并到 4096 个以后，常见的词基本都成了一个 token。比如下面两句话，53 个字节切成了 13 个 token，26 个字节切成了 5 个：</p>
+<div class="toks"><span>Once</span><span>␣upon</span><span>␣a</span><span>␣time</span><span>,</span><span>␣there</span><span>␣was</span><span>␣a</span><span>␣little</span><span>␣girl</span><span>␣named</span><span>␣Lily</span><span>.</span></div>
+<div class="toks"><span>The</span><span>␣farmer</span><span>␣was</span><span>␣frightened</span><span>.</span></div>
+<p>可以看到，词前面的空格是跟着词走的。合并之前，会先按 GPT-2 的规则把文本切成词和标点，合并不会跨过它们的边界，所以 <code>␣dog</code> 可以成为一个 token，<code>dog.</code> 不行。核心代码就这么几十行（完整文件在 <a href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.05_tokenizer/tokenizers">GitHub</a>）：</p>
+<details class="blk" open><summary><span class="bn">1</span><span class="bt">BPE</span><span class="bd">训练和编码</span></summary><pre><code class="language-python"># 先按 GPT-2 的规则把文本切成词和标点，合并不会跨过它们的边界
+pattern = regex.compile(r&quot;&quot;&quot;&#x27;(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+&quot;&quot;&quot;)
+# 相同的词只存一份，记下它出现了多少次；每个词先拆成字节
+chunk_counts = Counter(chunk for doc in train_docs for chunk in pattern.findall(doc))
+words = {tuple(chunk.encode(&#x27;utf-8&#x27;)): n for chunk, n in chunk_counts.items()}
+
+# 把 ids 里所有相邻的 pair 换成 new_id
+def merge(ids, pair, new_id):
+    out, i = [], 0
+    while i &lt; len(ids):
+        if i &lt; len(ids) - 1 and (ids[i], ids[i + 1]) == pair:
+            out.append(new_id)
+            i += 2
+        else:
+            out.append(ids[i])
+            i += 1
+    return tuple(out)
+
+merges = {}                                  # (id, id) -&gt; 新 id，按学到的顺序
+vocab = [bytes([i]) for i in range(256)]     # 每个 token 对应的字节
+for new_id in range(256, vocab_size - 1):    # 最后一个 id 留给 BOS
+    # 数一数所有相邻的两个 token 一共一起出现了多少次
+    pairs = Counter()
+    for ids, n in words.items():
+        for pair in zip(ids, ids[1:]):
+            pairs[pair] += n
+    # 最多的那一对合并成新 token
+    pair = max(pairs, key=pairs.get)
+    merges[pair] = new_id
+    vocab.append(vocab[pair[0]] + vocab[pair[1]])
+    words = {merge(ids, pair, new_id): n for ids, n in words.items()}
+
+# 编码一个词：从字节出发，每次合并&quot;最早学到&quot;的那一对，直到没有可合并的
+def encode_chunk(chunk):
+    ids = tuple(chunk.encode(&#x27;utf-8&#x27;))
+    while len(ids) &gt;= 2:
+        pair = min(zip(ids, ids[1:]), key=lambda p: merges.get(p, float(&#x27;inf&#x27;)))
+        if pair not in merges:
+            break
+        ids = merge(ids, pair, merges[pair])
+    return ids</code></pre></details>
+
+<p id="bpb" style="margin-top:18px">换了 tokenizer 以后，loss 就不能直接比了。同样一句话，char 要猜 53 次，bpe4096 只要猜 13 次，每次猜的东西也完全不同。所以我们统一换算成 bits per byte（bpb）：平均每个字节的文本，模型要用多少 bit 来编码，越低越好。换算的方法是把整个验证集的 loss 加起来，从以 e 为底换成以 2 为底，再除以这段文本的总字节数：</p>
+<pre class="solo"><code class="language-python">token_bytes = torch.tensor([len(b) for b in vocab])  # 每个 token 是几个字节
+
+def val_bpb():
+    nats = ...            # 整个验证集上 loss 的总和（以 e 为底）
+    val_bytes = ...       # 验证集一共多少字节
+    return nats / math.log(2) / val_bytes</code></pre>
+
+<p>所有 tokenizer 用同样的设置：TinyStories，batch 16，上下文 256 个 token，训练 4096 步，模型宽度 16，在 GPU 上跑。验证集固定是同样的 500 篇故事。</p>
+
+<h3 id="r-105">运行结果</h3>
+<div class="res">
+  <figure><svg class="chart" viewBox="0 0 660 238" role="img" aria-label="不同 tokenizer 的验证集 bpb">
+<text class="lab" x="150" y="22" text-anchor="end">char（89）</text>
+<rect class="bar2" x="160" y="6" width="334.9" height="22" rx="3"/>
+<text class="val" x="502.9" y="22">2.39</text><text class="tick" x="546.9" y="22">22 s</text>
+<text class="lab" x="150" y="56" text-anchor="end">byte（257）</text>
+<rect class="bar2" x="160" y="40" width="333.2" height="22" rx="3"/>
+<text class="val" x="501.2" y="56">2.38</text><text class="tick" x="545.2" y="56">23 s</text>
+<text class="lab" x="150" y="90" text-anchor="end">bpe512（512）</text>
+<rect class="bar2" x="160" y="74" width="256.8" height="22" rx="3"/>
+<text class="val" x="424.8" y="90">1.83</text><text class="tick" x="468.8" y="90">24 s</text>
+<text class="lab" x="150" y="124" text-anchor="end">bpe1024（1024）</text>
+<rect class="bar2" x="160" y="108" width="209.7" height="22" rx="3"/>
+<text class="val" x="377.7" y="124">1.50</text><text class="tick" x="421.7" y="124">27 s</text>
+<text class="lab" x="150" y="158" text-anchor="end">bpe4096（4096）</text>
+<rect class="bar2" x="160" y="142" width="168.0" height="22" rx="3"/>
+<text class="val" x="336.0" y="158">1.20</text><text class="tick" x="380.0" y="158">60 s</text>
+<text class="lab" x="150" y="192" text-anchor="end">gpt2（50257）</text>
+<rect class="bar2" x="160" y="176" width="163.7" height="22" rx="3"/>
+<text class="val" x="331.7" y="192">1.17</text><text class="tick" x="375.7" y="192">409 s</text>
+<text class="tick" x="150" y="230" text-anchor="end">tokenizer（词表）</text><text class="tick" x="160" y="230">验证集 bpb，越低越好；灰字是训练时间</text>
+</svg></figure>
+  <div>
+    <p>BPE 的提升非常大。同样的步数，bpe4096 的 bpb 只有 char 的一半。词表越大越好，但收益递减：512、1024、4096 依次是 1.83、1.50、1.20。char 和 byte 几乎一样，因为 TinyStories 基本是英文，几乎没有多字节的字符。</p>
+    <p>gpt2 只比 bpe4096 好 0.03，代价却大得多：参数多 12 倍，时间多 7 倍。bpe4096 是在 TinyStories 上训练的，正好贴合这类文本；gpt2 的 5 万个词大多是为网页文本准备的，这里用不上，却每一步都要在 5 万个词上算 softmax。</p>
+  </div>
+</div>
+<p>速度上，词表在 1024 以下时，时间主要花在注意力上，训练时间基本不变，都在 22 到 27 秒。词表再大，输出层 lm_head 和 softmax 的开销就开始占主导，gpt2 的 409 秒几乎全花在这上面。</p>
+
+<p id="split" style="margin-top:22px">最后补充一点：BPE 到底好在哪？除了切法不同，这里还混着两个因素。一是上下文：上下文都是 256 个 token，char 只能看到 256 个字节，bpe4096 能看到约 1000 个字节，差不多是一整篇故事。二是参数量：词表越大，输入的 wte 和输出的 lm_head 就越大，char 一共只有 1.0 万个参数，bpe4096 有 13.8 万。所以我们又做了两组实验，每组只把其中一个因素向 bpe4096 看齐：第一组把上下文调到约 1000 个字节，第二组把模型加宽到参数总量约 13.8 万。</p>
+<div class="res">
+  <figure><svg class="chart" viewBox="0 0 660 260" role="img" aria-label="对齐上下文或参数量后各 tokenizer 的 bpb">
+<circle class="d0" cx="96" cy="14" r="6"/><text class="lab" x="108" y="19">1.05 原结果</text>
+<circle class="d1" cx="266" cy="14" r="6"/><text class="lab" x="278" y="19">上下文字节数对齐</text>
+<circle class="d2" cx="436" cy="14" r="6"/><text class="lab" x="448" y="19">参数量对齐</text>
+<line class="grid" x1="90.0" x2="90.0" y1="40" y2="220"/><text class="tick" x="90.0" y="238" text-anchor="middle">1.0</text>
+<line class="grid" x1="242.8" x2="242.8" y1="40" y2="220"/><text class="tick" x="242.8" y="238" text-anchor="middle">1.5</text>
+<line class="grid" x1="395.6" x2="395.6" y1="40" y2="220"/><text class="tick" x="395.6" y="238" text-anchor="middle">2.0</text>
+<line class="grid" x1="548.3" x2="548.3" y1="40" y2="220"/><text class="tick" x="548.3" y="238" text-anchor="middle">2.5</text>
+<text class="tick" x="365" y="256" text-anchor="middle">验证集 bpb，越低越好</text>
+<text class="lab" x="78" y="63" text-anchor="end">char</text>
+<line class="grid" x1="249.8" x2="592.0" y1="58" y2="58" style="stroke:var(--muted)"/>
+<circle class="d0" cx="515.3" cy="58" r="6"/>
+<circle class="d1" cx="592.0" cy="58" r="6"/>
+<circle class="d2" cx="249.8" cy="58" r="6"/>
+<text class="lab" x="78" y="99" text-anchor="end">byte</text>
+<line class="grid" x1="259.0" x2="585.9" y1="94" y2="94" style="stroke:var(--muted)"/>
+<circle class="d0" cx="511.7" cy="94" r="6"/>
+<circle class="d1" cx="585.9" cy="94" r="6"/>
+<circle class="d2" cx="259.0" cy="94" r="6"/>
+<text class="lab" x="78" y="135" text-anchor="end">bpe512</text>
+<line class="grid" x1="171.3" x2="349.4" y1="130" y2="130" style="stroke:var(--muted)"/>
+<circle class="d0" cx="344.8" cy="130" r="6"/>
+<circle class="d1" cx="349.4" cy="130" r="6"/>
+<circle class="d2" cx="171.3" cy="130" r="6"/>
+<text class="lab" x="78" y="171" text-anchor="end">bpe1024</text>
+<line class="grid" x1="142.9" x2="244.9" y1="166" y2="166" style="stroke:var(--muted)"/>
+<circle class="d0" cx="242.2" cy="166" r="6"/>
+<circle class="d1" cx="244.9" cy="166" r="6"/>
+<circle class="d2" cx="142.9" cy="166" r="6"/>
+<text class="lab" x="78" y="207" text-anchor="end">bpe4096</text>
+<line class="grid" x1="151.1" x2="151.1" y1="202" y2="202" style="stroke:var(--muted)"/>
+<circle class="d0" cx="151.1" cy="202" r="6"/>
+<circle class="d1" cx="151.1" cy="202" r="6"/>
+<circle class="d2" cx="151.1" cy="202" r="6"/>
+</svg></figure>
+  <div>
+    <p>上下文变长，char 反而变差了，从 2.39 到 2.64，BPE 几乎不变。所以 BPE 的好处，不是"一次能装下更多文本"。</p>
+    <p>参数对齐后，char 从 2.39 降到 1.52，和 bpe4096 的差距从 1.19 缩小到 0.32，大约 70% 的差距消失了。BPE 的优势，有一大半是靠词表上的参数堆出来的。剩下的部分，来自每个 token 本身更有意义：不用逐字母拼写，同样的文本要猜的次数也更少。</p>
+    <p>还有一个有意思的地方：参数一样多时，bpe1024 比 bpe4096 还好。bpe4096 的参数 95% 都在词表上，模型本身只有 16 维；bpe1024 把更多参数留给了模型（48 维）。词表并不是越大越好，要和模型大小一起选。</p>
+  </div>
+</div>
+
+<div class="nextsec"><a href="1.04.html">上一节：1.04 GPU</a> · 下一节：1.06 优化器（写作中）</div>
+</section>
+</main>
+</div>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
+</body>
+</html>
