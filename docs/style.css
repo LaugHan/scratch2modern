@@ -159,3 +159,18 @@ details.blk pre code { display: block; background: none; padding: 12px 16px; fon
 .arch .otx { fill: var(--accent); font-size: 15px; font-weight: 600; }
 .side .ch a { color: var(--fg); }
 .side a.cur { color: var(--fg); font-weight: 600; }
+.chart .l1 { fill: none; stroke: var(--chart-avg); stroke-width: 5; opacity: .22; }
+.chart .l2 { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 6 4; }
+.chart .bar1 { fill: var(--chart-raw); }
+.chart .bar2 { fill: var(--accent); }
+.chart .val { fill: var(--fg); font-size: 13px; font-family: var(--mono); }
+
+/* 代码对照 */
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; margin: 4px 0 16px; align-items: start; }
+.pair .pl { font-size: 12px; color: var(--muted); margin: 0 0 4px; font-family: var(--mono); }
+.pair pre, pre.solo { margin: 0; background: var(--code-bg); border-radius: 6px; overflow-x: auto; }
+.pair pre code, pre.solo code { display: block; background: none; padding: 12px 16px; font-size: 13px; line-height: 1.65; }
+pre.solo { margin: 4px 0 16px; }
+@media (max-width: 900px) { .pair { grid-template-columns: 1fr; } }
+.small-fig { max-width: 600px; margin: 8px 0 6px; }
+.pair.stack { grid-template-columns: 1fr; }

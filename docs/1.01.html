@@ -15,7 +15,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <body>
 <header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
 <div class="wrap layout">
-<aside class="side"><div class="ch"><a href="./#chapters">第一章 · 训练</a></div><ol><li><a class="cur" href="1.01.html"><span class="sn">1.01</span>microgpt</a><ol><li><a href="#lm">语言模型</a></li><li><a href="#gpt2">GPT-2 结构</a></li><li><a href="#b-data">数据</a></li><li><a href="#b-tokenizer">Tokenizer</a></li><li><a href="#b-autograd">自动求导</a></li><li><a href="#b-params">参数</a></li><li><a href="#b-ops">基本运算</a></li><li><a href="#b-model">模型</a></li><li><a href="#b-adam">Adam</a></li><li><a href="#b-train">训练循环</a></li><li><a href="#b-sample">生成</a></li><li><a href="#r-101">运行结果</a></li></ol></li><li><span class="off"><span class="sn">1.02</span>PyTorch</span></li><li><span class="off"><span class="sn">1.03</span>Batch</span></li><li><span class="off"><span class="sn">1.04</span>GPU</span></li><li><span class="off"><span class="sn">1.05</span>Tokenizer</span></li><li><span class="off"><span class="sn">1.06</span>优化器</span></li><li><span class="off"><span class="sn">1.07</span>学习率调度</span></li><li><span class="off"><span class="sn">1.08</span>数值精度</span></li><li><span class="off"><span class="sn">1.09</span>工程加速</span></li><li><span class="off"><span class="sn">1.10</span>训练细节</span></li><li><span class="off"><span class="sn">1.11</span>回顾</span></li></ol></aside>
+<aside class="side"><div class="ch"><a href="./#chapters">第一章 · 训练</a></div><ol><li><a class="cur" href="1.01.html"><span class="sn">1.01</span>microgpt</a><ol><li><a href="#lm">语言模型</a></li><li><a href="#gpt2">GPT-2 结构</a></li><li><a href="#b-data">数据</a></li><li><a href="#b-tokenizer">Tokenizer</a></li><li><a href="#b-autograd">自动求导</a></li><li><a href="#b-params">参数</a></li><li><a href="#b-ops">基本运算</a></li><li><a href="#b-model">模型</a></li><li><a href="#b-adam">Adam</a></li><li><a href="#b-train">训练循环</a></li><li><a href="#b-sample">生成</a></li><li><a href="#r-101">运行结果</a></li></ol></li><li><a href="1.02.html"><span class="sn">1.02</span>PyTorch</a></li><li><span class="off"><span class="sn">1.03</span>Batch</span></li><li><span class="off"><span class="sn">1.04</span>GPU</span></li><li><span class="off"><span class="sn">1.05</span>Tokenizer</span></li><li><span class="off"><span class="sn">1.06</span>优化器</span></li><li><span class="off"><span class="sn">1.07</span>学习率调度</span></li><li><span class="off"><span class="sn">1.08</span>数值精度</span></li><li><span class="off"><span class="sn">1.09</span>工程加速</span></li><li><span class="off"><span class="sn">1.10</span>训练细节</span></li><li><span class="off"><span class="sn">1.11</span>回顾</span></li></ol></aside>
 <main class="content">
 <section id="s-101">
 <div class="ch-intro">第一章 · 训练</div>
@@ -117,7 +117,7 @@ step 1000 / 1000 | loss 2.6497
   <li>它只有算法。没有为了速度或效果额外加的东西，之后我们每加一样，都能单独看出它的作用。</li>
 </ol>
 
-<p>下面按文件的顺序把代码分成 9 块贴出来。原来的英文注释换成了中文，记日志的几行去掉了，完整文件在 <a href="https://github.com/LaugHan/scratch2modern/blob/main/src/1.01_microgpt/train.py">GitHub</a>。<b>强烈建议打开编辑器，跟着手敲一遍。</b>敲的时候你会停下来想“这一行为什么这样写”，而这些地方读的时候很容易一眼滑过去。</p>
+<p>下面按文件的顺序把代码分成 9 块贴出来。原来的英文注释换成了中文，记日志的几行去掉了，完整文件在 <a href="https://github.com/LaugHan/scratch2modern/blob/main/src/ch1/1.01_microgpt/train.py">GitHub</a>。<b>强烈建议打开编辑器，跟着手敲一遍。</b>敲的时候你会停下来想“这一行为什么这样写”，而这些地方读的时候很容易一眼滑过去。</p>
 
 <div class="tools"><button onclick="setAll(false)">全部折叠</button><button onclick="setAll(true)">全部展开</button></div>
 <details class="blk" open id="b-data"><summary><span class="bn">1</span><span class="bt">数据</span><span class="bd">读入 32033 个英文名字</span></summary><pre><code class="language-python">import os
@@ -359,7 +359,7 @@ for sample_idx in range(20):
     <p>学到的东西就是开头那 20 个名字，没见过的也像英文名字。代价是慢：每秒只能处理 66 个 token。每一次加法、乘法都要创建一个 Python 对象、记下它的来历，真正的算术只占很小一部分。</p>
   </div>
 </div>
-<div class="nextsec">下一节：1.02 PyTorch（写作中）</div>
+<div class="nextsec"><a href="1.02.html">下一节：1.02 PyTorch</a></div>
 </section>
 </main>
 </div>
