@@ -28,11 +28,11 @@
 
 ## 结果
 
-![compare](../../out/1.10_details/compare.png)
+![compare](../../../out/ch1/1.10_details/compare.png)
 
 从左到右：初始化（每种初始化在不同学习率下的结果，★ 是最佳学习率上 3 个种子的均值，竖线是范围）、weight decay、梯度裁剪（× 表示发散）、dropout。L2 和全零初始化的结果太差，超出了图的范围。
 
-![curves](../../out/1.10_details/curves.png)
+![curves](../../../out/ch1/1.10_details/curves.png)
 
 左：不裁剪时梯度的总长度，学习率 0.01 和 0.04，实线是每 128 步的平均值，虚线是最大值。右：dropout 三种做法在训练集（虚线）和验证集（实线）上的 bpb。
 
@@ -97,7 +97,7 @@
 
 每种做法跑 3 个种子（`sweep_small.sh`）。
 
-![overfit](../../out/1.10_details/overfit.png)
+![overfit](../../../out/ch1/1.10_details/overfit.png)
 
 左：每种做法训练集（空心）和验证集（实心）的最终 bpb，两点之间的竖线就是差距；灰色虚线是全量数据、什么都不加时的验证集结果。右：种子 42 的训练集（虚线）和验证集（实线）曲线。
 

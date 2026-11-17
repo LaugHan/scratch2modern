@@ -71,7 +71,7 @@ MFU 这么低，根本原因是**算术强度**（每从显存读写 1 字节能
 | 2048 | 471.11 | 1113k | 29.17 GB |
 | 3072 | 显存放不下 | | |
 
-![batch sweep](../../../out/1.04_cuda/analysis/batch_sweep.png)
+![batch sweep](../../../../out/ch1/1.04_cuda/analysis/batch_sweep.png)
 
 虚线是"一份注意力矩阵正好装满 96MB L2 缓存"的位置（batch 48）。
 

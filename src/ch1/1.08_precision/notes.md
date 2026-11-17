@@ -39,7 +39,7 @@
 
 ## 结果
 
-![compare](../../out/1.08_precision/compare.png)
+![compare](../../../out/ch1/1.08_precision/compare.png)
 
 从左到右：
 1. 最终 val bpb：实心点是 fp64 评估（竖线是 3 个种子的范围），空心点是用训练时的精度评估；
@@ -113,7 +113,7 @@
 | 1536 | 744 / 1.0 | 33 / 23 | 14.9 / 51 | 12.2 / 62 | 11.7 / 64 | 11.5 / 66 | 9.2 / **82** |
 | 3072 | 2831 / 1.0 | 124 / 23 | 56 / 52 | 41 / 71 | 41 / 71 | 35 / 82 | 34 / **84** |
 
-![speed](../../out/1.08_precision/analysis/speed.png)
+![speed](../../../out/ch1/1.08_precision/analysis/speed.png)
 
 左：每步耗时；中：实际达到的 TFLOPS；右：显存峰值。
 

@@ -28,7 +28,7 @@
 | cosine | 0.01 | 1.1783 | 1.1748 ~ 1.1819 |
 | **wsd** | 0.01 | **1.1742** | 1.1713 ~ 1.1788 |
 
-![shape](../../out/1.07_schedule/shape.png)
+![shape](../../../out/ch1/1.07_schedule/shape.png)
 
 左图：横轴是峰值学习率，纵轴是最终的 val bpb，★ 是最佳点（竖线是 3 个种子的范围），图顶部的 × 表示发散。中图：最佳峰值下学习率随步数的变化。右图：对应的 loss 曲线。
 
@@ -48,7 +48,7 @@
 
 均为种子 42、WSD 衰减形状。括号里是发散时 warmup 已经把学习率升到了多少。
 
-![warmup](../../out/1.07_schedule/warmup.png)
+![warmup](../../../out/ch1/1.07_schedule/warmup.png)
 
 左图：峰值学习率和最终 val bpb，× 表示发散。右图：每种 warmup 在最佳峰值下的 loss 曲线。
 
@@ -67,7 +67,7 @@ WSD 训练 $N$ 步时，前 80% 就是 constant。同一个种子下，不同 $N
 | 2048 步 | **1.2156** | 1.2283 | 0.013 |
 | 4096 步 | **1.1713** | 1.1748 | 0.004 |
 
-![anytime](../../out/1.07_schedule/anytime.png)
+![anytime](../../../out/ch1/1.07_schedule/anytime.png)
 
 灰色粗线是 constant 主干，实线是不同长度的 WSD，虚线是不同长度的 cosine。
 

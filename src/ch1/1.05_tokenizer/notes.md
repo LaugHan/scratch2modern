@@ -26,7 +26,7 @@
 
 "字节/token"就是压缩比；"参数量"括号里是 wte 和 lm_head 的参数，它们随词表大小增长。
 
-![compare](../../out/1.05_tokenizer/compare.png)
+![compare](../../../out/ch1/1.05_tokenizer/compare.png)
 
 - **BPE 的提升非常大。** 同样的步数，bpe4096 的 bpb 只有 char 的一半。生成的文字也从 `limed and the and saided ig the toy...` 变成了 `One day, a little boy named Tim went to...`，基本能读了。
 - **char 和 byte 几乎一样。** TinyStories 基本是英文，几乎没有多字节字符。

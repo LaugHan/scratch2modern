@@ -34,7 +34,7 @@
 
 ## 第一次：Muon 不加 weight decay
 
-![curves](../../out/1.12_full/curves.png)
+![curves](../../../out/ch1/1.12_full/curves.png)
 
 左：验证集（实线）和训练集固定窗口（虚线）的 bpb；右：学习率倍数。
 

@@ -31,7 +31,7 @@
 | bpe1024 | 3.16 | 16 → 48 | 13.8 万（9.8 万） | 810 | 53.1 MB | 33 s | 1.60 MB/s | 1.173（1.498） |
 | bpe4096 | 3.97 | 16 | 13.8 万（13.1 万） | 1015 | 66.5 MB | 60 s | 1.12 MB/s | 1.200（1.200） |
 
-![compare](../../../out/1.05_tokenizer/analysis/compare.png)
+![compare](../../../../out/ch1/1.05_tokenizer/analysis/compare.png)
 
 实线是这里的实验，虚线是 1.05 的原结果。
 
