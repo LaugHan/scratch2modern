@@ -22,42 +22,17 @@
 
 ## 进度
 
-✅ 已完成 · 🚧 进行中 · ⬜ 计划中。点节号看网站上的讲解，点"代码"看这一节的代码和 notes。
-
 ### 第一章：训练
 
-模型不动，只改怎么训练。
+模型结构不动，只改怎么训练。从 microgpt 出发，它用纯 Python 一个数一个数地求导，在 CPU 上跑；然后依次换成 PyTorch 张量、batch、GPU、BPE 分词器、bf16 混合精度和工程加速，中间也比较了优化器、学习率调度和各种训练细节。在同一个 1 层、13.8 万参数的模型上，训练时间从 93.5 秒降到 4.0 秒，验证集 bpb 从 2.52 降到 1.18；算上最开始的纯 Python，吞吐快了约 20 万倍。最后用选定的配置，在完整的 TinyStories 上训练了一个 6 层、531 万参数的模型，bpb 降到 0.589。
 
-| 节 | 主题 | 这一节回答什么 | 实验 | 网站 |
-|---|---|---|---|---|
-| [1.01](https://laughan.github.io/scratch2modern/1.01.html) | microgpt | 200 行纯 Python 的 GPT 是怎么工作的 | ✅ [代码](src/ch1/1.01_microgpt) | ✅ |
-| [1.02](https://laughan.github.io/scratch2modern/1.02.html) | PyTorch | 换成张量运算，为什么能快几十倍 | ✅ [代码](src/ch1/1.02_torch) | ✅ |
-| [1.03](https://laughan.github.io/scratch2modern/1.03.html) | Batch | 一次喂多条数据，速度和效果各怎么变 | ✅ [代码](src/ch1/1.03_batch) | ✅ |
-| [1.04](https://laughan.github.io/scratch2modern/1.04.html) | GPU | 搬到 GPU 上快多少，瓶颈在哪里 | ✅ [代码](src/ch1/1.04_cuda) | ✅ |
-| [1.05](https://laughan.github.io/scratch2modern/1.05.html) | Tokenizer | 字符、字节、BPE，怎么切 token 最好 | ✅ [代码](src/ch1/1.05_tokenizer) | ✅ |
-| [1.06](https://laughan.github.io/scratch2modern/1.06.html) | 优化器 | 从 SGD 到 Muon，各自解决了什么问题 | ✅ [代码](src/ch1/1.06_optimizer) | ✅ |
-| [1.07](https://laughan.github.io/scratch2modern/1.07.html) | 学习率调度 | 为什么要衰减，形状和 warmup 重不重要 | ✅ [代码](src/ch1/1.07_schedule) | ✅ |
-| [1.08](https://laughan.github.io/scratch2modern/1.08.html) | 数值精度 | fp64 到 fp8，位数少了会损失什么、快多少 | ✅ [代码](src/ch1/1.08_precision) | ✅ |
-| 1.09 | 工程加速 | 数学不变，SDPA、compile、CUDA Graph 等一项项叠上去能快多少 | ✅ [代码](src/ch1/1.09_engineering) | ⬜ |
-| 1.10 | 训练细节 | 初始化、weight decay、梯度裁剪、dropout 有没有用 | ✅ [代码](src/ch1/1.10_details) | ⬜ |
-| 1.11 | 回顾 | 把前面串起来，每一步各贡献了多少 | ✅ [代码](src/ch1/1.11_summary) | ⬜ |
-| 1.12 | 完整训练 | 用选定的配置，在完整的 TinyStories 上能训练到什么程度 | ✅ [代码](src/ch1/1.12_full) | ⬜ |
+<p align="center"><img src="out/ch1/1.11_summary/ladder.png" width="600" alt="第一章的阶梯：训练时间和验证集 bpb"></p>
+
+每个点是一次训练，在上一个点的基础上多改一样东西：① CPU、字符分词 → ② 搬到 GPU → ③ 加大 batch → ④ 换成 bpe1024、模型加宽 → ⑤ bf16 混合精度 → ⑥ 工程加速。
 
 ### 第二章：模型架构
 
-训练方式不动，只改模型本身，一项项补上主流模型（Llama、Qwen3、DeepSeek-V3 等）的部件。
-
-| 节 | 主题 | 这一节回答什么 | 实验 | 网站 |
-|---|---|---|---|---|
-| 2.01 | 更大的模型，更多的数据 | 换成多样的数据、更长的上下文、更大的模型，第一章的配置还管不管用 | ✅ [代码](src/ch2/2.01_scale) | ⬜ |
-| 2.02 | 位置编码 | 模型怎么知道 token 的先后顺序，能不能外推到更长 | ⬜ | ⬜ |
-| 2.03 | 归一化 | norm 放在哪、放几个、用哪种 | ⬜ | ⬜ |
-| 2.04 | MLP | 激活函数和门控，值不值得多一个矩阵 | ⬜ | ⬜ |
-| 2.05 | 注意力的 K、V | 少存一些 K、V，效果和速度各怎么变 | ⬜ | ⬜ |
-| 2.06 | 形状 | 深一点好还是宽一点好；embedding 要不要和输出层共享 | ⬜ | ⬜ |
-| 2.07 | MoE | 参数多、每次只用一部分，能不能更好 | ⬜ | ⬜ |
-| 2.08 | 注意力的小改动 | 几个防止 logit 失控的小技巧有没有用 | ⬜ | ⬜ |
-| 2.09 | 合起来 | 把每节胜出的放在一起，和 2.01 比 | ⬜ | ⬜ |
+训练方式不动，换到一个更大的模型和更多样的数据上（8 层、宽 512、7720 万参数，FineWeb-Edu，上下文 1024），对比位置编码、归一化、MLP、注意力、MoE 等架构上的改进。目前完成了基线。
 
 ## 项目结构
 
