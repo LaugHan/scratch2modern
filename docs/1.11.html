@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.11 回顾 · scratch2modern</title>
+<meta name="description" content="1.11：把第一章串起来，每一步改了什么、为什么有用、贡献了多少。">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="1.11 回顾 · scratch2modern">
+<meta property="og:description" content="1.11：把第一章串起来，每一步改了什么、为什么有用、贡献了多少。">
+<meta property="og:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>
+addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
+function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.open = open); }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+<style>.math{overflow-x:auto;overflow-y:hidden;margin:6px 0 14px}</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a class="gh" href="https://github.com/LaugHan/scratch2modern" aria-label="在 GitHub 上 Star"><img src="https://img.shields.io/github/stars/LaugHan/scratch2modern?style=social&amp;label=Star" alt="GitHub Star" height="20"></a></nav></div></header>
+<div class="wrap layout">
+<aside class="side" id="side" data-cur="1.11"><ol class="subs" hidden><li><a href="#scope">范围</a></li><li><a href="#s12">每一步</a></li><li><a href="#two">更快和更有效</a></li><li><a href="#kept">没改配置的几节</a></li><li><a href="#big">大模型里</a></li><li><a href="#sum">总结</a></li><li><a href="#deep">深入</a></li></ol></aside><script src="toc.js"></script>
+<main class="content">
+<section>
+<div class="ch-intro">第一章 · 训练</div>
+<h2>1.11 回顾</h2>
+<div class="summary"><div><span class="k">这一节</span>回顾：把第一章的每一步串起来，再和大模型对照</div><div><span class="k">结果</span>吞吐快约 300 倍，bpb 2.52 → 1.18；规模无关的结论和大模型一致</div></div>
+
+<p>第一章从 microgpt 出发，一次只改一样东西，把训练做得更快、更好。这一节不加新东西，而是把前面 10 节串起来：每一步改了什么，为什么有用，各自贡献了多少。最后再回答一个问题：在玩具模型上得到的这些结论，放到真实的大模型上还成立吗？</p>
+
+<figure style="margin:0 0 0px;max-width:600px"><svg class="chart" viewBox="0 0 560 360" role="img" aria-label="第一章：训练时间和验证集 bpb 的变化">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="currentColor" stroke-width="1.5"/></marker></defs>
+<line class="grid" x1="46" x2="546" y1="316.0" y2="316.0"/><text class="tick" x="38" y="320.0" text-anchor="end">1.0</text>
+<line class="grid" x1="46" x2="546" y1="232.7" y2="232.7"/><text class="tick" x="38" y="236.7" text-anchor="end">1.5</text>
+<line class="grid" x1="46" x2="546" y1="149.3" y2="149.3"/><text class="tick" x="38" y="153.3" text-anchor="end">2.0</text>
+<line class="grid" x1="46" x2="546" y1="66.0" y2="66.0"/><text class="tick" x="38" y="70.0" text-anchor="end">2.5</text>
+<text class="tick" x="67.9" y="334" text-anchor="middle">3s</text>
+<text class="tick" x="212.7" y="334" text-anchor="middle">10s</text>
+<text class="tick" x="344.7" y="334" text-anchor="middle">30s</text>
+<text class="tick" x="489.5" y="334" text-anchor="middle">100s</text>
+<text class="tick" x="296" y="356" text-anchor="middle">训练时间（对数坐标）</text>
+<text class="tick" x="12" y="166" text-anchor="middle" transform="rotate(-90 12 166)">验证集 bpb</text>
+<line class="arrow" style="color:var(--muted)" marker-end="url(#ah)" x1="472.4" y1="62.7" x2="421.7" y2="62.7"/>
+<line class="arrow" style="color:var(--muted)" marker-end="url(#ah)" x1="403.9" y1="64.5" x2="315.7" y2="82.5"/>
+<line class="arrow" style="color:var(--muted)" marker-end="url(#ah)" x1="309.1" y1="93.1" x2="355.1" y2="278.9"/>
+<line class="arrow" style="color:var(--muted)" marker-end="url(#ah)" x1="348.3" y1="287.5" x2="249.5" y2="286.1"/>
+<line class="arrow" style="color:var(--muted)" marker-end="url(#ah)" x1="231.5" y1="286.0" x2="111.5" y2="286.0"/>
+<circle class="pt" cx="481.4" cy="62.7" r="5"/>
+<text class="plab" x="481.4" y="84.7" text-anchor="middle">① 起点</text>
+<circle class="pt" cx="412.7" cy="62.7" r="5"/>
+<text class="plab" x="412.7" y="48.7" text-anchor="middle">② 上 GPU</text>
+<circle class="pt" cx="306.9" cy="84.3" r="5"/>
+<text class="plab" x="296.9" y="88.3" text-anchor="end">③ 加大 batch</text>
+<circle class="pt" cx="357.3" cy="287.7" r="5"/>
+<text class="plab" x="367.3" y="309.7" text-anchor="start">④ BPE + 加宽</text>
+<circle class="pt" cx="240.5" cy="286.0" r="5"/>
+<text class="plab" x="240.5" y="272.0" text-anchor="middle">⑤ bf16 混合精度</text>
+<circle class="pt" cx="102.5" cy="286.0" r="5"/>
+<text class="plab" x="102.5" y="308.0" text-anchor="middle">⑥ 编译 + CUDA Graph</text>
+</svg></figure>
+<p class="cap">每个点是一次训练，横轴是训练时间，纵轴是最终的验证集 bpb。每个点在上一个点的基础上多改一样东西。</p>
+
+<p id="scope">先说清楚这一节看的是什么、不看什么：</p>
+<ul class="plain">
+  <li><b>只挑了真正改动了配置的几步。</b>每一节都对比了好几种做法，这里只取最后采用的那一种。1.06 优化器、1.07 学习率调度、1.10 训练细节对比完都沿用了原来的做法，不在阶梯上，放到后面单独说。1.08、1.09 里的多项改动也各合并成一步。</li>
+  <li><b>这是一个玩具模型。</b>1 层 Transformer，宽度 48，13.8 万个参数，数据只有 TinyStories 官方验证集那一个文件（约 2200 万个字符），训练 4 秒。所以这里看到的"哪一步贡献最大"，只对这个规模成立。</li>
+  <li><b>每个点只跑了一个种子。</b>前面各节测过种子之间的波动，val bpb 约 ±0.003，比这里各步之间的差距小得多。</li>
+</ul>
+<p>阶梯上的 6 个点分别是：</p>
+<ul class="plain" style="list-style:none;padding-left:0">
+  <li>① CPU、字符分词、宽度 16、每步 1 个窗口、16384 步（1.03）；</li>
+  <li>② 搬到 GPU（1.04）；</li>
+  <li>③ 每步 16 个窗口，训练 4096 步（1.05 起）；</li>
+  <li>④ 换成 bpe1024，宽度加到 48（1.05、1.06）；</li>
+  <li>⑤ bf16 混合精度（1.08）；</li>
+  <li>⑥ 去掉同步、fused Adam、SDPA、编译 + CUDA Graph（1.09），也就是现在的配置。</li>
+</ul>
+<p>下面一步一步看。吞吐都按每秒处理的文本字节数算，不按 token 数算，这样字符分词和 BPE 才能比。</p>
+<details class="blk" open id="s12"><summary><span class="bn">1</span><span class="bt">① → ② 搬到 GPU</span><span class="bd">只快了 1.8 倍</span></summary>
+<p>参数和数据都放到 GPU 上，计算完全不变，bpb 也一模一样（2.52），却只快了 1.8 倍：93.5 秒 → 52.8 秒。</p>
+<p>原因是每步只算 1 个窗口，计算量太小。每一步要启动约 280 个 kernel（kernel 就是 GPU 上执行的一个小程序），每个只算一点点。时间主要花在 CPU 一个一个地启动它们上，GPU 大部分时间在等。见 <a href="1.04.html">1.04</a>。</p>
+</details>
+<details class="blk" open id="s23"><summary><span class="bn">2</span><span class="bt">② → ③ 加大 batch</span><span class="bd">又快又好</span></summary>
+<p>每步从 1 个窗口改成 16 个，训练从 16384 步改成 4096 步，看过的文本多了 4 倍：</p>
+<ul class="plain">
+  <li><b>更快</b>：每步的计算量大了 16 倍，但启动 kernel 的次数不变。启动的开销被分摊开，吞吐涨了约 10 倍（8.0 万 → 77 万字节/秒）。</li>
+  <li><b>更好</b>：同样的时间里能看更多文本，bpb 从 2.52 降到 2.39。</li>
+</ul>
+<p>batch 只有在 GPU 上才划算。<a href="1.03.html">1.03</a> 在 CPU 上试过，batch 越大反而越慢：CPU 本来就在满负荷计算，没有可以分摊的启动开销。</p>
+</details>
+<details class="blk" open id="s34"><summary><span class="bn">3</span><span class="bt">③ → ④ 换分词器、加宽</span><span class="bd">bpb 降了一半</span></summary>
+<p>这是唯一一步让 bpb 大幅下降的改动：2.39 → 1.17。它包含两件事：</p>
+<ul class="plain">
+  <li><b>bpe1024</b>（<a href="1.05.html">1.05</a>）：把常见的字符组合合并成一个 token，平均每个 token 对应 3.2 个字节。同样 4096 步，看过的文本从 16.8 MB 变成 53 MB；256 个 token 的上下文也从 256 个字符变成约 800 个字符，模型一次能看到更多内容。</li>
+  <li><b>宽度 16 → 48</b>（1.05 的分析，从 1.06 起采用）：参数从 1.0 万增加到 13.8 万。词表变大以后，embedding 和输出层占了大头，宽度 16 放不下。参数量相同时比较，bpe1024 配宽度 48 最好。</li>
+</ul>
+<p>代价是每步的计算量变大，训练时间从 21.9 秒涨到 33.3 秒。但按字节算，吞吐反而翻了一倍，因为每个 token 对应的文本多了 3 倍。</p>
+</details>
+<details class="blk" open id="s45"><summary><span class="bn">4</span><span class="bt">④ → ⑤ bf16 混合精度</span><span class="bd">快 2.6 倍，显存减半</span></summary>
+<p><a href="1.08.html">1.08</a> 把矩阵乘法从 fp64 换成 bf16，参数的主副本和 Adam 的状态仍然是 fp32：</p>
+<ul class="plain">
+  <li><b>更快</b>：33.3 秒 → 12.6 秒。这张卡的 fp64 只有 fp32 的 1/64，bf16 还能用上专门做矩阵乘法的 Tensor Core。</li>
+  <li><b>显存减半</b>：299 MB → 148 MB。反向传播要用的中间结果，大部分从每个 8 字节变成 2 字节。</li>
+  <li><b>代价很小</b>：bpb 只差约 0.003，和种子之间的波动同一个量级。</li>
+</ul>
+</details>
+<details class="blk" open id="s56"><summary><span class="bn">5</span><span class="bt">⑤ → ⑥ 工程加速</span><span class="bd">又快 3.2 倍</span></summary>
+<p><a href="1.09.html">1.09</a> 数学完全不变，只减少 CPU 和 GPU 之间的等待：</p>
+<ul class="plain">
+  <li><b>去掉每步的同步</b>：不再每步把 loss 读回 CPU，CPU 可以提前把后面的活排进队列；</li>
+  <li><b>fused Adam</b>：把每个参数各自的几次更新合并成一个 kernel；</li>
+  <li><b>SDPA</b>：PyTorch 自带的注意力实现（内部是 FlashAttention），不再把注意力矩阵写到显存里；</li>
+  <li><b>torch.compile</b>：把很多小运算融合成少数几个 kernel，每步的 kernel 从约 190 个降到 85 个；</li>
+  <li><b>CUDA Graph</b>：把一整步的 kernel 录下来，之后一次性提交，CPU 每步只需要启动 12 次。</li>
+</ul>
+<p>每步从 3.56 毫秒降到 0.85 毫秒，训练时间从 12.6 秒降到 4.0 秒。显存也从 148 MB 降到 99 MB：融合以后，很多中间结果不用再存下来。</p>
+</details>
+
+<h3 id="two">更快和更有效</h3>
+<p>把每一步的吞吐画在一起：</p>
+<figure style="margin:0 0 6px;max-width:600px"><svg class="chart" viewBox="0 0 680 256" role="img" aria-label="阶梯每一步的吞吐">
+<line class="grid" x1="150.0" x2="150.0" y1="8" y2="212"/><text class="tick" x="150.0" y="228" text-anchor="middle">1 万</text>
+<line class="grid" x1="270.8" x2="270.8" y1="8" y2="212"/><text class="tick" x="270.8" y="228" text-anchor="middle">10 万</text>
+<line class="grid" x1="391.6" x2="391.6" y1="8" y2="212"/><text class="tick" x="391.6" y="228" text-anchor="middle">100 万</text>
+<line class="grid" x1="512.4" x2="512.4" y1="8" y2="212"/><text class="tick" x="512.4" y="228" text-anchor="middle">1000 万</text>
+<text class="lab" x="138" y="30" text-anchor="end">① CPU 起点</text>
+<rect class="bar1" x="150" y="14" width="78.9" height="22" rx="3"/>
+<text class="val" x="236.9" y="30">4.5 万</text>
+<text class="lab" x="138" y="64" text-anchor="end">② 上 GPU</text>
+<rect class="bar2" x="150" y="48" width="109.1" height="22" rx="3"/>
+<text class="val" x="267.1" y="64">8 万</text>
+<text class="lab" x="670" y="64" text-anchor="end" style="fill:var(--accent)">×1.8</text>
+<text class="lab" x="138" y="98" text-anchor="end">③ 加大 batch</text>
+<rect class="bar2" x="150" y="82" width="227.9" height="22" rx="3"/>
+<text class="val" x="385.9" y="98">77 万</text>
+<text class="lab" x="670" y="98" text-anchor="end" style="fill:var(--accent)">×9.6</text>
+<text class="lab" x="138" y="132" text-anchor="end">④ bpe1024 + 加宽</text>
+<rect class="bar2" x="150" y="116" width="266.2" height="22" rx="3"/>
+<text class="val" x="424.2" y="132">160 万</text>
+<text class="lab" x="670" y="132" text-anchor="end" style="fill:var(--accent)">×2.1</text>
+<text class="lab" x="138" y="166" text-anchor="end">⑤ bf16 混合精度</text>
+<rect class="bar2" x="150" y="150" width="316.9" height="22" rx="3"/>
+<text class="val" x="474.9" y="166">420 万</text>
+<text class="lab" x="670" y="166" text-anchor="end" style="fill:var(--accent)">×2.6</text>
+<text class="lab" x="138" y="200" text-anchor="end">⑥ 工程加速</text>
+<rect class="bar2" x="150" y="184" width="377.3" height="22" rx="3"/>
+<text class="val" x="535.3" y="200">1330 万</text>
+<text class="lab" x="670" y="200" text-anchor="end" style="fill:var(--accent)">×3.2</text>
+<text class="tick" x="150" y="248">每秒处理的文本字节数（对数坐标）；右边是相对上一步的倍数</text>
+</svg></figure>
+<p class="cap">从 ① 到 ⑥，每秒处理的文本多了约 300 倍：1.8 × 9.6 × 2.1 × 2.6 × 3.2。</p>
+<p>每一步的作用可以分成两类：</p>
+<ul class="plain">
+  <li><b>更快</b>：同样的数学，每秒处理更多文本。② GPU、③ 加大 batch、⑤ bf16、⑥ 工程加速都是这一类，再往前还有 1.02 的张量化。时间上的提升几乎全部来自这一类。</li>
+  <li><b>更有效</b>：同样多的文本，学到更多。主要是 ④ 换分词器和加宽模型，bpb 的下降几乎全部来自这一步。③ 多训练了 4 倍的文本，也贡献了一小部分。</li>
+</ul>
+<p>对这个玩具模型来说，最大的瓶颈一直是 CPU 启动 kernel 的开销：② 加速有限、③ 的 batch 有效、⑥ 的编译和 CUDA Graph 有效，都是因为它。</p>
+
+<h3 id="kept">没有改动配置的几节</h3>
+<p>这三节不在阶梯上，但它们回答了"原来的做法够不够好"：</p>
+<ul class="plain">
+  <li><b><a href="1.06.html">1.06 优化器</a></b>：比较了 SGD、momentum、Adam、AdamW、Lion、Muon。Adam 比 SGD 好很多，Muon 还略好一点。保留 Adam，因为大模型的经验大多来自 AdamW，用它更好对照。</li>
+  <li><b><a href="1.07.html">1.07 学习率调度</a></b>：只要最后衰减到 0，线性、cosine、WSD 的差别都在种子波动以内；不衰减明显更差。warmup 在这个模型上没有用处。</li>
+  <li><b><a href="1.10.html">1.10 训练细节</a></b>：初始化只要不是全零、σ 不太大就行；weight decay、梯度裁剪、dropout 都没有用处，因为模型没有过拟合，也没有不稳定。人为制造过拟合以后，weight decay 才开始起作用。</li>
+</ul>
+<p>1.06 和 1.07 都是在旧配置上比的。现在的配置（⑥）快了很多，我们再把 Muon 和 WSD 换上去试一次，每种组合 3 个种子：</p>
+<figure style="margin:0 0 6px;max-width:600px"><svg class="chart" viewBox="0 0 680 280" role="img" aria-label="Adam/Muon 和线性/WSD 四种组合的训练时间与验证集 bpb">
+<line class="grid" x1="60" x2="530" y1="238.0" y2="238.0"/><text class="tick" x="52" y="242.0" text-anchor="end">1.15</text>
+<line class="grid" x1="60" x2="530" y1="174.0" y2="174.0"/><text class="tick" x="52" y="178.0" text-anchor="end">1.16</text>
+<line class="grid" x1="60" x2="530" y1="110.0" y2="110.0"/><text class="tick" x="52" y="114.0" text-anchor="end">1.17</text>
+<line class="grid" x1="60" x2="530" y1="46.0" y2="46.0"/><text class="tick" x="52" y="50.0" text-anchor="end">1.18</text>
+<text class="tick" x="60.0" y="256" text-anchor="middle">0s</text>
+<text class="tick" x="177.5" y="256" text-anchor="middle">4s</text>
+<text class="tick" x="295.0" y="256" text-anchor="middle">8s</text>
+<text class="tick" x="412.5" y="256" text-anchor="middle">12s</text>
+<text class="tick" x="530.0" y="256" text-anchor="middle">16s</text>
+<text class="tick" x="295" y="276" text-anchor="middle">训练时间；纵轴：验证集 bpb（小点是单个种子，大点是 3 个种子平均）</text>
+<circle cx="177.1" cy="70.7" r="2.6" style="fill:var(--c1);opacity:.45"/>
+<circle cx="172.0" cy="47.3" r="2.6" style="fill:var(--c1);opacity:.45"/>
+<circle cx="183.3" cy="80.5" r="2.6" style="fill:var(--c1);opacity:.45"/>
+<circle cx="177.5" cy="66.2" r="6" style="fill:var(--bg);stroke:var(--c1);stroke-width:2"/>
+<text class="lab" x="189.5" y="70.2">Adam + 线性（现在） 1.1769</text>
+<circle cx="189.1" cy="81.5" r="2.6" style="fill:var(--c1);opacity:.45"/>
+<circle cx="184.2" cy="92.4" r="2.6" style="fill:var(--c1);opacity:.45"/>
+<circle cx="200.5" cy="96.3" r="2.6" style="fill:var(--c1);opacity:.45"/>
+<circle cx="191.3" cy="90.1" r="6" style="fill:var(--c1);stroke:var(--c1);stroke-width:2"/>
+<text class="lab" x="203.3" y="94.1">Adam + WSD 1.1731</text>
+<circle cx="423.9" cy="129.9" r="2.6" style="fill:var(--c2);opacity:.45"/>
+<circle cx="427.6" cy="170.2" r="2.6" style="fill:var(--c2);opacity:.45"/>
+<circle cx="487.0" cy="137.5" r="2.6" style="fill:var(--c2);opacity:.45"/>
+<circle cx="446.2" cy="145.8" r="6" style="fill:var(--bg);stroke:var(--c2);stroke-width:2"/>
+<text class="lab" x="538.0" y="149.8">Muon + 线性 1.1644</text>
+<circle cx="420.8" cy="156.2" r="2.6" style="fill:var(--c2);opacity:.45"/>
+<circle cx="456.0" cy="194.0" r="2.6" style="fill:var(--c2);opacity:.45"/>
+<circle cx="458.8" cy="164.4" r="2.6" style="fill:var(--c2);opacity:.45"/>
+<circle cx="445.2" cy="171.5" r="6" style="fill:var(--c2);stroke:var(--c2);stroke-width:2"/>
+<text class="lab" x="538.0" y="175.5">Muon + WSD 1.1604</text>
+</svg></figure>
+<p class="cap">空心是线性衰减，实心是 WSD。Muon 更好，但慢了 3 倍。</p>
+<ul class="plain">
+  <li><b>Muon 让结果更好了，却让训练慢了 3 倍。</b>Muon 每一步要对每个矩阵做 5 次 Newton–Schulz 迭代，算出近似正交化的更新。在这么小的矩阵上，这些运算的时间几乎全花在 CPU 启动 kernel 上：一步要 1.9 毫秒，而 fused Adam 只要 0.04 毫秒，前向加反向一共也才不到 1 毫秒。</li>
+  <li><b>到了大模型上，这个问题就不存在了。</b>这部分额外计算只占总计算量的 1% 左右（Keller Jordan 的估计）。算法上更好，要配上工程才能变成更快；在玩具模型上，配不上。</li>
+  <li><b>WSD 比线性衰减略好</b>，约 0.004，和 1.07 的结论一致。它真正的好处是"随时可以停"，在这里体现不出来。</li>
+</ul>
+
+<p id="big" style="margin-top:22px">最后补充一点：这一章的结论在真实的大模型里成立吗？每个结论都来自一个 13.8 万参数、训练 4 秒的玩具模型。下面对照 2025–26 年几个公开了训练细节的开源模型：DeepSeek-V4-Pro（1.6 万亿参数，33 万亿 token）、Kimi K3（2.8 万亿参数）、GLM-5（7440 亿参数，28.5 万亿 token）、Qwen3（最大 2350 亿参数，36 万亿 token）、Gemma 4（最大 310 亿参数）。和我们比，参数量和数据量都差了 100 万倍以上。只看本章讨论过的这些部件，模型结构上的其他改动留到后面的章节。</p>
+<p>一致的地方：</p>
+<ul class="plain">
+  <li><b>分词器</b>（1.05）：我们在宽度 48 时 bpe1024 最好，大模型的词表是 12.8 万到 26.2 万（DeepSeek-V4 128K，Kimi 160K，GLM 约 155K，Gemma 262K）。道理相同：词表越大，每个 token 包含的文本越多，但 embedding 和输出层也越大。大模型宽度有几千，这部分只占很小的比例，所以能用大得多的词表。</li>
+  <li><b>batch</b>（1.03、1.04）：都是为了把硬件填满。大模型每步 1600 万到 9000 多万个 token，常常从小逐步加大（DeepSeek-V4、GLM），因为要分到几千张卡上，每张卡都要有足够的活。</li>
+  <li><b>精度</b>（1.08）：bf16 混合精度是基础；DeepSeek 用 FP8 训练，Kimi K2 只用 FP8 存激活、不用来计算。道理相同：低精度只有在矩阵足够大时才划算，而且每降一级都要小心。我们的 fp8 在小矩阵上反而更慢。</li>
+  <li><b>dropout</b>（1.10）：都不用，GLM 明确写了不用 dropout。原因也相同：都没有过拟合，大模型的数据基本只过一遍。</li>
+</ul>
+<p>不一致的地方：</p>
+<ul class="plain">
+  <li><b>优化器</b>（1.06）：Muon 已经成为主流，Kimi K2/K3、GLM-4.5/5、DeepSeek-V4、Qwen 的新一代都用 Muon；embedding 和输出层仍然用 AdamW，和我们的分法一样。我们嫌它慢，是因为矩阵太小；大模型里这部分只占约 1% 的计算量，它们还专门做了工程优化，比如把同样形状的矩阵叠起来一起算（DeepSeek-V4），把大量小 kernel 用 CUDA Graph 录下来（Qwen）。</li>
+  <li><b>学习率调度</b>（1.07）：都用 warmup（DeepSeek-V4 2000 步，Kimi K3 1%）。衰减形状分两派：DeepSeek-V4 和 Kimi K2 用 WSD，GLM 和 Kimi K3 实验后改用 cosine，认为 WSD 在恒定段学得不够。大模型一训就是几个月，学习率上很小的差别也值得争取；warmup 防的是训练开头的不稳定，我们的 1 层模型本来就稳定。</li>
+  <li><b>weight decay</b>（1.10）：都用 0.1。大模型没有过拟合，加 weight decay 是为了控制参数不要越长越大。Muon 尤其需要，不加的话参数和激活会越来越大（Moonlight 的研究）。我们训练太短，参数还长不到会出问题的程度。</li>
+  <li><b>梯度裁剪</b>（1.10）：上一代几乎都裁到 1.0（GPT-3、LLaMA、DeepSeek-V3），新一代的报告大多不再单独提。我们只有 1 层，梯度一直很小；大模型更容易出现 loss 尖峰，需要这层保险。</li>
+  <li><b>初始化</b>（1.10）：新一代的报告大多不写，DeepSeek-V3 用 0.006。模型越深，初始值的影响会一层层累积，需要更小的 σ。</li>
+  <li><b>工程</b>（1.09）：大模型自己写 kernel，让计算和几千张卡之间的通信同时进行；Gemma 用 JAX + XLA 编译器。它们的瓶颈是计算本身和卡与卡之间的通信，启动开销可以忽略。1.09 的宽度扫描已经能看到这个趋势：同样的工程加速，宽度 48 时快 4.5 倍，宽度 1536 时只快 1.2 倍。</li>
+</ul>
+<p>一致的部分，背后的道理和规模无关：词表大小的取舍、把硬件填满、低精度的风险、不存在过拟合。不一致的部分几乎都是因为规模：玩具模型太小，Muon 的额外开销显得很大；太浅，warmup、梯度裁剪、初始化的影响显不出来；训练太短，weight decay 控制参数大小的作用用不上。</p>
+<p class="cap">出处：<a href="https://arxiv.org/abs/2606.19348">DeepSeek-V4</a>、<a href="https://arxiv.org/abs/2507.20534">Kimi K2</a>、<a href="https://arxiv.org/abs/2607.24653">Kimi K3</a>、<a href="https://arxiv.org/abs/2508.06471">GLM-4.5</a>、<a href="https://arxiv.org/abs/2602.15763">GLM-5</a>、<a href="https://arxiv.org/abs/2505.09388">Qwen3</a>、<a href="https://arxiv.org/abs/2608.30320">Qwen3.8-Next</a>、<a href="https://arxiv.org/abs/2607.02770">Gemma 4</a>。各报告公开的细节详略不一，Gemma 4 几乎没有写训练超参数，没写的项这里没有列出。</p>
+
+<h3 id="sum">总结</h3>
+<p>训练时间从 93.5 秒降到 4.0 秒，bpb 从 2.52 降到 1.18。时间上的提升来自很多步，每一步都是在减少等待、把硬件用满；bpb 的下降主要来自换分词器和加宽模型这一步。</p>
+<p>这些具体的数字和排序，只对这个玩具模型成立。能带走的是方法：先找清楚时间花在哪里，再对症下药；比较不同的分词器时，按字节算 bpb；比较优化器和学习率时，每种都单独调到最好再比，并用多个种子看波动。</p>
+<p>下一节用第一章的全部配置，把模型放大到 6 层，在完整的 TinyStories 上训练。第二章再开始改模型的结构：模型变深以后，1.10 里"用不上"的那些东西，比如残差输出层的缩放、梯度裁剪，可能会重新变得重要。</p>
+
+
+<details class="blk" id="deep"><summary><span class="bn">+</span><span class="bt">深入</span><span class="bd">起点之前的三步；Muon 为什么编译不了</span></summary>
+<p><b>起点之前：1.01 → 1.03。</b>阶梯从 ① 开始，但在它之前还有几步，是在 names 数据集上做的，bpb 不能放进同一张图：</p>
+<ul class="plain">
+  <li><a href="1.01.html">1.01</a> 是 Karpathy 的 microgpt 原版：纯 Python，每个数都是一个自动求导的节点，每秒只能处理 66 个字节。</li>
+  <li><a href="1.02.html">1.02</a> 换成 PyTorch 张量：一个矩阵就是一个节点，矩阵乘法交给底层的 C++ 实现。每一步的 loss 和 1.01 完全相同，快了约 25 倍。</li>
+  <li><a href="1.03.html">1.03</a> 再把"一次一个 token"改成"一次一整个窗口"：所有位置一起算，用因果 mask 保证每个位置只看得到前面的 token。这就是 ①。</li>
+</ul>
+<p>这几步都没有改变数学，只是把同样的计算交给更擅长的执行方式。从 66 字节/秒到 ① 的 4.5 万字节/秒，已经快了约 700 倍；再算上 ① 到 ⑥ 的 300 倍，一共约 20 万倍。</p>
+<p><b>Muon 为什么编译不了。</b>PyTorch 自带的 Muon 没法直接编译，编译器会主动跳过它的 step。手写一个把同样形状的矩阵叠在一起批量计算、再编译的版本，一步能降到 0.6 毫秒，但还是比 Adam 慢一倍：单是 GPU 上的计算就要约 0.47 毫秒。</p>
+</details>
+
+
+<div class="nextsec"><a href="1.10.html">上一节：1.10 训练细节</a> · 下一节：1.12 全量训练（写作中）</div>
+</section>
+</main>
+</div>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。作者 <a href="https://github.com/LaugHan">@LaugHan</a> · <a href="https://github.com/LaugHan/scratch2modern/blob/main/LICENSE">MIT 许可证</a> · 最后更新 2026-11-18</div></footer>
+</body>
+</html>
