@@ -6,6 +6,13 @@
 <title>1.03 Batch · scratch2modern</title>
 <meta name="description" content="1.03：一次算一整批。">
 <link rel="stylesheet" href="style.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="1.03 Batch · scratch2modern">
+<meta property="og:description" content="1.03：一次算一整批。">
+<meta property="og:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
 <script>
 addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
@@ -13,13 +20,14 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 </script>
 </head>
 <body>
-<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a class="gh" href="https://github.com/LaugHan/scratch2modern" aria-label="在 GitHub 上 Star"><img src="https://img.shields.io/github/stars/LaugHan/scratch2modern?style=social&amp;label=Star" alt="GitHub Star" height="20"></a></nav></div></header>
 <div class="wrap layout">
 <aside class="side" id="side" data-cur="1.03"><ol class="subs" hidden><li><a href="#batch">batch 是什么</a></li><li><a href="#ts">TinyStories</a></li><li><a href="#b3-model">模型</a></li><li><a href="#b3-loss">loss</a></li><li><a href="#b3-data">取数据</a></li><li><a href="#setup">实验怎么比</a></li><li><a href="#r-103">运行结果</a></li><li><a href="#malloc">为什么越大越慢</a></li></ol></aside><script src="toc.js"></script>
 <main class="content">
 <section>
 <div class="ch-intro">第一章 · 训练</div>
 <h2>1.03 Batch</h2>
+<div class="summary"><div><span class="k">这一节</span>一次喂一批数据（batch），换到 TinyStories</div><div><span class="k">结果</span>names 上又快了 15 倍；TinyStories 在 CPU 上 batch 反而越大越慢</div><div class="rt">阅读约 5 分钟</div></div>
 
 <p>上一节最后我们发现，时间大部分花在调用上，而不是计算上。现在每次调用只处理一个 token：16 个数进去，16 个数出来。既然每次调用的开销差不多是固定的，那一次多喂一些数据进去，同样的开销就能算更多的东西。这就是 batch。</p>
 
@@ -197,10 +205,10 @@ def get_batch(data, batch_size):
 
 <p id="malloc" style="margin-top:18px">最后补充一点：为什么 TinyStories 上 batch 越大反而越慢？注意力要算每个位置对每个位置的权重，这是一个 B × 4 × 256 × 256 的矩阵，batch 16 时已经超过 32 MB。Linux 上的内存分配器（glibc 的 malloc）遇到这么大的一块，会直接向操作系统要新的内存页，用完马上还回去，下一次再重新要。每次拿到新页，都要先触发缺页中断、把整页清零，这部分开销比计算本身还大。在一个单独的测试里，把这个阈值调大以后，batch 64 每步从 1463 毫秒降到了 403 毫秒。但即便如此，CPU 上每个 token 还是要约 22 微秒，batch 再大也没有帮助：CPU 没有多少调用开销可以摊，它是真的算不过来了。</p>
 
-<div class="nextsec"><a href="1.02.html">上一节：1.02 PyTorch</a> · <a href="1.04.html">下一节：1.04 GPU</a></div>
+<div class="endcard"><div><a class="nx" href="1.04.html"><span class="k">下一节</span>1.04 GPU →</a><a class="pv" href="1.02.html">← 上一节：1.02 PyTorch</a></div><a class="gh" href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.03_batch"><span class="k">代码和日志在 GitHub</span>觉得有用，点个 ⭐</a></div>
 </section>
 </main>
 </div>
-<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。作者 <a href="https://github.com/LaugHan">@LaugHan</a> · 最后更新 2026-11-18</div></footer>
 </body>
 </html>

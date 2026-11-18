@@ -196,3 +196,30 @@ pre.solo { margin: 4px 0 16px; }
 .chart .d2 { fill: var(--c2); stroke: var(--bg); stroke-width: 2; }
 .toks span { display: inline-block; background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin: 0 2px 4px 0; font-family: var(--mono); font-size: 13px; white-space: pre; }
 .duo .pl { font-size: 12px; color: var(--muted); margin: 0 0 4px; font-family: var(--mono); }
+
+/* 推广相关：顶栏 star、首页大数字、节摘要、节末卡片 */
+.top nav .gh { display: inline-flex; align-items: center; }
+.top nav .gh img { display: block; }
+.bignum { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 4px; }
+.bignum b { display: block; font-family: var(--mono); font-size: 28px; color: var(--accent); line-height: 1.2; }
+.bignum span { font-size: 13px; color: var(--muted); }
+.bigsub { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+.chlist .row.head { border-bottom: none; padding-bottom: 4px; }
+.chlist .row.sec { padding: 8px 0; }
+.chlist .row.sec .no { padding-left: 14px; }
+.chlist .row.sec h3 { font-size: 15px; font-weight: 600; }
+.chlist .row.sec p { font-size: 14px; margin: 0; }
+.summary { border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 6px; padding: 10px 14px; margin: 6px 0 22px; font-size: 14px; color: var(--fg-2); display: grid; gap: 4px; }
+.summary .k { display: inline-block; min-width: 48px; color: var(--muted); font-size: 13px; margin-right: 6px; }
+.summary .rt { font-size: 12.5px; color: var(--muted); }
+.endcard { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; margin-top: 48px; }
+.endcard > div, .endcard > a { border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; text-decoration: none; }
+.endcard .k { display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 2px; }
+.endcard .nx { display: block; font-weight: 600; text-decoration: none; }
+.endcard .nx.off { color: var(--muted); font-weight: 400; }
+.endcard .pv { display: block; font-size: 13px; color: var(--muted); margin-top: 8px; text-decoration: none; }
+.endcard > a.gh { font-weight: 600; }
+.endcard > a.gh:hover, .endcard .nx:hover { border-color: var(--accent); color: var(--accent); }
+.chlist .row.sec, .chlist .row.head { grid-template-columns: 90px 160px minmax(0, 1fr) 190px; }
+@media (max-width: 640px) { .endcard { grid-template-columns: 1fr; } .chlist .row.sec, .chlist .row.head { grid-template-columns: 56px minmax(0, 1fr); gap: 2px 12px; } .chlist .row.sec p, .chlist .row.sec .st, .chlist .row.head p, .chlist .row.head .st { grid-column: 2; text-align: left; } }
+@media (max-width: 640px) { .home-hero .chart .plab { font-size: 18px; } .home-hero .chart .tick { font-size: 14px; } }

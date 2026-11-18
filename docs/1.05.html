@@ -6,6 +6,13 @@
 <title>1.05 Tokenizer · scratch2modern</title>
 <meta name="description" content="1.05：换一种方式把文本切成 token。">
 <link rel="stylesheet" href="style.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="1.05 Tokenizer · scratch2modern">
+<meta property="og:description" content="1.05：换一种方式把文本切成 token。">
+<meta property="og:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
 <script>
 addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
@@ -13,13 +20,14 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 </script>
 </head>
 <body>
-<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a class="gh" href="https://github.com/LaugHan/scratch2modern" aria-label="在 GitHub 上 Star"><img src="https://img.shields.io/github/stars/LaugHan/scratch2modern?style=social&amp;label=Star" alt="GitHub Star" height="20"></a></nav></div></header>
 <div class="wrap layout">
 <aside class="side" id="side" data-cur="1.05"><ol class="subs" hidden><li><a href="#tok">四种切法</a></li><li><a href="#bpe">BPE</a></li><li><a href="#bpb">bpb</a></li><li><a href="#r-105">运行结果</a></li><li><a href="#split">BPE 好在哪</a></li></ol></aside><script src="toc.js"></script>
 <main class="content">
 <section>
 <div class="ch-intro">第一章 · 训练</div>
 <h2>1.05 Tokenizer</h2>
+<div class="summary"><div><span class="k">这一节</span>换一种切 token 的方式：BPE</div><div><span class="k">结果</span>同样的步数，bpb 从 2.39 降到 1.20，降了一半</div><div class="rt">阅读约 4 分钟</div></div>
 
 <p>到目前为止，模型都是一个字符一个 token。前面训练出来的故事还读不通：模型每一步只猜一个字母，一个单词要一个字母一个字母地拼出来，光一个 the 就要连着猜对三次。那能不能换一种切法，让一个 token 装下更多的内容？</p>
 
@@ -170,10 +178,10 @@ def val_bpb():
   </div>
 </div>
 
-<div class="nextsec"><a href="1.04.html">上一节：1.04 GPU</a> · <a href="1.06.html">下一节：1.06 优化器</a></div>
+<div class="endcard"><div><a class="nx" href="1.06.html"><span class="k">下一节</span>1.06 优化器 →</a><a class="pv" href="1.04.html">← 上一节：1.04 GPU</a></div><a class="gh" href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.05_tokenizer"><span class="k">代码和日志在 GitHub</span>觉得有用，点个 ⭐</a></div>
 </section>
 </main>
 </div>
-<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。作者 <a href="https://github.com/LaugHan">@LaugHan</a> · 最后更新 2026-11-18</div></footer>
 </body>
 </html>

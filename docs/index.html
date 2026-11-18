@@ -6,9 +6,16 @@
 <title>scratch2modern</title>
 <meta name="description" content="从 microgpt 出发，一步步搭出现代大语言模型，每一步都有对照实验。">
 <link rel="stylesheet" href="style.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="scratch2modern">
+<meta property="og:description" content="从 microgpt 出发，一步步搭出现代大语言模型，每一步都有对照实验。">
+<meta property="og:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
 </head>
 <body>
-<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a class="gh" href="https://github.com/LaugHan/scratch2modern" aria-label="在 GitHub 上 Star"><img src="https://img.shields.io/github/stars/LaugHan/scratch2modern?style=social&amp;label=Star" alt="GitHub Star" height="20"></a></nav></div></header>
 <main class="wrap">
 <section class="home-hero">
   <div>
@@ -18,9 +25,11 @@
     <p>从它到现代大模型，中间隔着大量训练技巧、结构改动和后训练算法，而且每年都有新的冒出来。这么多东西，哪些是真的有用？我们把它们拆开，一次只加一样，再拿去和你直觉上觉得对的做法、和曾经或现在流行的做法放在一起比，用实验看看到底差在哪。</p>
     <p>所有实验都在仓库里，拉下来就能跑。你也可以换成自己的数据，或者去验证我们没覆盖到的细节。</p>
     <p>所有实验都在单卡上完成，模型始终是 toy 规模。有些结论在这个规模下会和原始报告不一致，遇到的时候我们会单独说明。</p>
-    <div class="btns"><a class="btn solid" href="1.01.html">从第一章开始</a><a class="btn" href="https://github.com/LaugHan/scratch2modern">GitHub</a></div>
+    <div class="btns"><a class="btn solid" href="1.01.html">从第一章开始</a><a class="btn" href="https://github.com/LaugHan/scratch2modern">⭐ Star on GitHub</a></div>
   </div>
   <figure style="margin:0">
+    <div class="bignum"><div><b>93.5s → 4.0s</b><span>训练时间</span></div><div><b>2.52 → 1.18</b><span>验证集 bpb</span></div></div>
+    <div class="bigsub">1 层 GPT · 单卡 · 每一步都有对照实验</div>
     <svg class="chart" viewBox="0 0 560 360" role="img" aria-label="第一章：训练时间和验证集 bpb 的变化">
 <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="currentColor" stroke-width="1.5"/></marker></defs>
 <line class="grid" x1="46" x2="546" y1="316.0" y2="316.0"/><text class="tick" x="38" y="320.0" text-anchor="end">1.0</text>
@@ -57,8 +66,19 @@
 
 <div class="sec-title" id="chapters">章节</div>
 <div class="chlist">
-  <a class="row" href="1.01.html"><span class="no">第一章</span><h3>训练</h3><p>模型不动，只改怎么训练：PyTorch、batch、GPU、tokenizer、优化器、学习率调度、数值精度、工程加速、训练细节。</p><span class="st on">已写到 1.08</span></a>
-  <div class="row dim"><span class="no">第二章</span><h3>模型结构</h3><p>模型变深、变大以后，结构要怎么改。</p><span class="st">规划中</span></div>
+  <div class="row head"><span class="no">第一章</span><h3>训练</h3><p>模型不动，只改怎么训练。</p><span class="st on">已写到 1.08</span></div>
+  <a class="row sec" href="1.01.html"><span class="no">1.01</span><h3>microgpt</h3><p>起点：Karpathy 的 microgpt，200 行纯 Python 的 GPT</p><span class="st">起点 · CPU 上 109 秒</span></a>
+  <a class="row sec" href="1.02.html"><span class="no">1.02</span><h3>PyTorch</h3><p>换成 PyTorch 张量</p><span class="st">快约 25 倍</span></a>
+  <a class="row sec" href="1.03.html"><span class="no">1.03</span><h3>Batch</h3><p>一次喂一批数据（batch），换到 TinyStories</p><span class="st">names 上再快 15 倍</span></a>
+  <a class="row sec" href="1.04.html"><span class="no">1.04</span><h3>GPU</h3><p>把训练搬到 GPU 上</p><span class="st">最多快 82 倍</span></a>
+  <a class="row sec" href="1.05.html"><span class="no">1.05</span><h3>Tokenizer</h3><p>换一种切 token 的方式：BPE</p><span class="st">bpb 2.39 → 1.20</span></a>
+  <a class="row sec" href="1.06.html"><span class="no">1.06</span><h3>优化器</h3><p>手写 6 个优化器：SGD 到 Muon</p><span class="st">Muon 比 Adam 好 0.013</span></a>
+  <a class="row sec" href="1.07.html"><span class="no">1.07</span><h3>学习率调度</h3><p>学习率调度：衰减的形状和 warmup</p><span class="st">衰减比不衰减好 0.07</span></a>
+  <a class="row sec" href="1.08.html"><span class="no">1.08</span><h3>数值精度</h3><p>数值精度：fp64 到 fp8</p><span class="st">bf16 和 fp64 一样准</span></a>
+  <div class="row sec dim"><span class="no">1.09</span><h3>工程加速</h3><p></p><span class="st">写作中</span></div>
+  <div class="row sec dim"><span class="no">1.10</span><h3>训练细节</h3><p></p><span class="st">写作中</span></div>
+  <div class="row sec dim"><span class="no">1.11</span><h3>回顾</h3><p></p><span class="st">写作中</span></div>
+  <div class="row dim"><span class="no">第二章</span><h3>模型结构</h3><p>换到更大的模型和更多样的数据上，对比各种架构改进。</p><span class="st">进行中</span></div>
   <div class="row dim"><span class="no">第三章</span><h3>后训练</h3><p>让只会续写的模型听懂指令。</p><span class="st">规划中</span></div>
   <div class="row dim"><span class="no">Infra</span><h3>显存、通信与并行</h3><p>一张卡放不下、算不完的时候怎么办。</p><span class="st">规划中</span></div>
 </div>
@@ -70,6 +90,6 @@
 <p>我写不出那么优雅的代码，并且可能在构建 modern model 的时候，一些代码也难以写得很优美。不过我尽可能从我自己就能够清晰理解的角度，把整个 modern model 讲清楚，不要隔靴搔痒。</p>
 </section>
 </main>
-<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。作者 <a href="https://github.com/LaugHan">@LaugHan</a> · 最后更新 2026-11-18</div></footer>
 </body>
 </html>

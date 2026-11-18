@@ -6,6 +6,13 @@
 <title>1.08 数值精度 · scratch2modern</title>
 <meta name="description" content="1.08：训练里的数用多少位来存、来算。">
 <link rel="stylesheet" href="style.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="1.08 数值精度 · scratch2modern">
+<meta property="og:description" content="1.08：训练里的数用多少位来存、来算。">
+<meta property="og:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
 <script>
 addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
@@ -17,13 +24,14 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <style>.math{overflow-x:auto;overflow-y:hidden;margin:6px 0 14px}</style>
 </head>
 <body>
-<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a class="gh" href="https://github.com/LaugHan/scratch2modern" aria-label="在 GitHub 上 Star"><img src="https://img.shields.io/github/stars/LaugHan/scratch2modern?style=social&amp;label=Star" alt="GitHub Star" height="20"></a></nav></div></header>
 <div class="wrap layout">
 <aside class="side" id="side" data-cur="1.08"><ol class="subs" hidden><li><a href="#float">浮点数</a></li><li><a href="#round">舍入</a></li><li><a href="#mixed">混合精度</a></li><li><a href="#scaling">loss scaling</a></li><li><a href="#fp8">fp8</a></li><li><a href="#design">8 种设置</a></li><li><a href="#r-108">运行结果</a></li><li><a href="#wide">加宽模型测速</a></li><li><a href="#big">大模型里</a></li><li><a href="#deep">深入：fp8</a></li></ol></aside><script src="toc.js"></script>
 <main class="content">
 <section>
 <div class="ch-intro">第一章 · 训练</div>
 <h2>1.08 数值精度</h2>
+<div class="summary"><div><span class="k">这一节</span>数值精度：fp64 到 fp8</div><div><span class="k">结果</span>bf16 混合精度和 fp64 结果一样；宽模型上快几十倍</div><div class="rt">阅读约 7 分钟</div></div>
 
 <p>其实模型参数的精度也有讲究，经常听到量化、混合精度等等的词，实际上它们讨论的都是模型参数的数值精度。我们的项目目前一直在用 fp64，这并不主流，它的精度很高，但相比之下计算速度会更慢，存储占用会更多。</p>
 
@@ -408,10 +416,10 @@ y = torch._scaled_mm(xq, wq, scale_a=sx, scale_b=sw, out_dtype=torch.bfloat16)</
 </details>
 
 
-<div class="nextsec"><a href="1.07.html">上一节：1.07 学习率调度</a> · 下一节：1.09 工程加速（写作中）</div>
+<div class="endcard"><div><div class="nx off"><span class="k">下一节</span>1.09 工程加速（写作中）</div><a class="pv" href="1.07.html">← 上一节：1.07 学习率调度</a></div><a class="gh" href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.08_precision"><span class="k">代码和日志在 GitHub</span>觉得有用，点个 ⭐</a></div>
 </section>
 </main>
 </div>
-<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。作者 <a href="https://github.com/LaugHan">@LaugHan</a> · 最后更新 2026-11-18</div></footer>
 </body>
 </html>

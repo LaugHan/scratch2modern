@@ -6,6 +6,13 @@
 <title>1.01 microgpt · scratch2modern</title>
 <meta name="description" content="1.01：语言模型在做什么，以及 Karpathy 的 microgpt。">
 <link rel="stylesheet" href="style.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="1.01 microgpt · scratch2modern">
+<meta property="og:description" content="1.01：语言模型在做什么，以及 Karpathy 的 microgpt。">
+<meta property="og:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
 <script>
 addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
@@ -13,13 +20,14 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 </script>
 </head>
 <body>
-<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a class="gh" href="https://github.com/LaugHan/scratch2modern" aria-label="在 GitHub 上 Star"><img src="https://img.shields.io/github/stars/LaugHan/scratch2modern?style=social&amp;label=Star" alt="GitHub Star" height="20"></a></nav></div></header>
 <div class="wrap layout">
 <aside class="side" id="side" data-cur="1.01"><ol class="subs" hidden><li><a href="#lm">语言模型</a></li><li><a href="#gpt2">GPT-2 结构</a></li><li><a href="#b-data">数据</a></li><li><a href="#b-tokenizer">Tokenizer</a></li><li><a href="#b-autograd">自动求导</a></li><li><a href="#b-params">参数</a></li><li><a href="#b-ops">基本运算</a></li><li><a href="#b-model">模型</a></li><li><a href="#b-adam">Adam</a></li><li><a href="#b-train">训练循环</a></li><li><a href="#b-sample">生成</a></li><li><a href="#r-101">运行结果</a></li></ol></aside><script src="toc.js"></script>
 <main class="content">
 <section id="s-101">
 <div class="ch-intro">第一章 · 训练</div>
 <h2>1.01 microgpt</h2>
+<div class="summary"><div><span class="k">这一节</span>起点：Karpathy 的 microgpt，200 行纯 Python 的 GPT</div><div><span class="k">结果</span>在 names 上训练 1000 步，CPU 上 109 秒，loss 2.65</div><div class="rt">阅读约 4 分钟</div></div>
 
 <pre class="out"><span class="dim">$ python train.py
 num docs: 32033
@@ -359,10 +367,10 @@ for sample_idx in range(20):
     <p>学到的东西就是开头那 20 个名字，没见过的也像英文名字。代价是慢：每秒只能处理 66 个 token。每一次加法、乘法都要创建一个 Python 对象、记下它的来历，真正的算术只占很小一部分。</p>
   </div>
 </div>
-<div class="nextsec"><a href="1.02.html">下一节：1.02 PyTorch</a></div>
+<div class="endcard"><div><a class="nx" href="1.02.html"><span class="k">下一节</span>1.02 PyTorch →</a></div><a class="gh" href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.01_microgpt"><span class="k">代码和日志在 GitHub</span>觉得有用，点个 ⭐</a></div>
 </section>
 </main>
 </div>
-<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。作者 <a href="https://github.com/LaugHan">@LaugHan</a> · 最后更新 2026-11-18</div></footer>
 </body>
 </html>
