@@ -1,0 +1,86 @@
+run possincos: 76.7M params, 25.2M in blocks
+train tokens: 741,785,470, val tokens: 10,312,022
+step    256 / 16384 | batch loss 6.5763 | val loss 5.6997 | 94s
+step    512 / 16384 | batch loss 5.3614 | val loss 5.1476 | 177s
+step    768 / 16384 | batch loss 4.9829 | val loss 4.8795 | 260s
+step   1024 / 16384 | batch loss 4.7473 | val loss 4.6930 | 343s
+step   1280 / 16384 | batch loss 4.6250 | val loss 4.6000 | 426s
+step   1536 / 16384 | batch loss 4.5445 | val loss 4.5349 | 509s
+step   1792 / 16384 | batch loss 4.4858 | val loss 4.4907 | 591s
+step   2048 / 16384 | batch loss 4.4519 | val loss 4.4526 | 674s
+step   2304 / 16384 | batch loss 4.4197 | val loss 4.4312 | 757s
+step   2560 / 16384 | batch loss 4.3911 | val loss 4.4068 | 839s
+step   2816 / 16384 | batch loss 4.3687 | val loss 4.3850 | 922s
+step   3072 / 16384 | batch loss 4.3501 | val loss 4.3627 | 1005s
+step   3328 / 16384 | batch loss 4.3365 | val loss 4.3624 | 1088s
+step   3584 / 16384 | batch loss 4.3210 | val loss 4.3359 | 1171s
+step   3840 / 16384 | batch loss 4.3170 | val loss 4.3274 | 1253s
+step   4096 / 16384 | batch loss 4.3050 | val loss 4.3192 | 1336s
+step   4352 / 16384 | batch loss 4.2889 | val loss 4.3041 | 1419s
+step   4608 / 16384 | batch loss 4.2806 | val loss 4.2894 | 1502s
+step   4864 / 16384 | batch loss 4.2787 | val loss 4.2821 | 1585s
+step   5120 / 16384 | batch loss 4.2648 | val loss 4.2791 | 1667s
+step   5376 / 16384 | batch loss 4.2558 | val loss 4.2796 | 1750s
+step   5632 / 16384 | batch loss 4.2483 | val loss 4.2700 | 1833s
+step   5888 / 16384 | batch loss 4.2451 | val loss 4.2648 | 1915s
+step   6144 / 16384 | batch loss 4.2457 | val loss 4.2595 | 1998s
+step   6400 / 16384 | batch loss 4.2334 | val loss 4.2588 | 2080s
+step   6656 / 16384 | batch loss 4.2261 | val loss 4.2503 | 2163s
+step   6912 / 16384 | batch loss 4.2266 | val loss 4.2463 | 2246s
+step   7168 / 16384 | batch loss 4.2170 | val loss 4.2443 | 2329s
+step   7424 / 16384 | batch loss 4.2206 | val loss 4.2369 | 2411s
+step   7680 / 16384 | batch loss 4.2180 | val loss 4.2394 | 2494s
+step   7936 / 16384 | batch loss 4.2065 | val loss 4.2249 | 2577s
+step   8192 / 16384 | batch loss 4.2036 | val loss 4.2261 | 2659s
+step   8448 / 16384 | batch loss 4.1996 | val loss 4.2231 | 2742s
+step   8704 / 16384 | batch loss 4.2093 | val loss 4.2215 | 2824s
+step   8960 / 16384 | batch loss 4.1931 | val loss 4.2216 | 2907s
+step   9216 / 16384 | batch loss 4.1907 | val loss 4.2312 | 2990s
+step   9472 / 16384 | batch loss 4.1867 | val loss 4.2179 | 3073s
+step   9728 / 16384 | batch loss 4.1965 | val loss 4.2158 | 3155s
+step   9984 / 16384 | batch loss 4.1877 | val loss 4.2160 | 3238s
+step  10240 / 16384 | batch loss 4.1839 | val loss 4.2123 | 3321s
+step  10496 / 16384 | batch loss 4.1840 | val loss 4.2124 | 3403s
+step  10752 / 16384 | batch loss 4.1792 | val loss 4.2033 | 3486s
+step  11008 / 16384 | batch loss 4.1866 | val loss 4.2003 | 3568s
+step  11264 / 16384 | batch loss 4.1824 | val loss 4.2028 | 3652s
+step  11520 / 16384 | batch loss 4.1798 | val loss 4.1967 | 3734s
+step  11776 / 16384 | batch loss 4.1746 | val loss 4.1978 | 3817s
+step  12032 / 16384 | batch loss 4.1724 | val loss 4.1954 | 3899s
+step  12288 / 16384 | batch loss 4.1691 | val loss 4.1924 | 3982s
+step  12544 / 16384 | batch loss 4.1735 | val loss 4.1952 | 4065s
+step  12800 / 16384 | batch loss 4.1731 | val loss 4.1907 | 4148s
+step  13056 / 16384 | batch loss 4.1674 | val loss 4.1915 | 4230s
+step  13312 / 16384 | batch loss 4.1640 | val loss 4.1711 | 4314s
+step  13568 / 16384 | batch loss 4.1264 | val loss 4.1345 | 4396s
+step  13824 / 16384 | batch loss 4.0888 | val loss 4.0977 | 4478s
+step  14080 / 16384 | batch loss 4.0544 | val loss 4.0537 | 4561s
+step  14336 / 16384 | batch loss 4.0083 | val loss 4.0214 | 4644s
+step  14592 / 16384 | batch loss 3.9781 | val loss 3.9804 | 4726s
+step  14848 / 16384 | batch loss 3.9411 | val loss 3.9447 | 4809s
+step  15104 / 16384 | batch loss 3.8996 | val loss 3.9004 | 4892s
+step  15360 / 16384 | batch loss 3.8508 | val loss 3.8623 | 4975s
+step  15616 / 16384 | batch loss 3.8116 | val loss 3.8222 | 5058s
+step  15872 / 16384 | batch loss 3.7739 | val loss 3.7824 | 5141s
+step  16128 / 16384 | batch loss 3.7377 | val loss 3.7445 | 5212s
+step  16384 / 16384 | batch loss 3.7001 | val loss 3.7230 | 5264s
+val loss 3.7230, time 5264s, peak memory 26786 MB
+--- The water cycle does not have a clear and orderly growth of the domestic and foreign water systems (shaking at 12C). The water cycle increases over the period of the domestic and foreign water cycles. The primary cycle is also the cycle in which the terrestrial and foreign water cycles are the two days: The cycle of the annual cycle has one cycle where the water cycle is the original. When the cycle of the domestic system is in the first phase, the waters (an internal basin) have to exist. The water cycle of the domestic system is the cycle of the domestic system. The water cycle is also the cycle of the domestic system, which has the same cycle as the system of the domestic system, and is taken as the system of the domestic system of the domestic system. The annual cycle of the domestic system is the maximum period of the domestic system. The water cycle is:
+The duration of the domestic system is the total span. The period of the domestic system must be at the second phase. The external basin is divided into two types: The tropical system, The tropical system and Tropical system.
+The tropical system is the tropical system. It is the tropical system, which is the tropical system. The tropical system is the tropical system, which is the tropical system. The tropical
+
+--- In 1492, the World Health Organization recommends the use of chemicals to treat mental health conditions such as depression, anxiety, and depression.
+The World Health Organization recommends on-site Chinese women and girls regularly to use their menstrual time as part of their regular routines and routine physical activity. Women also need a regular daily routine for every 7 months to get less frequent and fewer days to manage their menstrual problems and to avoid unnecessary menstrual cycles.
+In 2005, the World Health Organization adopted a new safe and effective solvent to mimic estrogen.
+The first use of a chemical formula was used to treat bipolar and mood conditions, and women considered aren’t always the only two to use. The chemical formula soaked in the water was used by women who experienced the mood shifts, despite some success.
+In 2013, researchers announced the use of chemicals to treat them as part of their daily routine. It was discovered in a laboratory of German scientists that drinking a liquid food that contains norepinephrine (NAM) can help with sedation and other harmful chemicals.
+On-site Chinese women also use norepinephrine (NAM), which is the same as norepinephrine (NAM) and norepinephrine (NAM).
+The chemical formula that is used was changed to
+
+--- Photosynthesis is a molecule that forms sugars, which is a substance that forms water. This means that one molecules in the water are hydrogen, and the other is a water molecule, which in turn, forms an energy, and energy that is used to grow things like flowers and flowers. For example, a fruit tree contains a substance called Acinetobacterium.
+There are two types of Citrocarinic acid:
+- Nitcane: PDF, O2, O2 and O2.
+- Nitcane: O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2, O2
+- Blood: Digestion, Kidney, Kidney, Kidney, Kidney
+The point of chlorophyll is that these are compounds that are secreted by animals during the formation of their bodies. The chemical constituents of these compounds include carbon: chlorine
+

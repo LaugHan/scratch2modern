@@ -1,0 +1,95 @@
+run posalibi: 76.7M params, 25.2M in blocks
+train tokens: 741,785,470, val tokens: 10,312,022
+step    256 / 16384 | batch loss 6.3063 | val loss 5.3253 | 68s
+step    512 / 16384 | batch loss 5.0584 | val loss 4.8645 | 126s
+step    768 / 16384 | batch loss 4.7264 | val loss 4.6615 | 184s
+step   1024 / 16384 | batch loss 4.5789 | val loss 4.5589 | 242s
+step   1280 / 16384 | batch loss 4.5040 | val loss 4.4902 | 300s
+step   1536 / 16384 | batch loss 4.4440 | val loss 4.4376 | 358s
+step   1792 / 16384 | batch loss 4.3974 | val loss 4.4010 | 416s
+step   2048 / 16384 | batch loss 4.3710 | val loss 4.3759 | 474s
+step   2304 / 16384 | batch loss 4.3455 | val loss 4.3545 | 533s
+step   2560 / 16384 | batch loss 4.3215 | val loss 4.3385 | 590s
+step   2816 / 16384 | batch loss 4.3012 | val loss 4.3155 | 649s
+step   3072 / 16384 | batch loss 4.2846 | val loss 4.3005 | 707s
+step   3328 / 16384 | batch loss 4.2740 | val loss 4.2898 | 765s
+step   3584 / 16384 | batch loss 4.2589 | val loss 4.2740 | 823s
+step   3840 / 16384 | batch loss 4.2560 | val loss 4.2737 | 881s
+step   4096 / 16384 | batch loss 4.2454 | val loss 4.2583 | 938s
+step   4352 / 16384 | batch loss 4.2296 | val loss 4.2413 | 994s
+step   4608 / 16384 | batch loss 4.2228 | val loss 4.2386 | 1050s
+step   4864 / 16384 | batch loss 4.2217 | val loss 4.2273 | 1107s
+step   5120 / 16384 | batch loss 4.2071 | val loss 4.2187 | 1163s
+step   5376 / 16384 | batch loss 4.1974 | val loss 4.2202 | 1219s
+step   5632 / 16384 | batch loss 4.1916 | val loss 4.2130 | 1276s
+step   5888 / 16384 | batch loss 4.1862 | val loss 4.2058 | 1332s
+step   6144 / 16384 | batch loss 4.1883 | val loss 4.1999 | 1389s
+step   6400 / 16384 | batch loss 4.1755 | val loss 4.1990 | 1445s
+step   6656 / 16384 | batch loss 4.1691 | val loss 4.1929 | 1501s
+step   6912 / 16384 | batch loss 4.1692 | val loss 4.1850 | 1558s
+step   7168 / 16384 | batch loss 4.1596 | val loss 4.1784 | 1614s
+step   7424 / 16384 | batch loss 4.1633 | val loss 4.1806 | 1670s
+step   7680 / 16384 | batch loss 4.1603 | val loss 4.1793 | 1726s
+step   7936 / 16384 | batch loss 4.1489 | val loss 4.1679 | 1784s
+step   8192 / 16384 | batch loss 4.1467 | val loss 4.1719 | 1841s
+step   8448 / 16384 | batch loss 4.1408 | val loss 4.1706 | 1897s
+step   8704 / 16384 | batch loss 4.1470 | val loss 4.1646 | 1954s
+step   8960 / 16384 | batch loss 4.1319 | val loss 4.1643 | 2010s
+step   9216 / 16384 | batch loss 4.1268 | val loss 4.1613 | 2066s
+step   9472 / 16384 | batch loss 4.1260 | val loss 4.1547 | 2123s
+step   9728 / 16384 | batch loss 4.1355 | val loss 4.1613 | 2179s
+step   9984 / 16384 | batch loss 4.1278 | val loss 4.1568 | 2235s
+step  10240 / 16384 | batch loss 4.1238 | val loss 4.1595 | 2292s
+step  10496 / 16384 | batch loss 4.1246 | val loss 4.1503 | 2349s
+step  10752 / 16384 | batch loss 4.1192 | val loss 4.1437 | 2405s
+step  11008 / 16384 | batch loss 4.1261 | val loss 4.1409 | 2463s
+step  11264 / 16384 | batch loss 4.1214 | val loss 4.1396 | 2520s
+step  11520 / 16384 | batch loss 4.1193 | val loss 4.1424 | 2578s
+step  11776 / 16384 | batch loss 4.1140 | val loss 4.1441 | 2634s
+step  12032 / 16384 | batch loss 4.1116 | val loss 4.1412 | 2691s
+step  12288 / 16384 | batch loss 4.1087 | val loss 4.1394 | 2747s
+step  12544 / 16384 | batch loss 4.1121 | val loss 4.1406 | 2804s
+step  12800 / 16384 | batch loss 4.1118 | val loss 4.1386 | 2860s
+step  13056 / 16384 | batch loss 4.1071 | val loss 4.1354 | 2916s
+step  13312 / 16384 | batch loss 4.1001 | val loss 4.1096 | 2974s
+step  13568 / 16384 | batch loss 4.0653 | val loss 4.0729 | 3030s
+step  13824 / 16384 | batch loss 4.0327 | val loss 4.0328 | 3086s
+step  14080 / 16384 | batch loss 3.9987 | val loss 4.0053 | 3143s
+step  14336 / 16384 | batch loss 3.9557 | val loss 3.9681 | 3201s
+step  14592 / 16384 | batch loss 3.9269 | val loss 3.9319 | 3258s
+step  14848 / 16384 | batch loss 3.8924 | val loss 3.8953 | 3315s
+step  15104 / 16384 | batch loss 3.8520 | val loss 3.8552 | 3371s
+step  15360 / 16384 | batch loss 3.8046 | val loss 3.8164 | 3427s
+step  15616 / 16384 | batch loss 3.7659 | val loss 3.7770 | 3484s
+step  15872 / 16384 | batch loss 3.7289 | val loss 3.7384 | 3540s
+step  16128 / 16384 | batch loss 3.6928 | val loss 3.7011 | 3596s
+step  16384 / 16384 | batch loss 3.6566 | val loss 3.6797 | 3661s
+val loss 3.6797, time 3661s, peak memory 26800 MB
+--- The water cycle does not have a clear mechanism to predict the occurrence of water contaminants, rather it is a risk factor for drinking water pollution, which is a risk factor for disease.
+But drinking water and sewage are the most important contaminants in our society, and many are potentially dangerous. To overcome this, the impact of such a system is really important.
+The use of the water is now still a big bet. However, it is home to a number of substances to help reduce and to help mitigate them.
+The causes of the water problem are personal, environmental, and economic problems that have been around for decades.
+
+--- In 1492, Fireworks were awarded. In 1543, the first public celebration was held in El Salvador, and was celebrated on 5 January 2005. In 1556, the city of Pelago used firework as a service to commemorate the deaths of many thousands of people.
+But despite the widespread belief that firework is not a political party, it has been a few times as popular as the construction of an elaborate firework. Would you have even thought that installing fireworks were a great tool for the public?
+For example, in November 15th of 1582, the city of Pelago built a woodcutter and two-storey mayons and became the center of the firework arena. In 1592, the first firework was built in the town of Pelago, where it was built by Louis Conservato. This was a festival to honor the festival and celebrate the great generosity of the community in the community. In 1592, the first firework, which was consecrated, was carried out by the government of Pelago and the town of Pelago, and the site of the village of Pelago. In 1593, the first firework was built in Pelago, and the site of the town was named after the city.
+In 1593
+
+--- Photosynthesis is the process by which the living cells to produce energy. Light energy is the energy that the living cells produce.
+The light is the energy that the living cells produce.
+The light is the energy that is emitted by the living cells.
+In the light emitted from the light, the light does not reflect light.
+The light is the energy that the living cells produce.
+The light emitted from the light is reflected on the light.
+The light is the energy that the living cells produce.
+The light is the energy that the living cells produce.
+The light is the energy that the living cells produce.
+The light is the energy that the living cells produce.
+The energy that is the light generated from the light is the energy that is the energy that the living cells produce.
+The light emitted from light in the light reflected from light represents the energy that the living cells produce.
+The light is the energy that the living cells produce.
+When the energy of the living cells is converted into energy, the light is emitted by the cells.
+The light emitted from light is generated by the light.
+The light is the energy that is produced by the living cells in the light.
+The light emitted from light is the energy that is the
+

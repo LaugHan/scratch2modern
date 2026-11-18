@@ -1,0 +1,79 @@
+run posfrac: 76.7M params, 25.2M in blocks
+train tokens: 741,785,470, val tokens: 10,312,022
+step    256 / 16384 | batch loss 6.8316 | val loss 5.9346 | 61s
+step    512 / 16384 | batch loss 5.5287 | val loss 5.2227 | 112s
+step    768 / 16384 | batch loss 5.0154 | val loss 4.8739 | 163s
+step   1024 / 16384 | batch loss 4.7330 | val loss 4.6731 | 213s
+step   1280 / 16384 | batch loss 4.6038 | val loss 4.5749 | 264s
+step   1536 / 16384 | batch loss 4.5244 | val loss 4.5119 | 316s
+step   1792 / 16384 | batch loss 4.4663 | val loss 4.4628 | 367s
+step   2048 / 16384 | batch loss 4.4316 | val loss 4.4345 | 418s
+step   2304 / 16384 | batch loss 4.3994 | val loss 4.4131 | 469s
+step   2560 / 16384 | batch loss 4.3707 | val loss 4.3919 | 521s
+step   2816 / 16384 | batch loss 4.3501 | val loss 4.3652 | 572s
+step   3072 / 16384 | batch loss 4.3312 | val loss 4.3451 | 623s
+step   3328 / 16384 | batch loss 4.3187 | val loss 4.3383 | 674s
+step   3584 / 16384 | batch loss 4.3025 | val loss 4.3224 | 725s
+step   3840 / 16384 | batch loss 4.3006 | val loss 4.3156 | 777s
+step   4096 / 16384 | batch loss 4.2896 | val loss 4.3049 | 828s
+step   4352 / 16384 | batch loss 4.2745 | val loss 4.2979 | 879s
+step   4608 / 16384 | batch loss 4.2677 | val loss 4.2784 | 931s
+step   4864 / 16384 | batch loss 4.2666 | val loss 4.2796 | 982s
+step   5120 / 16384 | batch loss 4.2536 | val loss 4.2723 | 1033s
+step   5376 / 16384 | batch loss 4.2452 | val loss 4.2746 | 1084s
+step   5632 / 16384 | batch loss 4.2406 | val loss 4.2630 | 1135s
+step   5888 / 16384 | batch loss 4.2349 | val loss 4.2644 | 1187s
+step   6144 / 16384 | batch loss 4.2378 | val loss 4.2511 | 1238s
+step   6400 / 16384 | batch loss 4.2250 | val loss 4.2544 | 1289s
+step   6656 / 16384 | batch loss 4.2183 | val loss 4.2505 | 1340s
+step   6912 / 16384 | batch loss 4.2197 | val loss 4.2438 | 1391s
+step   7168 / 16384 | batch loss 4.2104 | val loss 4.2370 | 1443s
+step   7424 / 16384 | batch loss 4.2145 | val loss 4.2359 | 1494s
+step   7680 / 16384 | batch loss 4.2106 | val loss 4.2350 | 1545s
+step   7936 / 16384 | batch loss 4.2004 | val loss 4.2247 | 1597s
+step   8192 / 16384 | batch loss 4.1979 | val loss 4.2236 | 1648s
+step   8448 / 16384 | batch loss 4.1919 | val loss 4.2175 | 1699s
+step   8704 / 16384 | batch loss 4.1996 | val loss 4.2204 | 1751s
+step   8960 / 16384 | batch loss 4.1832 | val loss 4.2159 | 1802s
+step   9216 / 16384 | batch loss 4.1784 | val loss 4.2210 | 1853s
+step   9472 / 16384 | batch loss 4.1788 | val loss 4.2167 | 1904s
+step   9728 / 16384 | batch loss 4.1878 | val loss 4.2157 | 1955s
+step   9984 / 16384 | batch loss 4.1800 | val loss 4.2090 | 2007s
+step  10240 / 16384 | batch loss 4.1749 | val loss 4.2082 | 2058s
+step  10496 / 16384 | batch loss 4.1766 | val loss 4.2043 | 2109s
+step  10752 / 16384 | batch loss 4.1722 | val loss 4.1998 | 2160s
+step  11008 / 16384 | batch loss 4.1788 | val loss 4.1995 | 2212s
+step  11264 / 16384 | batch loss 4.1741 | val loss 4.1987 | 2263s
+step  11520 / 16384 | batch loss 4.1720 | val loss 4.1959 | 2315s
+step  11776 / 16384 | batch loss 4.1677 | val loss 4.1987 | 2366s
+step  12032 / 16384 | batch loss 4.1642 | val loss 4.1952 | 2417s
+step  12288 / 16384 | batch loss 4.1626 | val loss 4.1923 | 2468s
+step  12544 / 16384 | batch loss 4.1642 | val loss 4.1948 | 2520s
+step  12800 / 16384 | batch loss 4.1651 | val loss 4.1897 | 2571s
+step  13056 / 16384 | batch loss 4.1603 | val loss 4.1890 | 2622s
+step  13312 / 16384 | batch loss 4.1539 | val loss 4.1672 | 2675s
+step  13568 / 16384 | batch loss 4.1194 | val loss 4.1350 | 2726s
+step  13824 / 16384 | batch loss 4.0868 | val loss 4.1012 | 2777s
+step  14080 / 16384 | batch loss 4.0551 | val loss 4.0633 | 2829s
+step  14336 / 16384 | batch loss 4.0132 | val loss 4.0311 | 2880s
+step  14592 / 16384 | batch loss 3.9862 | val loss 3.9959 | 2931s
+step  14848 / 16384 | batch loss 3.9530 | val loss 3.9612 | 2982s
+step  15104 / 16384 | batch loss 3.9145 | val loss 3.9210 | 3034s
+step  15360 / 16384 | batch loss 3.8681 | val loss 3.8825 | 3085s
+step  15616 / 16384 | batch loss 3.8320 | val loss 3.8468 | 3136s
+step  15872 / 16384 | batch loss 3.7971 | val loss 3.8090 | 3188s
+step  16128 / 16384 | batch loss 3.7639 | val loss 3.7747 | 3239s
+step  16384 / 16384 | batch loss 3.7289 | val loss 3.7542 | 3291s
+val loss 3.7542, time 3291s, peak memory 26784 MB
+--- The water cycle growth historic archeniian and and Caleb Guth:: referral guide guide guide guide guides guide guide for ebook Website Services Services Services Services Service Length 0 1 1 1 2 1 1 1 1 2 2 2 2 21 21 14 May May Havebeenslattdijijijijijijijijijijichtformermetmetmpspspspspsps.
+By
+
+--- In 1492, and data data Data Data Data Science Science Science Scientists and Sw Sw Sp Wild Wild Wild and to exist live live live live live live live live life life life personal personal connection system system:
+-----532732331026769.
+
+
+TheHHHHHHHHHHHHHHHNNNNNNNNPPPPPPPPPPPPPPPPpp::::: is not intended intended intended intended intended intended intended intended intended intended intended intended intended intended intended intended intended intended purpose What To This Does A A A A Would The A A A A A C C C C C F F F F F F F F F F F D S S R D S S S S S S S S S K K K K K R D K K C R R M A A D A A A A A A A A A D A A A A A A A A A A A A A A A A A A A A A A A a A A A A A A A A A A A A A A A A A A Description Note Tape Tape Tape Tape Tape Tape Tape felt tight tight tight, and,.
+THEI�
+
+--- Photosynthesis is to earth earth climate climate climate climate ocean continental shelf board board tape tape tape tape tape tape tape reel sold by species like pral ind j me j j j j k k p () and scale scale scale scale scale scale scale scale scale scale scales o t s to scale scales scales scales scales scales scales scales Headss Head Head Head Head Head Head Head Head Head Head Head Head Head Head Head Head Head Head Head Head Head Head Head Head Head Lyle mCt. Orient Arctic se European state climate climate climate climate climate climate climate climate climate climate climate destabilizes climate climate climate climate climate country climate climate climate climate climate climate climate climatic climate climate climate climate climate climate interd % built-Los macad Creative Commons Formol: 1 small stick tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape Tape tape tape tape tapes. tape tape tape tape tape tape tape tape record tape tape tape tape tape tape tape tape and tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tape tapes.
+

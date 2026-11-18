@@ -1,0 +1,91 @@
+run posnone: 76.7M params, 25.2M in blocks
+train tokens: 741,785,470, val tokens: 10,312,022
+step    256 / 16384 | batch loss 6.5772 | val loss 5.8561 | 71s
+step    512 / 16384 | batch loss 5.5771 | val loss 5.3395 | 130s
+step    768 / 16384 | batch loss 5.1265 | val loss 5.0081 | 184s
+step   1024 / 16384 | batch loss 4.8644 | val loss 4.7938 | 235s
+step   1280 / 16384 | batch loss 4.7104 | val loss 4.6768 | 286s
+step   1536 / 16384 | batch loss 4.6208 | val loss 4.6087 | 338s
+step   1792 / 16384 | batch loss 4.5582 | val loss 4.5598 | 390s
+step   2048 / 16384 | batch loss 4.5213 | val loss 4.5161 | 441s
+step   2304 / 16384 | batch loss 4.4874 | val loss 4.4957 | 493s
+step   2560 / 16384 | batch loss 4.4558 | val loss 4.4783 | 545s
+step   2816 / 16384 | batch loss 4.4336 | val loss 4.4491 | 596s
+step   3072 / 16384 | batch loss 4.4140 | val loss 4.4273 | 648s
+step   3328 / 16384 | batch loss 4.3997 | val loss 4.4121 | 700s
+step   3584 / 16384 | batch loss 4.3847 | val loss 4.3931 | 751s
+step   3840 / 16384 | batch loss 4.3896 | val loss 4.3962 | 803s
+step   4096 / 16384 | batch loss 4.3674 | val loss 4.3845 | 855s
+step   4352 / 16384 | batch loss 4.3519 | val loss 4.3628 | 906s
+step   4608 / 16384 | batch loss 4.3455 | val loss 4.3622 | 958s
+step   4864 / 16384 | batch loss 4.3393 | val loss 4.3492 | 1009s
+step   5120 / 16384 | batch loss 4.3249 | val loss 4.3408 | 1060s
+step   5376 / 16384 | batch loss 4.3159 | val loss 4.3455 | 1112s
+step   5632 / 16384 | batch loss 4.3076 | val loss 4.3279 | 1164s
+step   5888 / 16384 | batch loss 4.3025 | val loss 4.3261 | 1215s
+step   6144 / 16384 | batch loss 4.3048 | val loss 4.3201 | 1267s
+step   6400 / 16384 | batch loss 4.2923 | val loss 4.3275 | 1318s
+step   6656 / 16384 | batch loss 4.2864 | val loss 4.3116 | 1370s
+step   6912 / 16384 | batch loss 4.2860 | val loss 4.3037 | 1421s
+step   7168 / 16384 | batch loss 4.2739 | val loss 4.2965 | 1473s
+step   7424 / 16384 | batch loss 4.2790 | val loss 4.2891 | 1525s
+step   7680 / 16384 | batch loss 4.2731 | val loss 4.2944 | 1576s
+step   7936 / 16384 | batch loss 4.2641 | val loss 4.2810 | 1627s
+step   8192 / 16384 | batch loss 4.2598 | val loss 4.2856 | 1679s
+step   8448 / 16384 | batch loss 4.2542 | val loss 4.2777 | 1730s
+step   8704 / 16384 | batch loss 4.2608 | val loss 4.2756 | 1782s
+step   8960 / 16384 | batch loss 4.2440 | val loss 4.2795 | 1833s
+step   9216 / 16384 | batch loss 4.2393 | val loss 4.2797 | 1885s
+step   9472 / 16384 | batch loss 4.2391 | val loss 4.2759 | 1937s
+step   9728 / 16384 | batch loss 4.2466 | val loss 4.2698 | 1988s
+step   9984 / 16384 | batch loss 4.2444 | val loss 4.2637 | 2040s
+step  10240 / 16384 | batch loss 4.2377 | val loss 4.2636 | 2091s
+step  10496 / 16384 | batch loss 4.2365 | val loss 4.2720 | 2143s
+step  10752 / 16384 | batch loss 4.2307 | val loss 4.2520 | 2194s
+step  11008 / 16384 | batch loss 4.2391 | val loss 4.2542 | 2245s
+step  11264 / 16384 | batch loss 4.2339 | val loss 4.2559 | 2297s
+step  11520 / 16384 | batch loss 4.2322 | val loss 4.2554 | 2350s
+step  11776 / 16384 | batch loss 4.2264 | val loss 4.2548 | 2425s
+step  12032 / 16384 | batch loss 4.2234 | val loss 4.2547 | 2483s
+step  12288 / 16384 | batch loss 4.2220 | val loss 4.2447 | 2564s
+step  12544 / 16384 | batch loss 4.2232 | val loss 4.2490 | 2646s
+step  12800 / 16384 | batch loss 4.2228 | val loss 4.2479 | 2728s
+step  13056 / 16384 | batch loss 4.2182 | val loss 4.2521 | 2811s
+step  13312 / 16384 | batch loss 4.2102 | val loss 4.2213 | 2894s
+step  13568 / 16384 | batch loss 4.1754 | val loss 4.1843 | 2976s
+step  13824 / 16384 | batch loss 4.1405 | val loss 4.1449 | 3058s
+step  14080 / 16384 | batch loss 4.1054 | val loss 4.1114 | 3141s
+step  14336 / 16384 | batch loss 4.0604 | val loss 4.0762 | 3223s
+step  14592 / 16384 | batch loss 4.0309 | val loss 4.0377 | 3305s
+step  14848 / 16384 | batch loss 3.9955 | val loss 4.0022 | 3387s
+step  15104 / 16384 | batch loss 3.9555 | val loss 3.9608 | 3469s
+step  15360 / 16384 | batch loss 3.9079 | val loss 3.9211 | 3552s
+step  15616 / 16384 | batch loss 3.8694 | val loss 3.8812 | 3635s
+step  15872 / 16384 | batch loss 3.8329 | val loss 3.8433 | 3717s
+step  16128 / 16384 | batch loss 3.7983 | val loss 3.8078 | 3800s
+step  16384 / 16384 | batch loss 3.7616 | val loss 3.7858 | 3882s
+val loss 3.7858, time 3882s, peak memory 26784 MB
+--- The water cycle does not have a clear and lasting impact on the domestic and foreign behavior than the actual consumption of the water.
+The water cycle is different than that of the water cycle in connection to the water cycle. It is followed by a cycle of essential oil (or water) that would not be used for farming or farming.
+The water cycle is not seen as an example of the industrial revolution, but is used in the production of old industrial waste (an example of a method to create a gas-truck gas) that is used in the production of fuels. These processes are responsible for the production of new or old industrial wastes.
+According to this study, the global situation will be considered to be a major problem.
+The global situation will have an impact on the domestic consumption of lead by the global economy.
+These findings are especially applicable to the industrial revolution.
+But despite the widespread implementation of the Integrated Water Cycle, the debate is still possible. In the last 100 years, the United States was able to develop the system of agricultural health, development and industrialisation.
+Things that could possibly be considered as an example of the social transformation of the water cycle are different.
+The same principle applies to the modern-day society of the water cycle, and the
+
+--- In 1492, scientists at the University of Chicago Health Sciences (CHIE) and the University of Minnesota (IZ) and the University of Toronto (U.S. University of Pittsburgh) and a nationally prominent researcher on the disease, was the first to identify and analyze the likely causes of the disease in the first place.
+"It was felt that disease-causing bacteria had been present in the blood. According to the results, we can completely ignore the inevitable findings and epidemics that are still being investigated," said the University researchers.
+The researchers also discovered a connection to some of the epidemics that were involved in the disease, including the cardiovascular risk associated with cardiovascular disease.
+To date, the review has led by Bern, director of the Yale School of Medicine, the Yale School of Medicine and the Yale School of Medicine.
+"The initial findings are critical to the European study," the study's authors said. "The initial findings are that we have to look at the wider public health associations that determine the role of the immune system in fighting pathogens," the study has built the first new tool in the international community.
+The study's authors, former research author Dr. Kristin Schubert, is the first to present the first novel studies that found that the impact of
+
+--- Photosynthesis is a molecule in the form of energy that is needed to power our cells to make energy efficient molecules. These molecules are hydrogen, and the remaining energy is needed to be able to continue their lives for several hundred years.
+At the same time, we use and use our cells to process energy. We use electrodes to push energy to a specific way. We use phosphorus and nitrogen, and we use snoring for energy.
+We use water. If you're not enough, water would be used at all times. If you could use a large amount of water, the water would be used as a fuel for electricity. If you want to use this, water would be used to power your pattern.
+One possible way to push energy to a specific way, water is to use small amounts of water. This may be done by using old sources of water, but it can also be used to use in power plants.
+We use a phosphate, phosphate, or phosphate to create a phosphate group. This phosphate group helps to create ammonia. The phosphate group is needed for the formation of phosphate groups, for power plants, for example, and for the formation of any water.
+We use phosphorus during the formation of phosphate groups. The phosphate group has a phosphate group for the formation
+

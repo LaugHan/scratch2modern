@@ -1,0 +1,82 @@
+run posrope: 76.7M params, 25.2M in blocks
+train tokens: 741,785,470, val tokens: 10,312,022
+step    256 / 16384 | batch loss 6.5064 | val loss 5.5216 | 70s
+step    512 / 16384 | batch loss 5.1690 | val loss 4.9452 | 125s
+step    768 / 16384 | batch loss 4.7682 | val loss 4.6775 | 180s
+step   1024 / 16384 | batch loss 4.5847 | val loss 4.5517 | 235s
+step   1280 / 16384 | batch loss 4.4995 | val loss 4.4777 | 292s
+step   1536 / 16384 | batch loss 4.4331 | val loss 4.4221 | 348s
+step   1792 / 16384 | batch loss 4.3804 | val loss 4.3854 | 404s
+step   2048 / 16384 | batch loss 4.3505 | val loss 4.3486 | 460s
+step   2304 / 16384 | batch loss 4.3175 | val loss 4.3234 | 516s
+step   2560 / 16384 | batch loss 4.2898 | val loss 4.3012 | 573s
+step   2816 / 16384 | batch loss 4.2679 | val loss 4.2852 | 629s
+step   3072 / 16384 | batch loss 4.2491 | val loss 4.2660 | 685s
+step   3328 / 16384 | batch loss 4.2374 | val loss 4.2578 | 741s
+step   3584 / 16384 | batch loss 4.2207 | val loss 4.2371 | 797s
+step   3840 / 16384 | batch loss 4.2169 | val loss 4.2322 | 853s
+step   4096 / 16384 | batch loss 4.2084 | val loss 4.2180 | 908s
+step   4352 / 16384 | batch loss 4.1917 | val loss 4.2011 | 964s
+step   4608 / 16384 | batch loss 4.1825 | val loss 4.1952 | 1021s
+step   4864 / 16384 | batch loss 4.1823 | val loss 4.1880 | 1077s
+step   5120 / 16384 | batch loss 4.1675 | val loss 4.1800 | 1133s
+step   5376 / 16384 | batch loss 4.1593 | val loss 4.1846 | 1190s
+step   5632 / 16384 | batch loss 4.1530 | val loss 4.1773 | 1246s
+step   5888 / 16384 | batch loss 4.1465 | val loss 4.1712 | 1302s
+step   6144 / 16384 | batch loss 4.1492 | val loss 4.1605 | 1358s
+step   6400 / 16384 | batch loss 4.1357 | val loss 4.1621 | 1415s
+step   6656 / 16384 | batch loss 4.1296 | val loss 4.1552 | 1471s
+step   6912 / 16384 | batch loss 4.1299 | val loss 4.1458 | 1527s
+step   7168 / 16384 | batch loss 4.1198 | val loss 4.1490 | 1584s
+step   7424 / 16384 | batch loss 4.1234 | val loss 4.1414 | 1640s
+step   7680 / 16384 | batch loss 4.1200 | val loss 4.1399 | 1696s
+step   7936 / 16384 | batch loss 4.1093 | val loss 4.1267 | 1752s
+step   8192 / 16384 | batch loss 4.1072 | val loss 4.1267 | 1809s
+step   8448 / 16384 | batch loss 4.1017 | val loss 4.1299 | 1865s
+step   8704 / 16384 | batch loss 4.1078 | val loss 4.1232 | 1921s
+step   8960 / 16384 | batch loss 4.0921 | val loss 4.1198 | 1978s
+step   9216 / 16384 | batch loss 4.0872 | val loss 4.1248 | 2034s
+step   9472 / 16384 | batch loss 4.0872 | val loss 4.1191 | 2090s
+step   9728 / 16384 | batch loss 4.0961 | val loss 4.1194 | 2147s
+step   9984 / 16384 | batch loss 4.0887 | val loss 4.1112 | 2203s
+step  10240 / 16384 | batch loss 4.0846 | val loss 4.1107 | 2259s
+step  10496 / 16384 | batch loss 4.0845 | val loss 4.1088 | 2316s
+step  10752 / 16384 | batch loss 4.0798 | val loss 4.1007 | 2372s
+step  11008 / 16384 | batch loss 4.0868 | val loss 4.0984 | 2428s
+step  11264 / 16384 | batch loss 4.0822 | val loss 4.1041 | 2485s
+step  11520 / 16384 | batch loss 4.0792 | val loss 4.1023 | 2541s
+step  11776 / 16384 | batch loss 4.0744 | val loss 4.1010 | 2597s
+step  12032 / 16384 | batch loss 4.0715 | val loss 4.0941 | 2653s
+step  12288 / 16384 | batch loss 4.0701 | val loss 4.0946 | 2710s
+step  12544 / 16384 | batch loss 4.0727 | val loss 4.0939 | 2766s
+step  12800 / 16384 | batch loss 4.0730 | val loss 4.0915 | 2822s
+step  13056 / 16384 | batch loss 4.0673 | val loss 4.0877 | 2879s
+step  13312 / 16384 | batch loss 4.0606 | val loss 4.0647 | 2936s
+step  13568 / 16384 | batch loss 4.0256 | val loss 4.0354 | 2992s
+step  13824 / 16384 | batch loss 3.9938 | val loss 3.9981 | 3049s
+step  14080 / 16384 | batch loss 3.9611 | val loss 3.9652 | 3105s
+step  14336 / 16384 | batch loss 3.9182 | val loss 3.9305 | 3161s
+step  14592 / 16384 | batch loss 3.8907 | val loss 3.8943 | 3218s
+step  14848 / 16384 | batch loss 3.8570 | val loss 3.8616 | 3274s
+step  15104 / 16384 | batch loss 3.8184 | val loss 3.8215 | 3330s
+step  15360 / 16384 | batch loss 3.7718 | val loss 3.7815 | 3387s
+step  15616 / 16384 | batch loss 3.7341 | val loss 3.7429 | 3443s
+step  15872 / 16384 | batch loss 3.6980 | val loss 3.7065 | 3499s
+step  16128 / 16384 | batch loss 3.6640 | val loss 3.6716 | 3556s
+step  16384 / 16384 | batch loss 3.6282 | val loss 3.6500 | 3612s
+val loss 3.6500, time 3612s, peak memory 27040 MB
+--- The water cycle does not have a clear and orderly equilibrium between the domestic and foreign water supply (Kiye), and is therefore influenced by the amount of water that is processed in the process of the rain and the circulation of the air in the earth. Achieving equilibrium in the reach of the oxides of water in the region is also possible.
+The use of the gas is performed by the water cycle. The water cycle is then divided into two phases (stage 1 and phase 2), and it is divided into six phases.
+The cycle is divided into six phase:
+- Water cycle
+- Water cycle.
+A further phase is divided into three phases.
+The first phase is considered to be the loss of rainfall and the rain of local soil. The formation of disease is the precipitation of the rain forest (Lottillo-Hernandez-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-Sarillo-S
+
+--- In 1492, the World War on Terror (after World War 2), the first atomic bomb was launched in nine cities. They were the last of the 23 projects on the world war. The Nazis were a crucial part of the war effort. The war was fought in the wake of the Second World War. The World War on Terror (1945 felt less frequent than the Nazi Germanic war) was and remains an important part of our quest for peace. The war ended with the end of the war.
+At the end of the war, the United States was one of the world’s most powerful, and the world’s biggest of the world’s greatest military and civilian weaponry. The World War I was the end of the Cold War. The war ended with the end of the Cold War and ended in the end of the Cold War.
+The World War I was a very important war of big-picture success. The first hostilities were between 1918 and 1924. For example, the Second World War was fought in the 1930s. By 1946, it had risen to the height of the Cold War. By 1950, the Second World War resulted in the end of the Cold War, the United States had a part to play in the war. With the end of World
+
+--- Photosynthesis is a molecule in the nucleus of a plant. Photosynthesis is what happens when a plant’s temperature drops below 40.
+Photosynthesis is a very sophisticated process that in one plant, one molecule, and one molecule does not exist. Photosynthesis doesn’t exist because of its rapid growth or chemical reaction. Photosynthesis is how light passes through the cell and helps to make it simpler to produce photosynthesize. Photosynthesis is how cells form chlorophyll and photosynthesize. Photosynthesis is the process of making photosynthetic photosynthesize and uses the nitrogen fertilization to create photosynthesized photosynthesis. Photosynthesis is how these photosynthesize in chlorophylls and photosynthesis is how those photosynthesized photosynthesis is how a plant leaves it. Photosynthesis occurs when chlorophyll is produced by the chlorophyll in chlorophylls or photosynthesize using the carbon dioxide in the chlorophyll. Photosynthesis is how photosynthesize in chlorophylls; photosynthesis is how photosynthesis works. Photosynthesis is how photosynthesize in chlorophylls and photosynthesis. Photosynthesis is how photosynthesis occurs. Photosynthesis is how photosynthesis occurs as an energy cycle.
+

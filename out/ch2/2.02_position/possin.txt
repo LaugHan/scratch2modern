@@ -1,0 +1,97 @@
+run possin: 76.7M params, 25.2M in blocks
+train tokens: 741,785,470, val tokens: 10,312,022
+step    256 / 16384 | batch loss 6.5915 | val loss 5.7107 | 63s
+step    512 / 16384 | batch loss 5.3724 | val loss 5.1615 | 114s
+step    768 / 16384 | batch loss 5.0037 | val loss 4.9071 | 167s
+step   1024 / 16384 | batch loss 4.7749 | val loss 4.7089 | 219s
+step   1280 / 16384 | batch loss 4.6397 | val loss 4.6106 | 271s
+step   1536 / 16384 | batch loss 4.5555 | val loss 4.5454 | 323s
+step   1792 / 16384 | batch loss 4.4938 | val loss 4.4925 | 375s
+step   2048 / 16384 | batch loss 4.4582 | val loss 4.4513 | 427s
+step   2304 / 16384 | batch loss 4.4242 | val loss 4.4341 | 478s
+step   2560 / 16384 | batch loss 4.3945 | val loss 4.4095 | 530s
+step   2816 / 16384 | batch loss 4.3719 | val loss 4.3833 | 582s
+step   3072 / 16384 | batch loss 4.3537 | val loss 4.3682 | 634s
+step   3328 / 16384 | batch loss 4.3403 | val loss 4.3608 | 686s
+step   3584 / 16384 | batch loss 4.3247 | val loss 4.3375 | 738s
+step   3840 / 16384 | batch loss 4.3196 | val loss 4.3334 | 790s
+step   4096 / 16384 | batch loss 4.3062 | val loss 4.3199 | 842s
+step   4352 / 16384 | batch loss 4.2913 | val loss 4.2955 | 894s
+step   4608 / 16384 | batch loss 4.2835 | val loss 4.2954 | 946s
+step   4864 / 16384 | batch loss 4.2818 | val loss 4.2877 | 998s
+step   5120 / 16384 | batch loss 4.2668 | val loss 4.2816 | 1049s
+step   5376 / 16384 | batch loss 4.2579 | val loss 4.2770 | 1101s
+step   5632 / 16384 | batch loss 4.2507 | val loss 4.2736 | 1153s
+step   5888 / 16384 | batch loss 4.2467 | val loss 4.2665 | 1205s
+step   6144 / 16384 | batch loss 4.2518 | val loss 4.2624 | 1257s
+step   6400 / 16384 | batch loss 4.2364 | val loss 4.2606 | 1308s
+step   6656 / 16384 | batch loss 4.2295 | val loss 4.2531 | 1360s
+step   6912 / 16384 | batch loss 4.2294 | val loss 4.2473 | 1412s
+step   7168 / 16384 | batch loss 4.2195 | val loss 4.2446 | 1464s
+step   7424 / 16384 | batch loss 4.2234 | val loss 4.2406 | 1516s
+step   7680 / 16384 | batch loss 4.2196 | val loss 4.2404 | 1568s
+step   7936 / 16384 | batch loss 4.2088 | val loss 4.2275 | 1619s
+step   8192 / 16384 | batch loss 4.2082 | val loss 4.2309 | 1670s
+step   8448 / 16384 | batch loss 4.2024 | val loss 4.2287 | 1721s
+step   8704 / 16384 | batch loss 4.2078 | val loss 4.2294 | 1772s
+step   8960 / 16384 | batch loss 4.1927 | val loss 4.2212 | 1824s
+step   9216 / 16384 | batch loss 4.1895 | val loss 4.2269 | 1876s
+step   9472 / 16384 | batch loss 4.1875 | val loss 4.2186 | 1928s
+step   9728 / 16384 | batch loss 4.1962 | val loss 4.2161 | 1980s
+step   9984 / 16384 | batch loss 4.1889 | val loss 4.2123 | 2031s
+step  10240 / 16384 | batch loss 4.1839 | val loss 4.2118 | 2083s
+step  10496 / 16384 | batch loss 4.1837 | val loss 4.2104 | 2135s
+step  10752 / 16384 | batch loss 4.1781 | val loss 4.1997 | 2187s
+step  11008 / 16384 | batch loss 4.1861 | val loss 4.2026 | 2239s
+step  11264 / 16384 | batch loss 4.1812 | val loss 4.1986 | 2290s
+step  11520 / 16384 | batch loss 4.1781 | val loss 4.2016 | 2342s
+step  11776 / 16384 | batch loss 4.1729 | val loss 4.2010 | 2393s
+step  12032 / 16384 | batch loss 4.1711 | val loss 4.1984 | 2445s
+step  12288 / 16384 | batch loss 4.1689 | val loss 4.1938 | 2496s
+step  12544 / 16384 | batch loss 4.1714 | val loss 4.1915 | 2548s
+step  12800 / 16384 | batch loss 4.1732 | val loss 4.1989 | 2600s
+step  13056 / 16384 | batch loss 4.1677 | val loss 4.1910 | 2652s
+step  13312 / 16384 | batch loss 4.1598 | val loss 4.1665 | 2705s
+step  13568 / 16384 | batch loss 4.1255 | val loss 4.1301 | 2756s
+step  13824 / 16384 | batch loss 4.0874 | val loss 4.0928 | 2808s
+step  14080 / 16384 | batch loss 4.0539 | val loss 4.0572 | 2859s
+step  14336 / 16384 | batch loss 4.0078 | val loss 4.0210 | 2911s
+step  14592 / 16384 | batch loss 3.9774 | val loss 3.9812 | 2962s
+step  14848 / 16384 | batch loss 3.9407 | val loss 3.9438 | 3014s
+step  15104 / 16384 | batch loss 3.9001 | val loss 3.9009 | 3066s
+step  15360 / 16384 | batch loss 3.8510 | val loss 3.8609 | 3118s
+step  15616 / 16384 | batch loss 3.8121 | val loss 3.8210 | 3170s
+step  15872 / 16384 | batch loss 3.7741 | val loss 3.7801 | 3222s
+step  16128 / 16384 | batch loss 3.7376 | val loss 3.7434 | 3274s
+step  16384 / 16384 | batch loss 3.7001 | val loss 3.7214 | 3326s
+val loss 3.7214, time 3326s, peak memory 26784 MB
+--- The water cycle does not have a clear mechanism to regulate water quality. The water cycle is connected to a regular cycle.
+A water cycle increases the life of a water-soluble substance (water and water) and seems to be in a mechanism of essential health.
+The water cycle does not occur in a specified period of time. Water alters the water cycle while it is in the water cycle.
+This is because water is converted into a water cycle (an example in a tub filled with water). The water cycle causes the water cycle to become the water cycle.
+Water cycle: Water cycle occurs when the water or water cycle is depleted.
+Water Cycle: Water cycle occurs when the water and water cycle become depleted. This process is called water cycle.
+The formation of water cycle: Water Cycle is a process of chemical reactions that occur when the water and water cycle is depleted.
+This process is called process of water. It takes place at a tank in which the water is dissolved.
+This process is called the formation of water cycle. The chemical reactions of water and water are not that different from water cycle.
+This process is called the formation of water cycle.
+The origin of water cycle
+A water cycle is generated by a frozen or chemically liquid or liquid
+
+--- In 1492, the British military leader was defeated by two ships to attack the British fleet on the French and Indian Armies.
+On 8 June 1677, on four of the ships landed a small and heavy cargo on the Indian Armies. The British raised five ships to victory, as of the British fleet, to win the favour of the British.
+On 6 February 1787, on 10 June 1788, the Royal Swedish Navy forces of the North occupied the British territory. They set up the British navy on the British territory.
+On 11 June 1788, on 11 July 1788, they were defeated by two ships, from the British fleet.
+On 17 April 1788, the British proceeded on the British carrier HMS Line. On 24 November 1788, they departed the British line from the British port of London.
+On 22 February 1788, they sailed to the British port of London, where they disembarked and sailed.
+On 28 June 1788, on 21 February 1788, the British landed on the British line on the British line of North to the British port of London.
+On 23 June 1788, the British sailed along the British line to the British port of London.
+On 13 June 1788, the British arrived to the British port
+
+--- Photosynthesis is a molecule in the air, which is a molecule in the water. This molecule is one of the ingredients in the hydrogen complex and the molecule is a very small molecule. We have a very large sample, so it is called the same atoms or two other and so the molecules are busulfur dioxide.
+When we drink water we can put a temperature of approximately 75 to 80.0 degrees Celsius. This temperature is what I mean by the mechanism of cytochrome c oxidase (ATR) and add carbon dioxide to the solution. This is called beta-lactase.
+If the temperature of the water is above 0.0 to 4.0 degrees Celsius, then we can put that temperature to a level at which it is called beta hydrolysate.
+If a water molecule is a protein, then it is a protein that is related to the protein synthesis in the cell.
+We know that the protein is the stuff of egg protein, so it will have to be replaced with another protein to be released. The protein is a chemical element that is necessary for a normal, healthy cell.
+The number of proteins needed for the enzyme is 1.5, so the sequence of protein groups is 3.8, so it is an antibody that is
+

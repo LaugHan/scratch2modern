@@ -1,0 +1,25 @@
+learned  length 1024: mean 3.7246, first 1024 3.7246
+rope     length 1024: mean 3.6501, first 1024 3.6501
+rope     length 2048: mean 3.8081, first 1024 3.6714, beyond 1024 3.9447
+rope     length 4096: mean 4.3976, first 1024 3.6762, beyond 1024 4.6380
+alibi    length 1024: mean 3.6797, first 1024 3.6797
+alibi    length 2048: mean 3.6655, first 1024 3.7024, beyond 1024 3.6286
+alibi    length 4096: mean 3.6699, first 1024 3.7079, beyond 1024 3.6572
+none     length 1024: mean 3.7858, first 1024 3.7858
+none     length 2048: mean 5.0594, first 1024 3.8082, beyond 1024 6.3105
+none     length 4096: mean 7.4295, first 1024 3.8167, beyond 1024 8.6337
+sincos   length 1024: mean 3.7229, first 1024 3.7229
+sincos   length 2048: mean 4.5705, first 1024 3.7467, beyond 1024 5.3943
+sincos   length 4096: mean 5.3101, first 1024 3.7516, beyond 1024 5.8296
+sin      length 1024: mean 3.7214, first 1024 3.7214
+sin      length 2048: mean 4.6050, first 1024 3.7441, beyond 1024 5.4658
+sin      length 4096: mean 5.3519, first 1024 3.7501, beyond 1024 5.8859
+binary   length 1024: mean 3.6968, first 1024 3.6968
+binary   length 2048: mean 4.5320, first 1024 3.7202, beyond 1024 5.3439
+binary   length 4096: mean 5.1721, first 1024 3.7277, beyond 1024 5.6536
+frac     length 1024: mean 3.7542, first 1024 3.7542
+frac     length 2048: mean 3.9605, first 1024 3.9997, beyond 1024 3.9213
+frac     length 4096: mean 4.6712, first 1024 4.6149, beyond 1024 4.6899
+int      length 1024: mean 4.1514, first 1024 4.1514
+int      length 2048: mean 6.8551, first 1024 4.1748, beyond 1024 9.5355
+int      length 4096: mean 10.1995, first 1024 4.1865, beyond 1024 12.2039

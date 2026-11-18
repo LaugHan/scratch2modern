@@ -1,0 +1,87 @@
+run posint: 76.7M params, 25.2M in blocks
+train tokens: 741,785,470, val tokens: 10,312,022
+step    256 / 16384 | batch loss 7.9230 | val loss 7.7036 | 61s
+step    512 / 16384 | batch loss 7.0590 | val loss 6.6670 | 112s
+step    768 / 16384 | batch loss 6.4398 | val loss 6.2603 | 163s
+step   1024 / 16384 | batch loss 6.1375 | val loss 6.0229 | 214s
+step   1280 / 16384 | batch loss 5.9245 | val loss 5.8754 | 266s
+step   1536 / 16384 | batch loss 5.7660 | val loss 5.7219 | 317s
+step   1792 / 16384 | batch loss 5.6230 | val loss 5.6286 | 368s
+step   2048 / 16384 | batch loss 5.5249 | val loss 5.5064 | 419s
+step   2304 / 16384 | batch loss 5.4238 | val loss 5.4053 | 470s
+step   2560 / 16384 | batch loss 5.3388 | val loss 5.3088 | 522s
+step   2816 / 16384 | batch loss 5.2801 | val loss 5.2434 | 573s
+step   3072 / 16384 | batch loss 5.2249 | val loss 5.2609 | 624s
+step   3328 / 16384 | batch loss 5.1862 | val loss 5.1922 | 675s
+step   3584 / 16384 | batch loss 5.1535 | val loss 5.1366 | 727s
+step   3840 / 16384 | batch loss 5.1292 | val loss 5.1134 | 778s
+step   4096 / 16384 | batch loss 5.0980 | val loss 5.1026 | 829s
+step   4352 / 16384 | batch loss 5.0769 | val loss 5.0924 | 880s
+step   4608 / 16384 | batch loss 5.0537 | val loss 5.0480 | 932s
+step   4864 / 16384 | batch loss 5.0333 | val loss 5.0283 | 983s
+step   5120 / 16384 | batch loss 5.0010 | val loss 4.9918 | 1034s
+step   5376 / 16384 | batch loss 4.9757 | val loss 4.9776 | 1085s
+step   5632 / 16384 | batch loss 4.9510 | val loss 4.9746 | 1136s
+step   5888 / 16384 | batch loss 4.9350 | val loss 4.9348 | 1188s
+step   6144 / 16384 | batch loss 4.9275 | val loss 4.9106 | 1239s
+step   6400 / 16384 | batch loss 4.9021 | val loss 4.9071 | 1290s
+step   6656 / 16384 | batch loss 4.8950 | val loss 4.9051 | 1341s
+step   6912 / 16384 | batch loss 4.8789 | val loss 4.8947 | 1392s
+step   7168 / 16384 | batch loss 4.8597 | val loss 4.8756 | 1444s
+step   7424 / 16384 | batch loss 4.8563 | val loss 4.8634 | 1495s
+step   7680 / 16384 | batch loss 4.8516 | val loss 4.8581 | 1546s
+step   7936 / 16384 | batch loss 4.8340 | val loss 4.8376 | 1598s
+step   8192 / 16384 | batch loss 4.8282 | val loss 4.8426 | 1649s
+step   8448 / 16384 | batch loss 4.8148 | val loss 4.8270 | 1700s
+step   8704 / 16384 | batch loss 4.8145 | val loss 4.8241 | 1752s
+step   8960 / 16384 | batch loss 4.7963 | val loss 4.8273 | 1803s
+step   9216 / 16384 | batch loss 4.7907 | val loss 4.8249 | 1854s
+step   9472 / 16384 | batch loss 4.7858 | val loss 4.8031 | 1905s
+step   9728 / 16384 | batch loss 4.7866 | val loss 4.8202 | 1956s
+step   9984 / 16384 | batch loss 4.7761 | val loss 4.7906 | 2008s
+step  10240 / 16384 | batch loss 4.7791 | val loss 4.7709 | 2059s
+step  10496 / 16384 | batch loss 4.7691 | val loss 4.7741 | 2111s
+step  10752 / 16384 | batch loss 4.7588 | val loss 4.7626 | 2162s
+step  11008 / 16384 | batch loss 4.7632 | val loss 4.7859 | 2213s
+step  11264 / 16384 | batch loss 4.7682 | val loss 4.7521 | 2264s
+step  11520 / 16384 | batch loss 4.7591 | val loss 4.7845 | 2316s
+step  11776 / 16384 | batch loss 4.7475 | val loss 4.7524 | 2367s
+step  12032 / 16384 | batch loss 4.7444 | val loss 4.7718 | 2418s
+step  12288 / 16384 | batch loss 4.7494 | val loss 4.7565 | 2469s
+step  12544 / 16384 | batch loss 4.7466 | val loss 4.7465 | 2521s
+step  12800 / 16384 | batch loss 4.7389 | val loss 4.7617 | 2572s
+step  13056 / 16384 | batch loss 4.7342 | val loss 4.7441 | 2623s
+step  13312 / 16384 | batch loss 4.7185 | val loss 4.7111 | 2676s
+step  13568 / 16384 | batch loss 4.6562 | val loss 4.6407 | 2727s
+step  13824 / 16384 | batch loss 4.5997 | val loss 4.5992 | 2778s
+step  14080 / 16384 | batch loss 4.5513 | val loss 4.5446 | 2829s
+step  14336 / 16384 | batch loss 4.4948 | val loss 4.4936 | 2881s
+step  14592 / 16384 | batch loss 4.4547 | val loss 4.4455 | 2932s
+step  14848 / 16384 | batch loss 4.4124 | val loss 4.4010 | 2983s
+step  15104 / 16384 | batch loss 4.3659 | val loss 4.3520 | 3035s
+step  15360 / 16384 | batch loss 4.3102 | val loss 4.3087 | 3086s
+step  15616 / 16384 | batch loss 4.2642 | val loss 4.2619 | 3137s
+step  15872 / 16384 | batch loss 4.2222 | val loss 4.2204 | 3188s
+step  16128 / 16384 | batch loss 4.1841 | val loss 4.1799 | 3240s
+step  16384 / 16384 | batch loss 4.1402 | val loss 4.1515 | 3292s
+val loss 4.1515, time 3292s, peak memory 26784 MB
+--- The water cycle does not have a clear and cost effective water quality. The water column is connected with a regular cup of halts or a short amount of water. This is usually picked up from the tank at the bottom of the tank in which the fish is being fed. The water column will not need to be cleaned in a tank or fish where the water column is placed.
+To learn more about water meters, please contact the first home.
+Add a pinch to your lesson plan to find the best water quality.
+Turn the water volume in the tank.
+Water is a very important topic in the UK.
+
+--- In 1492, approximately 10,000 people live in poverty alone. In the middle of the United States, hundreds of millions of people live in poverty, food, and shelter in disease last to a half century. But as most people live in poverty, they have no questions to their families, is the main cause of poverty. In a study published in the journal “The Bottom Table – Reproductive Care for Sociality and Sociality,” it demonstrated that economic deprivation in government in rural and rural areas would cause black Americans to be underweight.
+And again, the good news is free. Just like in the modern world, there is a huge amount of wealth. But there has been a huge increase in unemployment rates. There is some significant economic disparities in poverty, but we still find people going to seek help on their own. This is a very dramatic injustice.
+The economic downturn has been heard about the increase in inequality in the United States, especially since World War II and the increase in poverty was carried out over the last decade by indigenous Americans and their descendants. It is still difficult to say that the unemployment rates of poverty are almost doubled in the region. But the current recession rate has been hit by millions of people.
+The widespread economic downturn has widened the poverty rate
+
+--- Photosynthesis is often referred to as osmosis.
+Pearres and spleen are often considered on the background of the plant. It is believed that some plants have been used for toxicity in both tropical and tropical climates. Because of its low water consumption and function, plants have been widely used for medicinal purposes.
+The plants’ ability to thrive in a variety of ways. Due to its many different species, fungi can grow in many plants. For example, plant-based plants normally have an alolid cycle impact on native plants, plants and soil.
+However, this is the case that ants are eventually destroyed from plants, but that are vital to the survival of plants.
+The entire plant is a good example of what type of plant-based plants do. The plants are grown and the soil is a very significant nemat in the plant.
+In this case, the plant is an important one and an and so-called “Greenhouseplant” and is a fertile supporter of plant-based plants. There are different varieties of plants, but the best treatments are available to be found.
+Granted into the above clause, they are characterized by the same plants, which are the same for those found in the same plant.
+If the plant has
+

@@ -1,0 +1,91 @@
+run posbinary: 76.7M params, 25.2M in blocks
+train tokens: 741,785,470, val tokens: 10,312,022
+step    256 / 16384 | batch loss 6.6405 | val loss 5.6696 | 64s
+step    512 / 16384 | batch loss 5.2700 | val loss 4.9978 | 115s
+step    768 / 16384 | batch loss 4.8088 | val loss 4.7216 | 167s
+step   1024 / 16384 | batch loss 4.6277 | val loss 4.5990 | 218s
+step   1280 / 16384 | batch loss 4.5439 | val loss 4.5294 | 270s
+step   1536 / 16384 | batch loss 4.4767 | val loss 4.4749 | 322s
+step   1792 / 16384 | batch loss 4.4245 | val loss 4.4280 | 373s
+step   2048 / 16384 | batch loss 4.3947 | val loss 4.3979 | 425s
+step   2304 / 16384 | batch loss 4.3645 | val loss 4.3757 | 477s
+step   2560 / 16384 | batch loss 4.3398 | val loss 4.3556 | 529s
+step   2816 / 16384 | batch loss 4.3194 | val loss 4.3367 | 581s
+step   3072 / 16384 | batch loss 4.3031 | val loss 4.3188 | 633s
+step   3328 / 16384 | batch loss 4.2912 | val loss 4.3208 | 685s
+step   3584 / 16384 | batch loss 4.2759 | val loss 4.2950 | 737s
+step   3840 / 16384 | batch loss 4.2729 | val loss 4.2858 | 788s
+step   4096 / 16384 | batch loss 4.2622 | val loss 4.2773 | 840s
+step   4352 / 16384 | batch loss 4.2467 | val loss 4.2669 | 892s
+step   4608 / 16384 | batch loss 4.2383 | val loss 4.2564 | 944s
+step   4864 / 16384 | batch loss 4.2381 | val loss 4.2479 | 995s
+step   5120 / 16384 | batch loss 4.2234 | val loss 4.2439 | 1047s
+step   5376 / 16384 | batch loss 4.2169 | val loss 4.2444 | 1099s
+step   5632 / 16384 | batch loss 4.2114 | val loss 4.2311 | 1151s
+step   5888 / 16384 | batch loss 4.2053 | val loss 4.2315 | 1203s
+step   6144 / 16384 | batch loss 4.2090 | val loss 4.2193 | 1255s
+step   6400 / 16384 | batch loss 4.1955 | val loss 4.2263 | 1306s
+step   6656 / 16384 | batch loss 4.1892 | val loss 4.2111 | 1358s
+step   6912 / 16384 | batch loss 4.1899 | val loss 4.2096 | 1409s
+step   7168 / 16384 | batch loss 4.1811 | val loss 4.2011 | 1461s
+step   7424 / 16384 | batch loss 4.1853 | val loss 4.1999 | 1513s
+step   7680 / 16384 | batch loss 4.1823 | val loss 4.2021 | 1565s
+step   7936 / 16384 | batch loss 4.1716 | val loss 4.1903 | 1616s
+step   8192 / 16384 | batch loss 4.1695 | val loss 4.1887 | 1668s
+step   8448 / 16384 | batch loss 4.1647 | val loss 4.1903 | 1720s
+step   8704 / 16384 | batch loss 4.1716 | val loss 4.1869 | 1771s
+step   8960 / 16384 | batch loss 4.1559 | val loss 4.1801 | 1823s
+step   9216 / 16384 | batch loss 4.1517 | val loss 4.1893 | 1875s
+step   9472 / 16384 | batch loss 4.1528 | val loss 4.1843 | 1927s
+step   9728 / 16384 | batch loss 4.1602 | val loss 4.1795 | 1979s
+step   9984 / 16384 | batch loss 4.1534 | val loss 4.1742 | 2030s
+step  10240 / 16384 | batch loss 4.1501 | val loss 4.1716 | 2082s
+step  10496 / 16384 | batch loss 4.1507 | val loss 4.1764 | 2133s
+step  10752 / 16384 | batch loss 4.1458 | val loss 4.1715 | 2185s
+step  11008 / 16384 | batch loss 4.1524 | val loss 4.1666 | 2237s
+step  11264 / 16384 | batch loss 4.1492 | val loss 4.1671 | 2288s
+step  11520 / 16384 | batch loss 4.1457 | val loss 4.1710 | 2340s
+step  11776 / 16384 | batch loss 4.1413 | val loss 4.1601 | 2391s
+step  12032 / 16384 | batch loss 4.1374 | val loss 4.1648 | 2442s
+step  12288 / 16384 | batch loss 4.1376 | val loss 4.1627 | 2492s
+step  12544 / 16384 | batch loss 4.1394 | val loss 4.1614 | 2543s
+step  12800 / 16384 | batch loss 4.1407 | val loss 4.1634 | 2593s
+step  13056 / 16384 | batch loss 4.1352 | val loss 4.1632 | 2644s
+step  13312 / 16384 | batch loss 4.1284 | val loss 4.1331 | 2696s
+step  13568 / 16384 | batch loss 4.0930 | val loss 4.0999 | 2746s
+step  13824 / 16384 | batch loss 4.0602 | val loss 4.0611 | 2798s
+step  14080 / 16384 | batch loss 4.0255 | val loss 4.0305 | 2849s
+step  14336 / 16384 | batch loss 3.9809 | val loss 3.9908 | 2901s
+step  14592 / 16384 | batch loss 3.9509 | val loss 3.9532 | 2953s
+step  14848 / 16384 | batch loss 3.9142 | val loss 3.9162 | 3004s
+step  15104 / 16384 | batch loss 3.8729 | val loss 3.8742 | 3056s
+step  15360 / 16384 | batch loss 3.8254 | val loss 3.8339 | 3108s
+step  15616 / 16384 | batch loss 3.7855 | val loss 3.7951 | 3160s
+step  15872 / 16384 | batch loss 3.7478 | val loss 3.7552 | 3212s
+step  16128 / 16384 | batch loss 3.7118 | val loss 3.7187 | 3264s
+step  16384 / 16384 | batch loss 3.6751 | val loss 3.6968 | 3316s
+val loss 3.6968, time 3316s, peak memory 26786 MB
+--- The water cycle does not have a clear mechanism to regulate the global domestic water cycle, rather it is a relatively inefficient process.
+The water cycle is a system that is maintained in a natural environment. It is allowed to breathe into the air layer to recharge and take up fuel cells. To put it simply, the water cycle is suspended in a cool air and it is suspended in a cool air. When water is grown in a pond, the water cycle is suspended in a cool air and it is controlled by a mixture of oxygen and the oxygen. This helps drain off the water through the air by directing the oxygen to the tank.
+The water cycle is also slow in the process due to the amount of water taken by the water cycle to recharge. In order to maintain a uniformity of water, it first must be balanced against each other. The water cycle is maximal in a given tank, and is fixed in a process of water. The water cycle is called tank water cycle. The water cycle is crucial to the entire tank and to the final stage of the tank life cycle.
+The water cycle is intended for every tank. The water cycle is carried out by the water cycle, using the water cycle. The water cycle is divided into two stages:
+Stage 1 - The Water
+
+--- In 1492, the World War II was the dividing line between those of the first World War I and the nine-year war of the last Third World. The war lasted until the Second World War was a violence against humanity and the warring factions in France and Italy.
+But then, the transition was so rapid that, even the Russian felt, was an inevitable anger, destabilizing democracy and the unbridled union that ran across the world of the North, the Soviet Union and the Continental Congress.
+The Russian communist states were not ready to follow until the Second World War (when the creation of the Trans-American groups and the Soviet Union and the Free State had begun a peaceful transition on the third World War I and the Eastern Front) as a whole.
+The transition between the first and third World War II in the five-world war in the four-world war in the Third World war in the three-world war in the four-world war in the two-world war in the six-world war in the four-world war in the two-world war in the Four-world war in the two-world war in the two-world war in the Four-world war in the six-world war in the Five-world war in the three-world
+
+--- Photosynthesis is a molecule that forms a small molecule known as a titer of another one molecule, one containing titer of another one.
+A molecule that has its own nematodes is called a titer, and it is called a titer or titer and it is called a bushy.
+For example, when it breaks down protein, it produces a phosphorus molecule that forms a nitrogen atom.
+In the video above, you can see that a titer of this nitrogen atom is called a titer of the other two.
+If you see any of the titer of the nitrogen atom as a titer of the other two, it is called a titer of the other three.
+The titer of this nitrogen atom is called a titer of the other two.
+The titer of this nitrogen molecule is called a titer of the other two.
+That’s the dirt on the titer of the other two.
+The titer of the nitrogen atom is called a titer of the same nitrogen atom as a titer of the other two.
+The titer of this nitrogen atom is called a titer of the other two.
+The titer of this nitrogen atom is called a titer of the other two.
+
+
