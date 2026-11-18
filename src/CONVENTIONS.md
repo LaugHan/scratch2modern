@@ -13,14 +13,15 @@ src/
 ├── ch1/
 │   ├── 1.01_microgpt/
 │   └── ...
-└── ch2/
-    ├── plan.md
-    ├── common.py       # 这一章不变的部分：数据、评估、训练循环、日志、生成
-    └── 2.01_baseline/
-        ├── train.py    # 这一节的模型和配置
-        ├── sweep.sh    # 这一节跑过的全部命令
-        ├── plot.py     # 读 out/，画图，打印 notes 里用到的每一个数
-        └── notes.md
+├── ch2/
+│   ├── plan.md
+│   ├── common.py       # 这一章不变的部分：数据、评估、训练循环、日志、生成
+│   └── 2.01_baseline/
+│       ├── train.py    # 这一节的模型和配置
+│       ├── sweep.sh    # 这一节跑过的全部命令
+│       ├── plot.py     # 读 out/，画图，打印 notes 里用到的每一个数
+│       └── notes.md
+└── explore/            # 对前沿工作的学习，不属于主线章节；一个工作一个目录，至少有 notes.md
 out/
 └── ch2/2.01_baseline/<run>/   # log.csv、final.csv、samples.txt
 ```
