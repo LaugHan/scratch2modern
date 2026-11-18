@@ -85,7 +85,8 @@ def encode_chunk(chunk):
         ids = merge(ids, pair, merges[pair])
     return ids</code></pre></details>
 
-<p id="bpb" style="margin-top:18px">换了 tokenizer 以后，loss 就不能直接比了。同样一句话，char 要猜 53 次，bpe4096 只要猜 13 次，每次猜的东西也完全不同。所以我们统一换算成 bits per byte（bpb）：平均每个字节的文本，模型要用多少 bit 来编码，越低越好。换算的方法是把整个验证集的 loss 加起来，从以 e 为底换成以 2 为底，再除以这段文本的总字节数：</p>
+<p id="bpb" style="margin-top:18px">换了 tokenizer 以后，loss 就不能直接比了。loss 是平均每个 token 的损失，可同样一句话，char 切成 53 个 token，bpe4096 只切成 13 个，一个 token 里装的文本长短完全不一样。所以要换一个分母：不按 token 平均，而按字节平均。把整个验证集上的 loss 加起来，再除以验证集的总字节数，就是平均每个字节的损失。不管怎么切，验证集的字节数都一样，这个数就可以直接比了。</p>
+<p>习惯上还会把 loss 从以 e 为底换成以 2 为底（除以 ln 2），单位就成了 bit，所以叫 bits per byte（bpb），越低越好。一个字节是 8 bit，模型完全瞎猜的话，bpb 就是 8。</p>
 <pre class="solo"><code class="language-python">token_bytes = torch.tensor([len(b) for b in vocab])  # 每个 token 是几个字节
 
 def val_bpb():
