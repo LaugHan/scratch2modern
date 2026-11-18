@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.12 全量训练 · scratch2modern</title>
+<meta name="description" content="1.12：用第一章的全部配置，把模型放大到 6 层，在完整的 TinyStories 上训练。">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="1.12 全量训练 · scratch2modern">
+<meta property="og:description" content="1.12：用第一章的全部配置，把模型放大到 6 层，在完整的 TinyStories 上训练。">
+<meta property="og:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>
+addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
+function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.open = open); }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+<style>.math{overflow-x:auto;overflow-y:hidden;margin:6px 0 14px}</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a class="gh" href="https://github.com/LaugHan/scratch2modern" aria-label="在 GitHub 上 Star"><img src="https://img.shields.io/github/stars/LaugHan/scratch2modern?style=social&amp;label=Star" alt="GitHub Star" height="20"></a></nav></div></header>
+<div class="wrap layout">
+<aside class="side" id="side" data-cur="1.12"><ol class="subs" hidden><li><a href="#cfg">配置</a></li><li><a href="#lr">扫学习率</a></li><li><a href="#run1">第一次</a></li><li><a href="#why">参数越长越大</a></li><li><a href="#run2">第二次</a></li><li><a href="#big">大模型里</a></li><li><a href="#deep">深入</a></li></ol></aside><script src="toc.js"></script>
+<main class="content">
+<section>
+<div class="ch-intro">第一章 · 训练</div>
+<h2>1.12 全量训练</h2>
+<div class="summary"><div><span class="k">这一节</span>全量训练：放大到 6 层、531 万参数，在完整的 TinyStories 上训练</div><div><span class="k">结果</span>Muon 加 weight decay 0.1 后 val bpb 0.589；不加的话训练到一半变差</div></div>
+
+<p>这是第一章的收尾实验：用第一章选定的全部配置，把模型放大一些，在完整的 TinyStories 训练集上训练，看能训练到什么程度。模型结构这一节不展开分析，那是第二章的内容。</p>
+
+<figure style="margin:0 0 0px;max-width:600px"><svg class="chart" viewBox="0 0 680 300" role="img" aria-label="不加和加 weight decay 两次训练的验证集 bpb">
+<rect x="434.0" y="12" width="96.0" height="246" style="fill:var(--fg);opacity:.06"/>
+<text class="tick" x="482.0" y="26" text-anchor="middle">衰减段</text>
+<line class="grid" x1="50" x2="530" y1="258.0" y2="258.0"/><text class="tick" x="42" y="262.0" text-anchor="end">0.5</text>
+<line class="grid" x1="50" x2="530" y1="222.9" y2="222.9"/><text class="tick" x="42" y="226.9" text-anchor="end">0.6</text>
+<line class="grid" x1="50" x2="530" y1="187.7" y2="187.7"/><text class="tick" x="42" y="191.7" text-anchor="end">0.7</text>
+<line class="grid" x1="50" x2="530" y1="152.6" y2="152.6"/><text class="tick" x="42" y="156.6" text-anchor="end">0.8</text>
+<line class="grid" x1="50" x2="530" y1="117.4" y2="117.4"/><text class="tick" x="42" y="121.4" text-anchor="end">0.9</text>
+<line class="grid" x1="50" x2="530" y1="82.3" y2="82.3"/><text class="tick" x="42" y="86.3" text-anchor="end">1.0</text>
+<line class="grid" x1="50" x2="530" y1="47.1" y2="47.1"/><text class="tick" x="42" y="51.1" text-anchor="end">1.1</text>
+<line class="grid" x1="50" x2="530" y1="12.0" y2="12.0"/><text class="tick" x="42" y="16.0" text-anchor="end">1.2</text>
+<text class="tick" x="50.0" y="276" text-anchor="middle">0k</text>
+<text class="tick" x="170.0" y="276" text-anchor="middle">16k</text>
+<text class="tick" x="290.0" y="276" text-anchor="middle">32k</text>
+<text class="tick" x="410.0" y="276" text-anchor="middle">48k</text>
+<text class="tick" x="530.0" y="276" text-anchor="middle">64k</text>
+<text class="tick" x="290" y="296" text-anchor="middle">步数；纵轴：验证集 bpb（开头 11.7，超出图外）</text>
+<polyline points="57.5,110.8 65.0,147.0 72.5,159.6 80.0,167.8 87.5,171.5 95.0,175.7 102.5,178.1 110.0,178.4 117.5,180.1 125.0,181.6 132.5,182.5 140.0,180.5 147.5,176.9 155.0,173.6 162.5,171.2 170.0,168.7 177.5,169.1 185.0,168.0 192.5,164.9 200.0,163.7 207.5,162.5 215.0,145.4 222.5,151.6 230.0,141.0 237.5,120.8 245.0,120.0 252.5,128.2 260.0,117.0 267.5,126.8 275.0,133.0 282.5,131.3 290.0,134.1 297.5,132.8 305.0,140.4 312.5,138.8 320.0,137.2 327.5,131.4 335.0,137.1 342.5,135.2 350.0,138.6 357.5,139.8 365.0,136.2 372.5,142.5 380.0,144.3 387.5,135.7 395.0,136.0 402.5,125.1 410.0,125.9 417.5,113.2 425.0,90.6 432.5,86.8 440.0,81.0 447.5,66.3 455.0,91.5 462.5,99.3 470.0,99.8 477.5,105.8 485.0,109.3 492.5,115.8 500.0,120.0 507.5,125.7 515.0,131.2 522.5,137.0 530.0,140.1" fill="none" style="stroke:var(--c2);stroke-width:2.2"/>
+<text class="lab" x="538" y="144.1">不加 weight decay</text><text class="val" x="538" y="160.1">0.836</text>
+<polyline points="57.5,115.1 65.0,144.9 72.5,154.5 80.0,159.8 87.5,161.2 95.0,164.3 102.5,166.9 110.0,167.6 117.5,168.7 125.0,169.5 132.5,171.7 140.0,171.2 147.5,172.8 155.0,172.6 162.5,173.7 170.0,173.6 177.5,172.7 185.0,175.0 192.5,174.4 200.0,175.0 207.5,175.2 215.0,176.3 222.5,175.9 230.0,176.5 237.5,175.7 245.0,176.2 252.5,175.7 260.0,176.8 267.5,177.4 275.0,178.8 282.5,177.1 290.0,177.8 297.5,177.9 305.0,177.3 312.5,178.1 320.0,178.0 327.5,177.4 335.0,179.1 342.5,178.5 350.0,177.5 357.5,178.5 365.0,178.5 372.5,178.8 380.0,178.8 387.5,178.6 395.0,178.6 402.5,179.4 410.0,179.4 417.5,178.4 425.0,179.6 432.5,179.1 440.0,180.5 447.5,183.8 455.0,186.8 462.5,190.7 470.0,194.1 477.5,196.8 485.0,200.5 492.5,204.7 500.0,208.8 507.5,213.3 515.0,217.1 522.5,222.7 530.0,226.8" fill="none" style="stroke:var(--c1);stroke-width:2.2"/>
+<text class="lab" x="538" y="230.8">weight decay 0.1</text><text class="val" x="538" y="246.8">0.589</text>
+<circle cx="132.5" cy="182.5" r="4" style="fill:var(--c2)"/>
+<text class="lab" x="132.5" y="202.5" text-anchor="middle">最低 0.715</text>
+</svg></figure>
+<p class="cap">两次训练只差一处：给 Muon 加不加 weight decay。不加的那次，训练到一半开始变差。</p>
+
+<h3 id="cfg">配置</h3>
+<p>和 1.11 现在的配置相比，改了这些：</p>
+<ul class="plain">
+  <li><b>模型</b>：6 层，宽度 256，4 个头，每个头的维度 64，和主流模型一样。参数 531 万，是 1.11 的 38 倍（Transformer 部分 478 万，embedding 和输出层 52 万）。</li>
+  <li><b>优化器</b>：Transformer 内部的矩阵用 Muon，embedding 和输出层用 Adam。1.11 里 Muon 更好但慢 3 倍，慢是因为矩阵太小；现在矩阵大了，额外的开销就不显眼了。</li>
+  <li><b>学习率调度</b>：前 1% warmup，WSD，最后 20% 线性降到 0。模型变深以后，开头更容易不稳定，所以加上 warmup。</li>
+  <li><b>batch 和步数</b>：每步 64 × 256 个 token，训练 65536 步。模型大了，每步要更多的数据才能把 GPU 填满。</li>
+  <li><b>数据</b>：完整的训练集，212 万个故事，6.2 亿个 token。一共看了 10.7 亿个 token，训练集约过 1.7 遍，是 1.11 的 60 多倍。</li>
+</ul>
+<p>上下文 256、bpe1024、初始化 N(0, 0.08²)、bf16 混合精度、编译 + CUDA Graph 都不变。规模参照的是 llama2.c 在 TinyStories 上训练的 15M 模型（6 层，宽度 288，上下文 256）。它的词表是 32000，我们是 1024，所以参数少很多。</p>
+
+<h3 id="lr">扫学习率</h3>
+<p>学习率同时缩放两个优化器：Muon 用 lr，Adam 用 lr / 2。每个学习率先训练 2048 步，其余和正式训练相同。lr 0.005、0.01、0.02 的 val bpb 分别是 0.761、0.739、0.753，0.04 和 0.08 发散。正式训练用 0.01。</p>
+
+<h3 id="run1">第一次：不加 weight decay</h3>
+<p>训练 800 秒，峰值显存 2.2 GB。val bpb 在第 11264 步降到最低的 0.715，比 1.11 的 1.18 低了 0.46：模型大了 38 倍，数据多了 60 多倍。</p>
+<p>但学习率恒定的阶段走过第 1.2 万步以后，loss 一路上升，到第 5.2 万步回到 0.99。最后 20% 的衰减只救回来一部分，最终 0.836，还不如扫学习率时只训练 2048 步的 0.739。</p>
+<p>生成的故事已经相当通顺，语法基本正确，但情节还不太连贯，树和医院混在了一起：</p>
+<div class="story">Once upon a time there was a little girl named Lily. One day, she went for a walk with her mommy. They saw a big tree with a needle. Lily wanted to climb it, but her mommy said no.<br>Lily&#x27;s mommy said, &quot;It is too high for me!&quot; Lily said, &quot;No, sweetie. You need to be careful not to climb it. It&#x27;s too high.&quot;<br>Lily and her mommy went to the station to the hospital. They climbed the tree and climbed up the tree. But when she got to the hospital, she saw that it was too heavy.</div>
+
+<h3 id="why">原因：参数越长越大</h3>
+<p>训练完把参数读出来看。初始化时所有矩阵的标准差都是 0.08：</p>
+<figure style="margin:0 0 6px;max-width:600px"><svg class="chart" viewBox="0 0 680 280" role="img" aria-label="两次训练后每一层矩阵的标准差">
+<line class="grid" x1="50" x2="510" y1="238.0" y2="238.0"/><text class="tick" x="42" y="242.0" text-anchor="end">0.02</text>
+<line class="grid" x1="50" x2="510" y1="196.7" y2="196.7"/><text class="tick" x="42" y="200.7" text-anchor="end">0.05</text>
+<line class="grid" x1="50" x2="510" y1="165.4" y2="165.4"/><text class="tick" x="42" y="169.4" text-anchor="end">0.1</text>
+<line class="grid" x1="50" x2="510" y1="134.1" y2="134.1"/><text class="tick" x="42" y="138.1" text-anchor="end">0.2</text>
+<line class="grid" x1="50" x2="510" y1="92.8" y2="92.8"/><text class="tick" x="42" y="96.8" text-anchor="end">0.5</text>
+<line class="grid" x1="50" x2="510" y1="61.6" y2="61.6"/><text class="tick" x="42" y="65.6" text-anchor="end">1</text>
+<line class="grid" x1="50" x2="510" y1="30.3" y2="30.3"/><text class="tick" x="42" y="34.3" text-anchor="end">2</text>
+<text class="tick" x="50.0" y="256" text-anchor="middle">第 1 层</text>
+<text class="tick" x="142.0" y="256" text-anchor="middle">第 2 层</text>
+<text class="tick" x="234.0" y="256" text-anchor="middle">第 3 层</text>
+<text class="tick" x="326.0" y="256" text-anchor="middle">第 4 层</text>
+<text class="tick" x="418.0" y="256" text-anchor="middle">第 5 层</text>
+<text class="tick" x="510.0" y="256" text-anchor="middle">第 6 层</text>
+<text class="tick" x="280" y="276" text-anchor="middle">纵轴：训练后矩阵的标准差（对数坐标）；虚线是初始化的 0.08</text>
+<line class="ref" x1="50" x2="510" y1="175.5" y2="175.5"/>
+<polyline points="50.0,93.3 142.0,75.0 234.0,61.2 326.0,49.9 418.0,41.7 510.0,48.4" fill="none" style="stroke:var(--c2);stroke-width:2"/>
+<circle cx="50.0" cy="93.3" r="3" style="fill:var(--c2)"/>
+<circle cx="142.0" cy="75.0" r="3" style="fill:var(--c2)"/>
+<circle cx="234.0" cy="61.2" r="3" style="fill:var(--c2)"/>
+<circle cx="326.0" cy="49.9" r="3" style="fill:var(--c2)"/>
+<circle cx="418.0" cy="41.7" r="3" style="fill:var(--c2)"/>
+<circle cx="510.0" cy="48.4" r="3" style="fill:var(--c2)"/>
+<polyline points="50.0,62.1 142.0,60.8 234.0,62.1 326.0,60.0 418.0,68.9 510.0,84.7" fill="none" style="stroke:var(--c2);stroke-width:2;stroke-dasharray:5 4"/>
+<circle cx="50.0" cy="62.1" r="3" style="fill:var(--c2)"/>
+<circle cx="142.0" cy="60.8" r="3" style="fill:var(--c2)"/>
+<circle cx="234.0" cy="62.1" r="3" style="fill:var(--c2)"/>
+<circle cx="326.0" cy="60.0" r="3" style="fill:var(--c2)"/>
+<circle cx="418.0" cy="68.9" r="3" style="fill:var(--c2)"/>
+<circle cx="510.0" cy="84.7" r="3" style="fill:var(--c2)"/>
+<polyline points="50.0,191.2 142.0,199.9 234.0,199.0 326.0,197.6 418.0,194.0 510.0,198.0" fill="none" style="stroke:var(--c1);stroke-width:2"/>
+<circle cx="50.0" cy="191.2" r="3" style="fill:var(--c1)"/>
+<circle cx="142.0" cy="199.9" r="3" style="fill:var(--c1)"/>
+<circle cx="234.0" cy="199.0" r="3" style="fill:var(--c1)"/>
+<circle cx="326.0" cy="197.6" r="3" style="fill:var(--c1)"/>
+<circle cx="418.0" cy="194.0" r="3" style="fill:var(--c1)"/>
+<circle cx="510.0" cy="198.0" r="3" style="fill:var(--c1)"/>
+<polyline points="50.0,205.6 142.0,204.5 234.0,206.7 326.0,206.7 418.0,204.5 510.0,204.5" fill="none" style="stroke:var(--c1);stroke-width:2;stroke-dasharray:5 4"/>
+<circle cx="50.0" cy="205.6" r="3" style="fill:var(--c1)"/>
+<circle cx="142.0" cy="204.5" r="3" style="fill:var(--c1)"/>
+<circle cx="234.0" cy="206.7" r="3" style="fill:var(--c1)"/>
+<circle cx="326.0" cy="206.7" r="3" style="fill:var(--c1)"/>
+<circle cx="418.0" cy="204.5" r="3" style="fill:var(--c1)"/>
+<circle cx="510.0" cy="204.5" r="3" style="fill:var(--c1)"/>
+<text class="lab" x="520" y="52.4">不加：q、k</text>
+<text class="lab" x="520" y="88.7">不加：MLP 第一层（虚线）</text>
+<text class="lab" x="520" y="202.0">加 0.1：q、k</text>
+<text class="lab" x="520" y="218.0">加 0.1：MLP 第一层（虚线）</text>
+</svg></figure>
+<p class="cap">不加 weight decay 时，q、k 越往后越大，最后两层长到了 1.3 以上。加了以后，所有矩阵都稳定在 0.03 到 0.06。</p>
+<p>q、k 长得最多，而注意力的 logit 正是它们的点积：</p>
+<div class="math">\[\text{logit}_{ij} = \frac{q_i \cdot k_j}{\sqrt{d}}, \qquad q,\,k \text{ 各大 16 倍} \;\Rightarrow\; \text{logit 大约 } 16^2 \approx 250 \text{ 倍}\]</div>
+<p>logit 大了 250 倍，softmax 变得非常尖锐，几乎只看一个位置，梯度也跟着变得极端，训练开始不稳定。</p>
+<p>为什么参数会一直长？Muon 每一步给出的更新，大小基本是固定的，不随梯度变小而变小，前后各步的更新又不会完全互相抵消。学习率不降下来，参数就一步步累积变大。这正是 1.10 里 weight decay 要管的事：每一步把参数往 0 拉一点。在 1.10 那个 1 层、训练 4 秒的模型上，参数还没长到出问题，weight decay 看起来"没有用"。</p>
+
+<h3 id="run2">第二次：加 weight decay 0.1</h3>
+<p>只改一处：Muon 加 weight decay 0.1，每一步先把矩阵乘上 \(1-\eta\lambda\)：</p>
+<div class="math">\[W \leftarrow (1 - \eta\lambda)\,W - \eta\cdot \mathrm{Muon}(\nabla L), \qquad \lambda = 0.1\]</div>
+<pre class="solo"><code class="language-python"># Transformer 内部的矩阵用 Muon，加 weight decay；embedding、输出层用 Adam，不加
+opt_muon = torch.optim.Muon(matrices, lr=lr, weight_decay=0.1)
+opt_adam = torch.optim.Adam([wte, wpe, lm_head], lr=lr / 2)</code></pre>
+<p>Adam 那部分不加。<code>torch.optim.Adam</code> 的 weight decay 是 L2 的写法，1.10 里会让训练失败。训练 775 秒，峰值显存 2.2 GB。</p>
+<ul class="plain">
+  <li><b>问题解决了。</b>学习率恒定的阶段，val bpb 一路缓慢下降，再也没有回升。</li>
+  <li><b>前期反而慢一点</b>：第 11264 步时 0.745，不加的是 0.715。weight decay 每一步都在把参数往回拉，学得慢一些，和 1.10 里看到的一样。</li>
+  <li><b>最后 20% 的衰减带来了一大截</b>：从 0.724 降到 0.589。这就是 1.07 里 WSD 的样子：恒定段积累，衰减段兑现。</li>
+  <li><b>最终 0.589</b>，比 1.11 的 1.18 降了一半，也比不加 weight decay 时的最低点低了 0.13。</li>
+</ul>
+<p>生成的故事：</p>
+<div class="story">Lily and Tom were twins who liked to play with their toys. One day, they found a big box in the living room. It had many buttons and lights and sounds. Lily and Tom wanted to see what was inside the box.<br>&quot;Let&#x27;s open it and see,&quot; Tom said.<br>&quot;No, we can&#x27;t,&quot; Lily said. &quot;Mom said we have to wait for her.&quot;<br>&quot;But I don&#x27;t know. Maybe it is a toy or a book or a toy. Maybe it is a treasure or a toy.&quot;<br>Tom was not sure. He did not want to wait. He wanted to see the box.<br>&quot;Please, Tom, let&#x27;s open the box,&quot; Lily said.<br>&quot;No, I don&#x27;t want to. It is my turn. I want to see what is inside,&quot; Tom said.<br>They both pulled the box and saw a shiny thing. It was a ring.</div>
+<p>对话有来有回，人物的动机前后一致，情节也能接上。和 1.11 那个 14 万参数、训练 4 秒的模型相比，已经是完全不同的水平。</p>
+
+<p id="big" style="margin-top:22px">最后补充一点：大模型训练是怎么做的？1.11 的对照里提过，Kimi、GLM、DeepSeek 都给 Muon 加了 0.1 的 weight decay。Moonlight 的研究发现的正是我们遇到的问题：Muon 不加 weight decay，参数和激活会越来越大。Kimi K2 还专门加了 QK-Clip，在注意力的 logit 太大时直接把 q、k 的权重缩小，管的也是这件事。1.10 在玩具模型上得出的"weight decay 没有用"，换到更深的模型、更长的训练就不成立了。</p>
+<p>第一章到这里结束：第一章的配置放大到 531 万参数、10.7 亿个 token，13 分钟训练到 val bpb 0.589。第二章开始改模型的结构。</p>
+
+
+<details class="blk" id="deep"><summary><span class="bn">+</span><span class="bt">深入</span><span class="bd">数据准备；开头的 11.7；训练集和验证集的差距</span></summary>
+<p><b>数据准备。</b>1.05 只存了词表，没存合并规则，所以先用和 1.05 完全相同的数据和步骤重新学一遍合并规则，检查学出来的词表和 1.05 逐个相同，再用 32 个进程并行把训练集编码成 token，约 1 分钟。token 用 int16 存，整份放进显存约 1.2 GB。验证集还是之前那 500 个故事，结果可以和前面各节直接比。</p>
+<p><b>开头的 val bpb 是 11.7。</b>比对 1024 个 token 均匀瞎猜的 3.2 差得多。6 层叠起来以后，初始化 0.08 让输出层一开始就很自信地猜错，和 1.10 里 Kaiming 初始化开头比瞎猜还差是同一回事。几百步之内就恢复了。</p>
+<p><b>训练集和验证集的差距。</b>我们在训练集开头取了和验证集同样多的窗口，用同样的方式评估。两次训练里，训练集窗口的 bpb 都一直比验证集高约 0.12。这不是过拟合：过拟合是训练集比验证集好，而且差距越拉越大；这里是两边取的文本不同，难度本来就不一样，差距从头到尾基本不变。</p>
+</details>
+
+
+<div class="nextsec"><a href="1.11.html">上一节：1.11 回顾</a> · 下一节：第二章（写作中）</div>
+</section>
+</main>
+</div>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。作者 <a href="https://github.com/LaugHan">@LaugHan</a> · <a href="https://github.com/LaugHan/scratch2modern/blob/main/LICENSE">MIT 许可证</a> · 最后更新 2026-11-18</div></footer>
+</body>
+</html>
