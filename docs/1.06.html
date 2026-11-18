@@ -19,7 +19,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <body>
 <header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
 <div class="wrap layout">
-<aside class="side"><div class="ch"><a href="./#chapters">第一章 · 训练</a></div><ol><li><a href="1.01.html"><span class="sn">1.01</span>microgpt</a></li><li><a href="1.02.html"><span class="sn">1.02</span>PyTorch</a></li><li><a href="1.03.html"><span class="sn">1.03</span>Batch</a></li><li><a href="1.04.html"><span class="sn">1.04</span>GPU</a></li><li><a href="1.05.html"><span class="sn">1.05</span>Tokenizer</a></li><li><a class="cur" href="1.06.html"><span class="sn">1.06</span>优化器</a><ol><li><a href="#sgd">SGD</a></li><li><a href="#momentum">Momentum</a></li><li><a href="#adam">Adam</a></li><li><a href="#adamw">AdamW</a></li><li><a href="#lion">Lion</a></li><li><a href="#muon">Muon</a></li><li><a href="#how">怎么比</a></li><li><a href="#r-106">运行结果</a></li><li><a href="#big">大模型里</a></li></ol></li><li><span class="off"><span class="sn">1.07</span>学习率调度</span></li><li><span class="off"><span class="sn">1.08</span>数值精度</span></li><li><span class="off"><span class="sn">1.09</span>工程加速</span></li><li><span class="off"><span class="sn">1.10</span>训练细节</span></li><li><span class="off"><span class="sn">1.11</span>回顾</span></li></ol></aside>
+<aside class="side"><div class="ch"><a href="./#chapters">第一章 · 训练</a></div><ol><li><a href="1.01.html"><span class="sn">1.01</span>microgpt</a></li><li><a href="1.02.html"><span class="sn">1.02</span>PyTorch</a></li><li><a href="1.03.html"><span class="sn">1.03</span>Batch</a></li><li><a href="1.04.html"><span class="sn">1.04</span>GPU</a></li><li><a href="1.05.html"><span class="sn">1.05</span>Tokenizer</a></li><li><a class="cur" href="1.06.html"><span class="sn">1.06</span>优化器</a><ol><li><a href="#sgd">SGD</a></li><li><a href="#momentum">Momentum</a></li><li><a href="#adam">Adam</a></li><li><a href="#adamw">AdamW</a></li><li><a href="#lion">Lion</a></li><li><a href="#muon">Muon</a></li><li><a href="#how">怎么比</a></li><li><a href="#r-106">运行结果</a></li><li><a href="#big">大模型里</a></li></ol></li><li><a href="1.07.html"><span class="sn">1.07</span>学习率调度</a></li><li><span class="off"><span class="sn">1.08</span>数值精度</span></li><li><span class="off"><span class="sn">1.09</span>工程加速</span></li><li><span class="off"><span class="sn">1.10</span>训练细节</span></li><li><span class="off"><span class="sn">1.11</span>回顾</span></li></ol></aside>
 <main class="content">
 <section>
 <div class="ch-intro">第一章 · 训练</div>
@@ -394,7 +394,7 @@ adam.step()                         # 其余参数还是交给 Adam</code></pre>
 <p id="big" style="margin-top:22px">最后补充一点：这些结论放到大模型上还成立吗？大体是一致的。SGD 基本不用来训练 Transformer；AdamW 是大模型预训练的默认选择，LLaMA、Chinchilla、DeepSeek-V3 用的都是它；Muon 正在被前沿模型采用，Kimi K2、GLM-4.5、DeepSeek-V4 都换成了它。</p>
 <p>不一致的地方，主要来自规模。weight decay 在我们这里有害，但大模型要训练很久，不加的话权重会越来越大，超出 bf16 这类低精度数能精确表示的范围，所以是必需的。Muon 的额外开销在我们这里有 21%，到了大模型里，矩阵大了，额外的计算不到 1%。至于 Muon 到底能快多少，Moonshot 报告约 2 倍；<a href="https://arxiv.org/abs/2509.02046">Wen et al. (2025)</a> 把 AdamW 认真调好以后再比，只有 1.1 到 1.4 倍，而且模型越大越少。这也说明了，比较优化器时，每个都要各自调好学习率，不然比的就是学习率。</p>
 
-<div class="nextsec"><a href="1.05.html">上一节：1.05 Tokenizer</a> · 下一节：1.07 学习率调度（写作中）</div>
+<div class="nextsec"><a href="1.05.html">上一节：1.05 Tokenizer</a> · <a href="1.07.html">下一节：1.07 学习率调度</a></div>
 </section>
 </main>
 </div>
