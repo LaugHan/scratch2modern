@@ -11,6 +11,10 @@
 addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
 function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.open = open); }
 </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+<style>.math{overflow-x:auto;overflow-y:hidden;margin:6px 0 14px}</style>
 </head>
 <body>
 <header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
@@ -60,13 +64,15 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 
 <p>先交代一个变化：从这一节开始，基础设置换成 bpe1024、模型宽度 48，一共 13.8 万个参数。这是 1.05 最后那组实验的结论，参数量相同时这个组合最好。其余和 1.05 一样：TinyStories，上下文 256，batch 16，训练 4096 步，学习率从初始值线性降到 0。每个优化器单独一个文件，接口都一样：给它参数和学习率，每一步调用一次 <code>step</code>。</p>
 
-<p>下面按时间顺序讲这 6 个，每一个都在解决前一个留下的问题。代码只放每一步更新的那几行（完整文件在 <a href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.06_optimizer/optimizers">GitHub</a>），注释里写"新"的是和前一个相比改了的地方。</p>
+<p>下面按时间顺序讲这 6 个，每一个都在解决前一个留下的问题。代码只放每一步更新的那几行（完整文件在 <a href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.06_optimizer/optimizers">GitHub</a>），每个都先写出数学，再看代码。</p>
 <div class="tools"><button onclick="setAll(false)">全部折叠</button><button onclick="setAll(true)">全部展开</button></div>
 <details class="blk" open id="sgd"><summary><span class="bn">1</span><span class="bt">SGD</span><span class="bd">沿着梯度往下走</span></summary>
-<p>最直接的想法：梯度指向 loss 上升最快的方向，那就往反方向走一小步。SGD 里的"随机"（stochastic），是说梯度不是在全部数据上算的，而是在一个 batch 上算的，带着噪声。</p>
+<p>最直接的想法：梯度指向 loss 上升最快的方向，那就往反方向走一小步。</p>
+<div class="math">\[\theta \leftarrow \theta - \eta\, g_t\]</div>
+<p>\(\theta\) 是参数，\(g_t\) 是第 \(t\) 步的梯度，\(\eta\) 是学习率。SGD 里的"随机"（stochastic），是说 \(g_t\) 不是在全部数据上算的，而是在一个 batch 上算的，带着噪声。写成代码就一行：</p>
 <pre><code class="language-python">for p in params:
     p -= lr * p.grad</code></pre>
-<p>问题在于，所有参数共用一个学习率。想象 loss 是一条狭长的山谷，横着很陡，顺着谷底很平。学习率要照顾最陡的方向，不然横着会越跳越高，直接发散；可这样一来，平缓的方向就走得很慢。</p>
+<p>问题在于，所有参数共用一个 \(\eta\)。想象 loss 是一条狭长的山谷，横着很陡，顺着谷底很平。\(\eta\) 要照顾最陡的方向，不然横着会越跳越高，直接发散；可这样一来，平缓的方向就走得很慢。</p>
 <figure style="margin:0;max-width:640px"><svg class="chart" viewBox="0 0 660 200" role="img" aria-label="狭长山谷里 SGD 和 momentum 走 30 步的路径（示意）">
 <defs><clipPath id="vclip"><rect x="0" y="0" width="660" height="166"/></clipPath></defs><g clip-path="url(#vclip)">
 <ellipse cx="580" cy="90" rx="112.0" ry="12.7" fill="none" class="grid"/>
@@ -147,14 +153,32 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <p class="cap">示意：同一条山谷，都走 30 步。SGD 的学习率已经快到发散的边缘了，离最低点还是很远。</p>
 <p>我们的实验里正是这样：SGD 的学习率越大越好，一直到 2；再加到 2.83，第 12 步就发散了。</p></details>
 <details class="blk" open id="momentum"><summary><span class="bn">2</span><span class="bt">Momentum</span><span class="bd">让方向攒起来</span></summary>
-<p>不直接用当前的梯度，而是把梯度一步步攒起来：每一步先把之前攒的乘上 0.9，再加上这一步的梯度。攒下来的这个量叫动量。像一个球滚下山，来回震荡的方向上，梯度正负交替，加起来互相抵消；一直朝着同一个方向的谷底，梯度不断叠加，越滚越快。如果梯度一直不变，动量最终是梯度的 1/(1 − 0.9) = 10 倍。</p>
+<p>不直接用当前的梯度，而是把梯度一步步攒起来，攒下来的量叫动量 \(m\)：</p>
+<div class="math">\[m \leftarrow \beta\, m + g_t, \qquad \theta \leftarrow \theta - \eta\, m\]</div>
+<p>每一步先把之前攒的乘上 \(\beta\)（我们用 0.9），再加上这一步的梯度，然后沿着 \(m\) 走。像一个球滚下山：来回震荡的方向上，\(g_t\) 正负交替，加起来互相抵消；一直朝着同一个方向的谷底，\(g_t\) 不断叠加，越滚越快。如果梯度一直是 \(g\)，\(m\) 最终会停在</p>
+<div class="math">\[m = \beta m + g \;\Rightarrow\; m = \frac{g}{1-\beta}\]</div>
+<p>也就是 \(\beta = 0.9\) 时，步长被放大 10 倍。</p>
 <pre><code class="language-python">for p, buf in zip(params, bufs):
     buf.mul_(beta).add_(p.grad)  # 新：先把攒下的乘 0.9，再加上这一步的梯度
     p -= lr * buf                # 新：用动量代替梯度</code></pre>
 <p>实验里 momentum 最好的学习率是 0.707，乘上 10 倍，等效步长约 7，是 SGD 发散边界的好几倍。震荡被抵消掉了，所以敢迈大步，bpb 从 1.319 降到 1.217。</p>
-<p>剩下的问题是，不同参数的梯度大小可以差好几个数量级。比如一个很少出现的 token，它的 embedding 只有在 batch 里出现时才有梯度。全局只有一个学习率，对梯度大的参数刚好，对梯度小的就太小了。</p></details>
+<p>剩下的问题是，不同参数的梯度大小可以差好几个数量级。比如一个很少出现的 token，它的 embedding 只有在 batch 里出现时才有梯度。全局只有一个 \(\eta\)，对梯度大的参数刚好，对梯度小的就太小了。</p></details>
 <details class="blk" open id="adam"><summary><span class="bn">3</span><span class="bt">Adam</span><span class="bd">每个参数有自己的步长</span></summary>
-<p>Adam 给每个参数记两样东西：m 是梯度的平均，告诉我们往哪走；v 是梯度平方的平均，告诉我们这个参数的梯度一般有多大。更新时用 m 除以 v 的平方根，也就是每个参数都用自己梯度的大小去归一化。梯度大的，步子不会太大；梯度小的，步子也不会太小，每个参数每步大约都走 lr 这么远。</p>
+<p>Adam 给每个参数记两样东西，再用它们来更新：</p>
+<div class="math">\[\begin{aligned}
+m &amp;\leftarrow \beta_1 m + (1-\beta_1)\, g_t \\
+v &amp;\leftarrow \beta_2 v + (1-\beta_2)\, g_t^2 \\
+\hat m &amp;= \frac{m}{1-\beta_1^t}, \qquad \hat v = \frac{v}{1-\beta_2^t} \\
+\theta &amp;\leftarrow \theta - \eta\, \frac{\hat m}{\sqrt{\hat v} + \epsilon}
+\end{aligned}\]</div>
+<p>一行一行看：</p>
+<ol class="plain">
+  <li>\(m\) 是梯度的滑动平均，告诉我们往哪走，和 momentum 一样，只是多乘了 \(1-\beta_1\)，变成了平均而不是累加。</li>
+  <li>\(v\) 是梯度平方的滑动平均，告诉我们这个参数的梯度一般有多大。</li>
+  <li>\(m\) 和 \(v\) 都从 0 开始，前几步会严重偏小，除以 \(1-\beta^t\) 正好修正回来。\(t\) 大了以后这一项趋近于 1，就不起作用了。</li>
+  <li>更新时用 \(\hat m\) 除以 \(\sqrt{\hat v}\)，每个参数都用自己梯度的大小去归一化，\(\epsilon\) 只是防止除以 0。梯度大的，步子不会太大；梯度小的，步子也不会太小，每个参数每步大约都走 \(\eta\) 这么远。</li>
+</ol>
+<p>\(\beta_1 = 0.85,\ \beta_2 = 0.99\)，沿用 microgpt 的设置。</p>
 <pre><code class="language-python">t += 1
 for p, m, v in zip(params, ms, vs):
     m.mul_(beta1).add_((1 - beta1) * p.grad)       # 梯度的平均：往哪走
@@ -162,22 +186,38 @@ for p, m, v in zip(params, ms, vs):
     m_hat = m / (1 - beta1 ** t)                   # m 和 v 从 0 开始，前几步偏小，修正回来
     v_hat = v / (1 - beta2 ** t)
     p -= lr * m_hat / (v_hat ** 0.5 + eps)         # 用自己梯度的大小归一化</code></pre>
-<p>实验里 Adam 最好的学习率是 0.01，bpb 1.176。代价是每个参数要多存 m 和 v 两份，优化器的状态是参数量的 2 倍。</p></details>
+<p>实验里 Adam 最好的学习率是 0.01，bpb 1.176。代价是每个参数要多存 \(m\) 和 \(v\) 两份，优化器的状态是参数量的 2 倍。</p></details>
 <details class="blk" open id="adamw"><summary><span class="bn">4</span><span class="bt">AdamW</span><span class="bd">把 weight decay 单独拿出来</span></summary>
-<p>weight decay 是每一步把所有参数按比例往 0 拉一点，防止参数无限变大。在 SGD 里，它等价于在 loss 里加上参数的平方和，直接加进梯度就行。但在 Adam 里，加进梯度的这一项也会被 √v 除掉，结果梯度大的参数反而被拉得少。AdamW 的修正很简单：weight decay 不经过梯度，单独做。</p>
+<p>weight decay 是每一步把所有参数按比例往 0 拉一点，防止参数无限变大。最自然的做法是在 loss 里加一项参数的平方和：</p>
+<div class="math">\[\mathcal{L}\;\to\;\mathcal{L} + \frac{\lambda}{2}\lVert\theta\rVert^2\]</div>
+<p>它的梯度是 \(\lambda\theta\)，加进 \(g_t\) 就行。在 SGD 里这样做完全没问题。但在 Adam 里，加进去的 \(\lambda\theta\) 也会和梯度一起被 \(\sqrt{\hat v}\) 除掉，结果梯度大的参数反而被拉得少，这不是我们想要的。AdamW 的修正很简单，weight decay 不经过梯度，单独减掉：</p>
+<div class="math">\[\theta \leftarrow \theta - \eta\lambda\,\theta - \eta\, \frac{\hat m}{\sqrt{\hat v} + \epsilon}\]</div>
+<p>多出来的就是 \(-\eta\lambda\theta\) 这一项，其余和 Adam 完全一样。我们取 \(\lambda = 0.1\)。</p>
 <pre><code class="language-python">for p, m, v in zip(params, ms, vs):
     p.mul_(1 - lr * weight_decay)  # 新：和 Adam 唯一的区别，不经过梯度，直接往 0 拉一点
     ...                            # 其余和 Adam 完全一样</code></pre>
-<p>实验里 AdamW（weight decay 0.1）比 Adam 略差，1.183 对 1.176，差距比换种子带来的波动还大。我们的模型小、训练短，还处在学不够的阶段，用不着把参数往回拉。</p></details>
+<p>实验里 AdamW 比 Adam 略差，1.183 对 1.176，差距比换种子带来的波动还大。我们的模型小、训练短，还处在学不够的阶段，用不着把参数往回拉。</p></details>
 <details class="blk" open id="lion"><summary><span class="bn">5</span><span class="bt">Lion</span><span class="bd">只看方向，不看大小</span></summary>
-<p>Lion 是 Google 在 2023 年用程序自动搜索出来的。它把 Adam 的思路推到了头：Adam 用 m / √v 来归一化，Lion 干脆只取符号，每个参数每一步都恰好走 ±lr。好处是只要一份状态，显存是 Adam 的一半。</p>
+<p>Lion 是 Google 在 2023 年用程序自动搜索出来的。它把 Adam 的思路推到了头：Adam 用 \(\hat m/\sqrt{\hat v}\) 来归一化，Lion 干脆只取符号：</p>
+<div class="math">\[\begin{aligned}
+\theta &amp;\leftarrow \theta - \eta\cdot \mathrm{sign}\big(\beta_1 m + (1-\beta_1)\, g_t\big) \\
+m &amp;\leftarrow \beta_2 m + (1-\beta_2)\, g_t
+\end{aligned}\]</div>
+<p>\(\mathrm{sign}\) 只看正负，正的变成 1，负的变成 −1，所以每个参数每一步都恰好走 \(\pm\eta\)。注意两行用的 \(\beta\) 不一样：更新方向用 \(\beta_1 = 0.9\) 混合，动量本身用 \(\beta_2 = 0.99\) 更新。好处是只要一份状态 \(m\)，显存是 Adam 的一半。</p>
 <pre><code class="language-python">for p, m in zip(params, ms):
     p -= lr * (beta1 * m + (1 - beta1) * p.grad).sign()  # 只取符号：每步都走 ±lr
     m.mul_(beta2).add_((1 - beta2) * p.grad)             # 只有一份状态</code></pre>
 <p>每个参数每步都走满，更新的幅度比 Adam 大，学习率就要小很多。我们最好的学习率是 0.00125，正好是 Adam 的 1/8，bpb 1.226。它也完全丢掉了梯度大小的信息：哪怕某个参数的梯度只是噪声，也要走满一步。</p></details>
 <details class="blk" open id="muon"><summary><span class="bn">6</span><span class="bt">Muon</span><span class="bd">把权重当作矩阵来更新</span></summary>
 <p>前面 5 个都把参数看成一堆独立的数，各更新各的。但 Transformer 里大部分参数是矩阵，它的作用是把一个向量变成另一个向量。<a href="https://kellerjordan.github.io/posts/muon/">Muon</a>（Keller Jordan，2024）从这个角度出发。它的观察是：用 Adam 这类优化器训练时，矩阵的更新往往集中在少数几个方向上，其余方向几乎不动。</p>
-<p>任何矩阵都可以拆成三个矩阵相乘，M = UΣVᵀ，这叫奇异值分解。U 和 V 是方向，Σ 是对角矩阵，对角线上的奇异值表示每个方向被放大了多少。Muon 把动量矩阵的奇异值全都换成 1，得到 UVᵀ：方向保留，但每个方向的幅度一样，原来被压住的方向也能学起来。这叫正交化。奇异值分解算起来很慢，Muon 用 Newton–Schulz 迭代来近似，只用矩阵乘法，每迭代一次就把奇异值往 1 推一点，5 次就差不多了。</p>
+<p>任何矩阵都可以拆成三个矩阵相乘，这叫奇异值分解：</p>
+<div class="math">\[M = U \Sigma V^\top\]</div>
+<p>\(U\) 和 \(V\) 的每一列是一个方向，\(\Sigma\) 是对角矩阵，对角线上的奇异值 \(\sigma_i\) 表示每个方向被放大了多少。Muon 把动量矩阵 \(M\) 的奇异值全都换成 1，方向保留，但每个方向的幅度一样，原来被压住的方向也能学起来。这叫正交化：</p>
+<div class="math">\[\mathrm{orth}(M) = U V^\top, \qquad \theta \leftarrow \theta - \eta \cdot \sqrt{\max\!\Big(1, \frac{\text{行数}}{\text{列数}}\Big)} \cdot \mathrm{orth}(M)\]</div>
+<p>\(M\) 是动量，和 momentum 一样攒（\(\beta = 0.95\)），实际代码里拿去正交化的是 \(g_t + \beta m\)，这叫 Nesterov 动量，相当于往前多看一步。根号那一项让高矩阵和宽矩阵的更新幅度一致。</p>
+<p>奇异值分解算起来很慢，Muon 用 Newton–Schulz 迭代来近似，只用矩阵乘法。先把 \(M\) 缩小到所有奇异值都不超过 1，记作 \(X\)，然后反复做：</p>
+<div class="math">\[X \leftarrow aX + b\,(XX^\top)X + c\,(XX^\top)^2X, \qquad (a,b,c) = (3.4445,\ -4.7750,\ 2.0315)\]</div>
+<p>这一步对每个奇异值做的事是一样的：\(\sigma \leftarrow a\sigma + b\sigma^3 + c\sigma^5\)。这组系数让 \(\sigma\) 每迭代一次就往 1 推一大步，5 次就差不多了，只是不精确等于 1，我们实测落在 0.68 到 1.13 之间。</p>
 <pre><code class="language-python">def orthogonalize(G, steps=5):
     # Newton–Schulz 迭代：把 G 的奇异值都推向 1，近似得到 U Vᵀ
     a, b, c = 3.4445, -4.7750, 2.0315
