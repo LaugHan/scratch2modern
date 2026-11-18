@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.08 数值精度 · scratch2modern</title>
+<meta name="description" content="1.08：训练里的数用多少位来存、来算。">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>
+addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
+function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.open = open); }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+<style>.math{overflow-x:auto;overflow-y:hidden;margin:6px 0 14px}</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a href="https://github.com/LaugHan/scratch2modern">GitHub</a></nav></div></header>
+<div class="wrap layout">
+<aside class="side"><div class="ch"><a href="./#chapters">第一章 · 训练</a></div><ol><li><a href="1.01.html"><span class="sn">1.01</span>microgpt</a></li><li><a href="1.02.html"><span class="sn">1.02</span>PyTorch</a></li><li><a href="1.03.html"><span class="sn">1.03</span>Batch</a></li><li><a href="1.04.html"><span class="sn">1.04</span>GPU</a></li><li><a href="1.05.html"><span class="sn">1.05</span>Tokenizer</a></li><li><a href="1.06.html"><span class="sn">1.06</span>优化器</a></li><li><a href="1.07.html"><span class="sn">1.07</span>学习率调度</a></li><li><a class="cur" href="1.08.html"><span class="sn">1.08</span>数值精度</a><ol><li><a href="#float">浮点数</a></li><li><a href="#round">舍入</a></li><li><a href="#mixed">混合精度</a></li><li><a href="#scaling">loss scaling</a></li><li><a href="#fp8">fp8</a></li><li><a href="#design">8 种设置</a></li><li><a href="#r-108">运行结果</a></li><li><a href="#wide">加宽模型测速</a></li><li><a href="#big">大模型里</a></li><li><a href="#deep">深入：fp8</a></li></ol></li><li><span class="off"><span class="sn">1.09</span>工程加速</span></li><li><span class="off"><span class="sn">1.10</span>训练细节</span></li><li><span class="off"><span class="sn">1.11</span>回顾</span></li></ol></aside>
+<main class="content">
+<section>
+<div class="ch-intro">第一章 · 训练</div>
+<h2>1.08 数值精度</h2>
+
+<p>其实模型参数的精度也有讲究，经常听到量化、混合精度等等的词，实际上它们讨论的都是模型参数的数值精度。我们的项目目前一直在用 fp64，这并不主流，它的精度很高，但相比之下计算速度会更慢，存储占用会更多。</p>
+
+<figure style="margin:0" class="small-fig"><svg class="chart" viewBox="0 0 680 260" role="img" aria-label="宽度 3072 时各精度每秒的浮点运算量">
+<text class="lab" x="180" y="22" text-anchor="end">fp64</text>
+<rect class="bar1" x="190" y="6" width="3.6" height="22" rx="3"/>
+<text class="val" x="201.6" y="22">1</text><text class="tick" x="233.6" y="22">每步 2.8 秒</text>
+<text class="lab" x="180" y="54" text-anchor="end">fp32</text>
+<rect class="bar2" x="190" y="38" width="83.0" height="22" rx="3"/>
+<text class="val" x="281.0" y="54">23</text><text class="tick" x="313.0" y="54">每步 124 毫秒</text>
+<text class="lab" x="180" y="86" text-anchor="end">tf32</text>
+<rect class="bar2" x="190" y="70" width="184.0" height="22" rx="3"/>
+<text class="val" x="382.0" y="86">52</text><text class="tick" x="414.0" y="86">每步 56 毫秒</text>
+<text class="lab" x="180" y="118" text-anchor="end">fp16 混合 + loss scaling</text>
+<rect class="bar2" x="190" y="102" width="253.1" height="22" rx="3"/>
+<text class="val" x="451.1" y="118">71</text><text class="tick" x="483.1" y="118">每步 41 毫秒</text>
+<text class="lab" x="180" y="150" text-anchor="end">bf16 混合</text>
+<rect class="bar2" x="190" y="134" width="251.6" height="22" rx="3"/>
+<text class="val" x="449.6" y="150">71</text><text class="tick" x="481.6" y="150">每步 41 毫秒</text>
+<text class="lab" x="180" y="182" text-anchor="end">fp8</text>
+<rect class="bar2" x="190" y="166" width="292.9" height="22" rx="3"/>
+<text class="val" x="490.9" y="182">82</text><text class="tick" x="522.9" y="182">每步 35 毫秒</text>
+<text class="lab" x="180" y="214" text-anchor="end">纯 bf16（去掉主副本）</text>
+<rect class="bar2" x="190" y="198" width="299.6" height="22" rx="3"/>
+<text class="val" x="497.6" y="214">84</text><text class="tick" x="529.6" y="214">每步 34 毫秒</text>
+<text class="tick" x="190" y="252">每秒实际做的浮点运算（TFLOPS，万亿次），越高越快；灰字是每一步的时间</text>
+</svg></figure>
+<p class="cap">把模型加宽到 3072，只测速度。fp64 每一步要 2.8 秒，纯 bf16 只要 34 毫秒，差了 82 倍。</p>
+
+
+<p id="float">常见的做法是用更小的精度，那都有什么精度呢？先看浮点数是怎么存的。它就像科学计数法 \(6.02 \times 10^{23}\)，由三部分组成：</p>
+<div class="math">\[x = (-1)^{\text{符号}} \times 2^{\text{指数}} \times 1.\underbrace{b_1 b_2 \cdots b_m}_{\text{尾数，}m\text{ 位}}\]</div>
+<p>指数位决定能表示多大、多小的数，也就是范围；尾数位决定有效数字有几位，也就是精度。总位数一定，给指数多一位，尾数就少一位。常见的几种格式：</p>
+<figure style="margin:0 0 16px"><svg class="chart" viewBox="0 0 700 222" role="img" aria-label="各浮点格式的符号位、指数位、尾数位">
+<rect x="80" y="4" width="14" height="14" rx="2" style="fill:var(--chart-raw)"/><text class="lab" x="100" y="16">符号</text>
+<rect x="220" y="4" width="14" height="14" rx="2" style="fill:var(--c1)"/><text class="lab" x="240" y="16">指数（范围）</text>
+<rect x="360" y="4" width="14" height="14" rx="2" style="fill:var(--c2)"/><text class="lab" x="380" y="16">尾数（精度）</text>
+<text class="lab" x="70" y="48" text-anchor="end">fp64</text>
+<rect x="80.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--chart-raw)"/>
+<rect x="87.6" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="95.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="102.8" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="110.4" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="118.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="125.6" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="133.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="140.8" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="148.39999999999998" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="156.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="163.6" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="171.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="178.8" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="186.39999999999998" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="194.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="201.6" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="209.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="216.79999999999998" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="224.4" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="232.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="239.6" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="247.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="254.79999999999998" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="262.4" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="270.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="277.6" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="285.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="292.79999999999995" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="300.4" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="308.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="315.6" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="323.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="330.79999999999995" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="338.4" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="346.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="353.59999999999997" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="361.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="368.8" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="376.4" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="384.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="391.59999999999997" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="399.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="406.8" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="414.4" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="422.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="429.59999999999997" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="437.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="444.79999999999995" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="452.4" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="460.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="467.59999999999997" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="475.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="482.79999999999995" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="490.4" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="498.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="505.59999999999997" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="513.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="520.8" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="528.4" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="536.0" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="543.5999999999999" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="551.2" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="558.8" y="34" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<text class="tick" x="574.4" y="48">64 位 = 1 + 11 + 52</text>
+<text class="lab" x="70" y="74" text-anchor="end">fp32</text>
+<rect x="80.0" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--chart-raw)"/>
+<rect x="87.6" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="95.2" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="102.8" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="110.4" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="118.0" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="125.6" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="133.2" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="140.8" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="148.39999999999998" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="156.0" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="163.6" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="171.2" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="178.8" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="186.39999999999998" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="194.0" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="201.6" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="209.2" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="216.79999999999998" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="224.4" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="232.0" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="239.6" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="247.2" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="254.79999999999998" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="262.4" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="270.0" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="277.6" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="285.2" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="292.79999999999995" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="300.4" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="308.0" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="315.6" y="60" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<text class="tick" x="331.2" y="74">32 位 = 1 + 8 + 23</text>
+<text class="lab" x="70" y="100" text-anchor="end">tf32</text>
+<rect x="80.0" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--chart-raw)"/>
+<rect x="87.6" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="95.2" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="102.8" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="110.4" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="118.0" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="125.6" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="133.2" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="140.8" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="148.39999999999998" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="156.0" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="163.6" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="171.2" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="178.8" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="186.39999999999998" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="194.0" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="201.6" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="209.2" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="216.79999999999998" y="86" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<text class="tick" x="232.4" y="100">19 位 = 1 + 8 + 10</text>
+<text class="lab" x="70" y="126" text-anchor="end">fp16</text>
+<rect x="80.0" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--chart-raw)"/>
+<rect x="87.6" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="95.2" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="102.8" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="110.4" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="118.0" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="125.6" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="133.2" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="140.8" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="148.39999999999998" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="156.0" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="163.6" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="171.2" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="178.8" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="186.39999999999998" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="194.0" y="112" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<text class="tick" x="209.6" y="126">16 位 = 1 + 5 + 10</text>
+<text class="lab" x="70" y="152" text-anchor="end">bf16</text>
+<rect x="80.0" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--chart-raw)"/>
+<rect x="87.6" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="95.2" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="102.8" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="110.4" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="118.0" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="125.6" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="133.2" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="140.8" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="148.39999999999998" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="156.0" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="163.6" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="171.2" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="178.8" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="186.39999999999998" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="194.0" y="138" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<text class="tick" x="209.6" y="152">16 位 = 1 + 8 + 7</text>
+<text class="lab" x="70" y="178" text-anchor="end">fp8 E4M3</text>
+<rect x="80.0" y="164" width="6.1" height="18" rx="1.5" style="fill:var(--chart-raw)"/>
+<rect x="87.6" y="164" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="95.2" y="164" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="102.8" y="164" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="110.4" y="164" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="118.0" y="164" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="125.6" y="164" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="133.2" y="164" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<text class="tick" x="148.8" y="178">8 位 = 1 + 4 + 3</text>
+<text class="lab" x="70" y="204" text-anchor="end">fp8 E5M2</text>
+<rect x="80.0" y="190" width="6.1" height="18" rx="1.5" style="fill:var(--chart-raw)"/>
+<rect x="87.6" y="190" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="95.2" y="190" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="102.8" y="190" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="110.4" y="190" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="118.0" y="190" width="6.1" height="18" rx="1.5" style="fill:var(--c1)"/>
+<rect x="125.6" y="190" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<rect x="133.2" y="190" width="6.1" height="18" rx="1.5" style="fill:var(--c2)"/>
+<text class="tick" x="148.8" y="204">8 位 = 1 + 5 + 2</text>
+</svg></figure>
+<ol class="plain">
+  <li>fp64 和 fp32：一个 64 位，一个 32 位。fp32 的有效数字约 7 位，范围到 \(10^{38}\)。</li>
+  <li>fp16 和 bf16：都是 16 位，取舍正好相反。fp16 尾数多，精度高一点，但最大只能表示 65504，最小的数也不够小；bf16 指数和 fp32 一样是 8 位，范围和 fp32 一样大，代价是有效数字只有 2 位多。</li>
+  <li>tf32：严格说不是一种存储格式，而是一个硬件开关。数还是按 fp32 存，只是做矩阵乘法时，硬件内部把尾数截到 10 位来算。</li>
+  <li>fp8：只有 8 位，分两种。E4M3 尾数多一位，精度高一些，最大 448；E5M2 指数多一位，范围大一些，最大 57344。</li>
+</ol>
+
+<p id="round">位数少了，最直接的影响是舍入。尾数只有 \(m\) 位，在 \(x\) 附近能表示的数之间就有间距：</p>
+<div class="math">\[\text{相邻两个数的间距} \approx |x| \cdot 2^{-m}\]</div>
+<p>bf16 的 \(m = 7\)，1 的下一个数是 1.0078，中间的数都表示不了，只能就近取一个。于是一个大数加上一个很小的数，结果可能还是那个大数：</p>
+<pre class="solo"><code class="language-python">&gt;&gt;&gt; torch.tensor(1.0, dtype=torch.bfloat16) + 0.003
+tensor(1., dtype=torch.bfloat16)</code></pre>
+<p>这对训练很要命。参数更新就是 <code>p -= lr * update</code>，参数本身在 0.1 左右，bf16 的间距约 0.0005；Adam 每一步的更新大约是学习率乘一个 0.1 左右的数。学习率降到 0.005 以下，很多更新就小于间距的一半，加不上去了，而学习率线性衰减时，后一半的训练都在这个区间。</p>
+
+<p id="mixed">所以常用的办法是混合精度：不同的数用不同的精度。参数留一份 fp32 的原件，叫主副本，每一步的更新都加在它上面，小的更新不会丢；计算量最大的矩阵乘法，再临时转出一份 16 位的副本来算。PyTorch 里用 autocast 来做这件事，它会自动决定哪些运算用 16 位、哪些留在 fp32：</p>
+<pre class="solo"><code class="language-python">params = ...  # 参数照常用 fp32 存，这就是主副本
+
+with torch.autocast(&#x27;cuda&#x27;, dtype=torch.bfloat16):  # 只有前向放在 autocast 里
+    loss = loss_fn(x, y)  # 矩阵乘法自动用 bf16 算，exp、求和这类自动用 fp32
+loss.backward()           # 梯度回到 fp32 的参数上
+optimizer.step()          # 更新加在 fp32 的主副本上</code></pre>
+
+<p id="scaling">fp16 还有一个问题：范围太小，小于 \(6\times10^{-8}\) 的数会下溢成 0，而梯度往往很小。loss scaling 的办法是先放大，再缩回去：</p>
+<div class="math">\[\mathcal{L} \to S\cdot\mathcal{L} \;\Rightarrow\; g \to S\cdot g, \qquad \text{更新前再除以 } S\]</div>
+<p>反向传播是一连串乘法，loss 放大 \(S\) 倍，所有梯度都跟着放大 \(S\) 倍，原本会变成 0 的小梯度就能存下了；更新之前，在 fp32 里再除回去。\(S\) 也不能太大，否则大的梯度会溢出成 inf，所以一般动态调整。PyTorch 里的工具叫 GradScaler：</p>
+<pre class="solo"><code class="language-python">scaler = torch.amp.GradScaler(&#x27;cuda&#x27;, init_scale=2.0 ** 16, growth_interval=2000)
+...
+scaler.scale(loss).backward()  # 1. 把 loss 乘以当前的倍数，再反向传播
+scaler.step(optimizer)         # 2. 把梯度除回去；如果梯度里有 inf，这一步就不更新
+scaler.update()                # 3. 溢出了就把倍数减半，连续 2000 步没溢出就翻倍</code></pre>
+<p>bf16 的范围和 fp32 一样大，就不需要这一步，这也是它后来取代 fp16 的原因之一。</p>
+
+<p id="fp8">到了 fp8，范围窄到放大一个倍数也不够了，得给每个张量单独算一个缩放因子，把它整个挤进 fp8 的范围，用完再乘回去：</p>
+<div class="math">\[s = \frac{\max|x|}{448}, \qquad x \approx s \cdot \mathrm{fp8}\Big(\frac{x}{s}\Big)\]</div>
+<pre class="solo"><code class="language-python">def quantize(x, fmt):
+    # 整个张量一个缩放因子：让最大的那个数刚好落在 fp8 的最大值上
+    scale = x.abs().max().float().clamp(min=1e-12) / torch.finfo(fmt).max
+    return (x / scale).to(fmt), scale
+
+# 矩阵乘法直接吃 fp8，算完再乘回两个缩放因子
+y = torch._scaled_mm(xq, wq, scale_a=sx, scale_b=sw, out_dtype=torch.bfloat16)</code></pre>
+<p>448 是 E4M3 的最大值。我们的 fp8 只用在 Transformer 层内的 6 个线性层上，前向用 E4M3，反向的梯度用 E5M2，lm_head 和注意力还是 bf16。</p>
+
+
+<p id="design" style="margin-top:22px">从这一节开始，优化器和学习率调度直接用 PyTorch 自带的（<code>torch.optim.Adam</code>、<code>LambdaLR</code>），不再手写。设置和 1.07 一样：bpe1024，宽度 48，上下文 256，batch 16，4096 步，Adam 学习率 0.01 线性衰减。我们比较 8 种设置，分三组（每种一个文件，在 <a href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.08_precision/precisions">GitHub</a>）：</p>
+<ol class="plain">
+  <li>基线：fp64、fp32、tf32。所有数都用同一种格式，只是位数不同。</li>
+  <li>论文的路线：fp16 混合精度加 loss scaling（Micikevicius et al. 2018），然后是现在的标准 bf16 混合精度，再到 fp8（DeepSeek-V3 的简化版）。</li>
+  <li>消融：从论文的方案里拿掉一个部件，看它是不是真的必要。纯 bf16 拿掉了 fp32 主副本，参数、梯度、优化器状态全是 bf16；另一个是 fp16 混合精度拿掉 loss scaling。</li>
+</ol>
+<p>评估做两次。训练过程中，用训练时的精度评估；训练结束后，再把参数转成 fp64，去掉 autocast 和 fp8，重新评估一次。后者只看训练出来的权重好不好，两者之差就是推理时的精度损失。每种设置跑 3 个种子。</p>
+
+<h3 id="r-108">运行结果</h3>
+<figure style="margin:0 0 18px"><svg class="chart" viewBox="0 0 680 362" role="img" aria-label="各精度方案的验证集 bpb">
+<circle class="pt" cx="256" cy="12" r="6"/><text class="lab" x="268" y="17">转成 fp64 再评估（横线是 3 个种子的范围）</text>
+<circle cx="256" cy="32" r="5" style="fill:none;stroke:var(--accent);stroke-width:1.6"/><text class="lab" x="268" y="37">用训练时的精度评估</text>
+<line class="grid" x1="20" x2="610" y1="142" y2="142" style="stroke-dasharray:4 4"/>
+<line class="grid" x1="20" x2="610" y1="246" y2="246" style="stroke-dasharray:4 4"/>
+<line class="grid" x1="310.0" x2="310.0" y1="54" y2="322"/><text class="tick" x="310.0" y="338" text-anchor="middle">1.17</text>
+<line class="grid" x1="430.0" x2="430.0" y1="54" y2="322"/><text class="tick" x="430.0" y="338" text-anchor="middle">1.18</text>
+<line class="grid" x1="550.0" x2="550.0" y1="54" y2="322"/><text class="tick" x="550.0" y="338" text-anchor="middle">1.19</text>
+<text class="lab" x="238" y="71" text-anchor="end">fp64</text>
+<line x1="341.9" x2="403.4" y1="66" y2="66" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="378.7" cy="66" r="6"/>
+<text class="val" x="415.4" y="71">1.1757</text>
+<text class="lab" x="238" y="101" text-anchor="end">fp32</text>
+<line x1="355.3" x2="420.4" y1="96" y2="96" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="377.3" cy="96" r="6"/>
+<text class="val" x="432.4" y="101">1.1756</text>
+<text class="lab" x="238" y="131" text-anchor="end">tf32</text>
+<line x1="365.2" x2="389.3" y1="126" y2="126" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="373.5" cy="126" r="6"/>
+<text class="val" x="401.3" y="131">1.1753</text>
+<text class="lab" x="238" y="175" text-anchor="end">fp16 混合 + loss scaling</text>
+<line x1="345.0" x2="428.1" y1="170" y2="170" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="383.0" cy="170" r="6"/>
+<text class="val" x="440.1" y="175">1.1761</text>
+<text class="lab" x="238" y="205" text-anchor="end">bf16 混合</text>
+<line x1="345.1" x2="412.2" y1="200" y2="200" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="380.0" cy="200" r="6"/>
+<text class="val" x="424.2" y="205">1.1758</text>
+<text class="lab" x="238" y="235" text-anchor="end">fp8</text>
+<line x1="448.8" x2="485.3" y1="230" y2="230" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="470.8" cy="230" r="6"/>
+<circle cx="542.1" cy="230" r="5" style="fill:none;stroke:var(--accent);stroke-width:1.6"/>
+<text class="val" x="554.1" y="235">1.1834</text>
+<text class="lab" x="238" y="279" text-anchor="end">纯 bf16（去掉主副本）</text>
+<line x1="451.5" x2="509.3" y1="274" y2="274" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="478.8" cy="274" r="6"/>
+<text class="val" x="521.3" y="279">1.1841</text>
+<text class="lab" x="238" y="309" text-anchor="end">fp16 混合（去掉 loss scaling）</text>
+<line x1="381.3" x2="440.6" y1="304" y2="304" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="402.3" cy="304" r="6"/>
+<text class="val" x="452.6" y="309">1.1777</text>
+<text class="tick" x="430" y="356" text-anchor="middle">验证集 bpb，越低越好</text>
+</svg></figure>
+<p><b>基线：</b>fp32 和 fp64 的结果一样，但快 2.8 倍（11.8 秒对 33.4 秒），显存也减半（159 MB 对 299 MB）。fp64 的精度远远超出了训练的需要。tf32 和 fp32 也一样，在这个模型上并不更快。</p>
+<p><b>论文的路线：</b>fp16 和 bf16 混合精度都没有损失，和 fp32 的差距在种子波动以内。fp8 差了 0.008，用 fp8 推理时又差了 0.006。从 loss 曲线看，fp8 从训练一开始就比 fp64 高 0.01 以上，一直到最后，fp8 的尾数只有 3 位，前向本身就算不准。</p>
+<p>奇怪的是，这一组在我们的模型上都比 fp32 慢：fp16 混合 14.0 秒，bf16 混合 12.5 秒，fp8 21.6 秒。原因又是 1.04 讲过的，我们的模型太小，时间全花在启动 kernel 上，而每多一步处理就要多启动 kernel：loss scaling 每步都要检查梯度有没有溢出，autocast 要在 fp32 和 16 位之间来回转，fp8 每次矩阵乘法前都要求最大值、缩放、转格式。显存也几乎没省，只少了约 7%，因为参数、梯度、Adam 状态都还是 fp32，还要多存一份 16 位副本。</p>
+
+<p><b>消融：</b>拿掉 fp32 主副本，纯 bf16 差了 0.008，主副本是必要的。用 bf16 评估和用 fp64 评估同一组权重，只差 0.0005，所以不是前向算不准，而是训练时出了问题：</p>
+<figure style="margin:0 0 6px"><svg class="chart" viewBox="0 0 680 260" role="img" aria-label="纯 bf16 和 bf16 混合精度相对 fp64 的验证集 bpb 差距">
+<line class="grid" x1="54" x2="660" y1="177.8" y2="177.8"/><text class="tick" x="46" y="181.8" text-anchor="end">+0.000</text>
+<line class="grid" x1="54" x2="660" y1="125.0" y2="125.0"/><text class="tick" x="46" y="129.0" text-anchor="end">+0.005</text>
+<line class="grid" x1="54" x2="660" y1="72.2" y2="72.2"/><text class="tick" x="46" y="76.2" text-anchor="end">+0.010</text>
+<text class="tick" x="54.0" y="238" text-anchor="middle">0</text>
+<text class="tick" x="205.5" y="238" text-anchor="middle">1024</text>
+<text class="tick" x="357.0" y="238" text-anchor="middle">2048</text>
+<text class="tick" x="508.5" y="238" text-anchor="middle">3072</text>
+<text class="tick" x="660.0" y="238" text-anchor="middle">4096</text>
+<text class="tick" x="357" y="256" text-anchor="middle">步数</text>
+<polyline points="72.9,184.5 91.9,176.4 110.8,184.9 129.8,179.6 148.7,150.6 167.6,164.4 186.6,146.8 205.5,170.3 224.4,176.9 243.4,180.4 262.3,164.9 281.2,145.0 300.2,142.2 319.1,168.0 338.1,173.5 357.0,166.2 375.9,163.7 394.9,160.1 413.8,176.9 432.8,161.7 451.7,177.3 470.6,177.9 489.6,176.5 508.5,177.9 527.4,166.4 546.4,173.8 565.3,171.2 584.2,172.9 603.2,178.2 622.1,174.6 641.1,174.5 660.0,173.6" fill="none" style="stroke:var(--c1);stroke-width:2"/>
+<text class="lab" x="654.0" y="165.6" text-anchor="end">bf16 混合</text>
+<polyline points="72.9,174.6 91.9,173.8 110.8,166.1 129.8,161.1 148.7,148.6 167.6,149.3 186.6,156.1 205.5,159.4 224.4,156.2 243.4,164.5 262.3,167.3 281.2,148.7 300.2,145.6 319.1,154.8 338.1,160.0 357.0,152.5 375.9,157.5 394.9,146.0 413.8,162.3 432.8,141.5 451.7,166.9 470.6,175.1 489.6,153.3 508.5,160.3 527.4,156.4 546.4,150.8 565.3,156.0 584.2,145.7 603.2,140.9 622.1,123.1 641.1,103.3 660.0,84.1" fill="none" style="stroke:var(--c2);stroke-width:2"/>
+<text class="lab" x="654.0" y="76.1" text-anchor="end">纯 bf16</text>
+<text class="tick" x="58" y="18">比 fp64 高多少（3 个种子平均）</text>
+</svg></figure>
+<p class="cap">纯 bf16 和 bf16 混合精度，各自比 fp64 高多少。</p>
+<p>前 3000 步，纯 bf16 和 fp64 的差距只有 0.003 以内；最后 1000 步，学习率越来越小，差距拉大到 0.010。这正是前面说的舍入：每一步的更新小于 bf16 的间距，被吃掉了，加不到参数上。有主副本的 bf16 混合精度，一直贴着 0。代价换来的是真正的显存减半，纯 bf16 只要 98 MB，因为所有数都是 16 位了。</p>
+<p>拿掉 loss scaling，在我们这里影响不明显。不放大时，矩阵参数的梯度里约 12% 下溢成了 0，放大以后只剩 0.03%；可结果只差 0.0016，两者的种子范围大部分重叠。我们的模型小，梯度规整，下溢掉的只是本来就很小的那部分。</p>
+
+<p id="wide" style="margin-top:22px"><b>加宽模型，只测速度。</b>宽度 48 的模型太小，精度对速度的影响看不出来。所以另写了一个测速脚本，模型和精度的处理都一样，用随机权重，宽度从 48 一直加到 3072，每个组合只测速度。</p>
+<figure style="margin:0 0 18px"><svg class="chart" viewBox="0 0 680 300" role="img" aria-label="不同宽度下各精度每秒的浮点运算量">
+<line class="grid" x1="50" x2="590" y1="260.0" y2="260.0"/><text class="tick" x="42" y="264.0" text-anchor="end">0</text>
+<line class="grid" x1="50" x2="590" y1="178.7" y2="178.7"/><text class="tick" x="42" y="182.7" text-anchor="end">30</text>
+<line class="grid" x1="50" x2="590" y1="97.3" y2="97.3"/><text class="tick" x="42" y="101.3" text-anchor="end">60</text>
+<line class="grid" x1="50" x2="590" y1="16.0" y2="16.0"/><text class="tick" x="42" y="20.0" text-anchor="end">90</text>
+<text class="tick" x="50.0" y="278" text-anchor="middle">48</text>
+<text class="tick" x="140.0" y="278" text-anchor="middle">96</text>
+<text class="tick" x="230.0" y="278" text-anchor="middle">192</text>
+<text class="tick" x="320.0" y="278" text-anchor="middle">384</text>
+<text class="tick" x="410.0" y="278" text-anchor="middle">768</text>
+<text class="tick" x="500.0" y="278" text-anchor="middle">1536</text>
+<text class="tick" x="590.0" y="278" text-anchor="middle">3072</text>
+<text class="tick" x="320" y="296" text-anchor="middle">模型宽度（对数坐标）；纵轴：TFLOPS</text>
+<polyline points="50.0,259.1 140.0,258.4 230.0,257.8 320.0,257.5 410.0,257.3 500.0,257.3 590.0,257.2" fill="none" style="stroke:var(--fg);stroke-width:2"/>
+<text class="lab" x="598.0" y="261.2">fp64 1</text>
+<polyline points="50.0,257.3 140.0,252.3 230.0,237.8 320.0,220.2 410.0,207.2 500.0,197.7 590.0,196.7" fill="none" style="stroke:var(--chart-raw);stroke-width:1.8"/>
+<text class="lab" x="598.0" y="200.7">fp32 23</text>
+<polyline points="50.0,257.3 140.0,252.4 230.0,238.3 320.0,190.7 410.0,139.7 500.0,122.5 590.0,119.7" fill="none" style="stroke:var(--chart-raw);stroke-width:1.8"/>
+<text class="lab" x="598.0" y="123.7">tf32 52</text>
+<polyline points="50.0,257.6 140.0,253.4 230.0,241.2 320.0,200.5 410.0,111.2 500.0,85.9 590.0,68.2" fill="none" style="stroke:var(--chart-raw);stroke-width:1.8"/>
+<text class="lab" x="598.0" y="75.2">bf16 混合 71</text>
+<polyline points="50.0,258.6 140.0,256.2 230.0,249.1 320.0,225.3 410.0,149.1 500.0,81.8 590.0,36.6" fill="none" style="stroke:var(--chart-raw);stroke-width:1.8"/>
+<text class="lab" x="598.0" y="49.6">fp8 82</text>
+<polyline points="50.0,257.3 140.0,252.5 230.0,238.3 320.0,191.5 410.0,71.7 500.0,38.8 590.0,31.6" fill="none" style="stroke:var(--accent);stroke-width:2.2"/>
+<text class="lab" x="598.0" y="29.6">纯 bf16 84</text>
+</svg></figure>
+<p>分成三段。宽度 192 以下，除了 fp64，所有精度都是两三毫秒一步，几乎不随宽度变，时间全花在启动 kernel 上，多启动 kernel 的方案反而更慢。宽度 384 到 768，开始拉开差距，fp32 先跟不上，接着 tf32 和 16 位格式也依次变慢。宽度 1536 以上，各精度都到了自己的上限，大致按"格式越短越快"排好。</p>
+<p>fp64 从宽度 192 起就卡在约 1 TFLOPS，这已经是这块卡 fp64 的上限，放到大一点的模型上是不可行的。fp32 卡在约 23，tf32 到 52，只需要一行设置就翻了一倍多。bf16 混合精度 71，纯 bf16 84，后者快 19%，因为 autocast 每次矩阵乘法前都要把 fp32 的参数转成 bf16 副本。fp8 没有达到预期，只比 bf16 混合快 16%，原因放在最后的"深入"里。</p>
+
+<p>fp16 混合精度生成的故事，和 fp64 训练的模型看不出区别：</p>
+<div class="story">Lucy was so happy and thanked her helping the ball. She climbed up and started to play with her friends. They all had a great day.</div>
+
+<p id="big" style="margin-top:22px">最后补充一点：大模型训练是怎么做的？bf16 混合精度和 fp32 训练效果一样（Kalamkar et al. 2019），是现在大模型训练的标准。fp32 主副本是必要的：Gopher 的附录发现，即使用随机舍入（按距离远近的比例，随机向上或向下取整），bf16 参数也不如保留一份 fp32 主副本。</p>
+<p>不一样的地方主要来自规模。大模型的矩阵足够大，低精度直接带来成倍的加速，我们的模型太小，反而更慢。loss scaling 在我们这里可有可无，大模型用 fp16 时，即使有 loss scaling 也经常发散，BLOOM 早期在 fp16 下训练 104B 的模型就遇到了无法恢复的发散，最后改用 bf16 才解决。fp8 在我们这里损失 0.008，DeepSeek-V3 用更细的缩放，在 671B 的模型上验证了 fp8 训练是可行的。</p>
+
+
+<details class="blk" id="deep"><summary><span class="bn">+</span><span class="bt">深入</span><span class="bd">fp8 为什么没有更快</span></summary>
+<p>单独测矩阵乘法时，fp8 确实快：4096×4096 的矩阵，fp8 是 255 TFLOPS，bf16 是 105，快 2.4 倍。可放到整个训练里，宽度 3072 时只比 bf16 混合精度快 16%，和纯 bf16 差不多。加速被摊薄了，原因有三个：</p>
+<ol class="plain">
+  <li>只有 6 个线性层用了 fp8，lm_head 和注意力仍然是 bf16。</li>
+  <li>每次量化都要先求最大值、再缩放、再转格式，反向还要为转置再存一份。</li>
+  <li>这些步骤各自是一个 kernel，没有和矩阵乘法合并成一个。</li>
+</ol>
+<p>精度上，我们用整个张量一个缩放因子，问题出在离群值上：只要张量里有一个特别大的数，缩放因子就被它定下来，其余的数都被压到很小，挤在 fp8 最粗糙的那一段里。DeepSeek-V3 的做法是分块缩放：激活每 1×128 个数一个缩放因子，权重每 128×128 块一个，离群值只影响自己那一小块；再加上提高矩阵乘法里累加的精度，以及和矩阵乘法融合在一起的 kernel。他们在 671B 的模型上，loss 的相对误差小于 0.25%。</p>
+</details>
+
+
+<div class="nextsec"><a href="1.07.html">上一节：1.07 学习率调度</a> · 下一节：1.09 工程加速（写作中）</div>
+</section>
+</main>
+</div>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。</div></footer>
+</body>
+</html>
