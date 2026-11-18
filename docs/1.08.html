@@ -35,7 +35,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 
 <p>其实模型参数的精度也有讲究，经常听到量化、混合精度等等的词，实际上它们讨论的都是模型参数的数值精度。我们的项目目前一直在用 fp64，这并不主流，它的精度很高，但相比之下计算速度会更慢，存储占用会更多。</p>
 
-<figure style="margin:0" class="small-fig"><svg class="chart" viewBox="0 0 680 260" role="img" aria-label="宽度 3072 时各精度每秒的浮点运算量">
+<figure style="margin:0;max-width:600px" class="small-fig"><svg class="chart" viewBox="0 0 680 260" role="img" aria-label="宽度 3072 时各精度每秒的浮点运算量">
 <text class="lab" x="180" y="22" text-anchor="end">fp64</text>
 <rect class="bar1" x="190" y="6" width="3.6" height="22" rx="3"/>
 <text class="val" x="201.6" y="22">1</text><text class="tick" x="233.6" y="22">每步 2.8 秒</text>
@@ -65,7 +65,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <p id="float">常见的做法是用更小的精度，那都有什么精度呢？先看浮点数是怎么存的。它就像科学计数法 \(6.02 \times 10^{23}\)，由三部分组成：</p>
 <div class="math">\[x = (-1)^{\text{符号}} \times 2^{\text{指数}} \times 1.\underbrace{b_1 b_2 \cdots b_m}_{\text{尾数，}m\text{ 位}}\]</div>
 <p>指数位决定能表示多大、多小的数，也就是范围；尾数位决定有效数字有几位，也就是精度。总位数一定，给指数多一位，尾数就少一位。常见的几种格式：</p>
-<figure style="margin:0 0 16px"><svg class="chart" viewBox="0 0 700 222" role="img" aria-label="各浮点格式的符号位、指数位、尾数位">
+<figure style="margin:0 0 16px;max-width:600px"><svg class="chart" viewBox="0 0 700 222" role="img" aria-label="各浮点格式的符号位、指数位、尾数位">
 <rect x="80" y="4" width="14" height="14" rx="2" style="fill:var(--chart-raw)"/><text class="lab" x="100" y="16">符号</text>
 <rect x="220" y="4" width="14" height="14" rx="2" style="fill:var(--c1)"/><text class="lab" x="240" y="16">指数（范围）</text>
 <rect x="360" y="4" width="14" height="14" rx="2" style="fill:var(--c2)"/><text class="lab" x="380" y="16">尾数（精度）</text>
@@ -300,7 +300,7 @@ y = torch._scaled_mm(xq, wq, scale_a=sx, scale_b=sw, out_dtype=torch.bfloat16)</
 <p>评估做两次。训练过程中，用训练时的精度评估；训练结束后，再把参数转成 fp64，去掉 autocast 和 fp8，重新评估一次。后者只看训练出来的权重好不好，两者之差就是推理时的精度损失。每种设置跑 3 个种子。</p>
 
 <h3 id="r-108">运行结果</h3>
-<figure style="margin:0 0 18px"><svg class="chart" viewBox="0 0 680 362" role="img" aria-label="各精度方案的验证集 bpb">
+<figure style="margin:0 0 18px;max-width:600px"><svg class="chart" viewBox="0 0 680 362" role="img" aria-label="各精度方案的验证集 bpb">
 <circle class="pt" cx="256" cy="12" r="6"/><text class="lab" x="268" y="17">转成 fp64 再评估（横线是 3 个种子的范围）</text>
 <circle cx="256" cy="32" r="5" style="fill:none;stroke:var(--accent);stroke-width:1.6"/><text class="lab" x="268" y="37">用训练时的精度评估</text>
 <line class="grid" x1="20" x2="610" y1="142" y2="142" style="stroke-dasharray:4 4"/>
@@ -348,7 +348,7 @@ y = torch._scaled_mm(xq, wq, scale_a=sx, scale_b=sw, out_dtype=torch.bfloat16)</
 <p>奇怪的是，这一组在我们的模型上都比 fp32 慢：fp16 混合 14.0 秒，bf16 混合 12.5 秒，fp8 21.6 秒。原因又是 1.04 讲过的，我们的模型太小，时间全花在启动 kernel 上，而每多一步处理就要多启动 kernel：loss scaling 每步都要检查梯度有没有溢出，autocast 要在 fp32 和 16 位之间来回转，fp8 每次矩阵乘法前都要求最大值、缩放、转格式。显存也几乎没省，只少了约 7%，因为参数、梯度、Adam 状态都还是 fp32，还要多存一份 16 位副本。</p>
 
 <p><b>消融：</b>拿掉 fp32 主副本，纯 bf16 差了 0.008，主副本是必要的。用 bf16 评估和用 fp64 评估同一组权重，只差 0.0005，所以不是前向算不准，而是训练时出了问题：</p>
-<figure style="margin:0 0 6px"><svg class="chart" viewBox="0 0 680 260" role="img" aria-label="纯 bf16 和 bf16 混合精度相对 fp64 的验证集 bpb 差距">
+<figure style="margin:0 0 6px;max-width:600px"><svg class="chart" viewBox="0 0 680 260" role="img" aria-label="纯 bf16 和 bf16 混合精度相对 fp64 的验证集 bpb 差距">
 <line class="grid" x1="54" x2="660" y1="177.8" y2="177.8"/><text class="tick" x="46" y="181.8" text-anchor="end">+0.000</text>
 <line class="grid" x1="54" x2="660" y1="125.0" y2="125.0"/><text class="tick" x="46" y="129.0" text-anchor="end">+0.005</text>
 <line class="grid" x1="54" x2="660" y1="72.2" y2="72.2"/><text class="tick" x="46" y="76.2" text-anchor="end">+0.010</text>
@@ -369,7 +369,7 @@ y = torch._scaled_mm(xq, wq, scale_a=sx, scale_b=sw, out_dtype=torch.bfloat16)</
 <p>拿掉 loss scaling，在我们这里影响不明显。不放大时，矩阵参数的梯度里约 12% 下溢成了 0，放大以后只剩 0.03%；可结果只差 0.0016，两者的种子范围大部分重叠。我们的模型小，梯度规整，下溢掉的只是本来就很小的那部分。</p>
 
 <p id="wide" style="margin-top:22px"><b>加宽模型，只测速度。</b>宽度 48 的模型太小，精度对速度的影响看不出来。所以另写了一个测速脚本，模型和精度的处理都一样，用随机权重，宽度从 48 一直加到 3072，每个组合只测速度。</p>
-<figure style="margin:0 0 18px"><svg class="chart" viewBox="0 0 680 300" role="img" aria-label="不同宽度下各精度每秒的浮点运算量">
+<figure style="margin:0 0 18px;max-width:600px"><svg class="chart" viewBox="0 0 680 300" role="img" aria-label="不同宽度下各精度每秒的浮点运算量">
 <line class="grid" x1="50" x2="590" y1="260.0" y2="260.0"/><text class="tick" x="42" y="264.0" text-anchor="end">0</text>
 <line class="grid" x1="50" x2="590" y1="178.7" y2="178.7"/><text class="tick" x="42" y="182.7" text-anchor="end">30</text>
 <line class="grid" x1="50" x2="590" y1="97.3" y2="97.3"/><text class="tick" x="42" y="101.3" text-anchor="end">60</text>
