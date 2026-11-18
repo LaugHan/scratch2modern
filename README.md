@@ -8,6 +8,7 @@ From a 200-line GPT to a modern LLM — one change at a time, every step backed 
 [中文](README.md) | [English](README_en.md)
 
 [![stars](https://img.shields.io/github/stars/LaugHan/scratch2modern?style=social)](https://github.com/LaugHan/scratch2modern/stargazers)
+[![license](https://img.shields.io/github/license/LaugHan/scratch2modern)](LICENSE)
 [![在线阅读](https://img.shields.io/badge/在线阅读-laughan.github.io%2Fscratch2modern-9a3b26)](https://laughan.github.io/scratch2modern/)
 
 ### [📖 在线阅读](https://laughan.github.io/scratch2modern/)
@@ -105,6 +106,10 @@ docs/                   # 网站
 ## 致谢
 
 起点代码来自 Andrej Karpathy 的 [microgpt](https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95)。
+
+## 许可证
+
+[MIT](LICENSE)
 
 ---
 

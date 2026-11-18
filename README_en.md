@@ -8,6 +8,7 @@ From a 200-line GPT to a modern LLM — one change at a time, every step backed 
 [中文](README.md) | [English](README_en.md)
 
 [![stars](https://img.shields.io/github/stars/LaugHan/scratch2modern?style=social)](https://github.com/LaugHan/scratch2modern/stargazers)
+[![license](https://img.shields.io/github/license/LaugHan/scratch2modern)](LICENSE)
 [![read online](https://img.shields.io/badge/read_online-laughan.github.io%2Fscratch2modern-9a3b26)](https://laughan.github.io/scratch2modern/)
 
 ### [📖 Read online](https://laughan.github.io/scratch2modern/) (Chinese for now)
@@ -107,6 +108,10 @@ docs/                   # the website
 ## Acknowledgements
 
 The starting code is Andrej Karpathy's [microgpt](https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95).
+
+## License
+
+[MIT](LICENSE)
 
 ---
 
