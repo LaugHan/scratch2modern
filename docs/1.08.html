@@ -31,7 +31,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <section>
 <div class="ch-intro">第一章 · 训练</div>
 <h2>1.08 数值精度</h2>
-<div class="summary"><div><span class="k">这一节</span>数值精度：fp64 到 fp8</div><div><span class="k">结果</span>bf16 混合精度和 fp64 结果一样；宽模型上快几十倍</div><div class="rt">阅读约 7 分钟</div></div>
+<div class="summary"><div><span class="k">这一节</span>数值精度：fp64 到 fp8</div><div><span class="k">结果</span>bf16 混合精度和 fp64 结果一样；宽模型上快几十倍</div></div>
 
 <p>其实模型参数的精度也有讲究，经常听到量化、混合精度等等的词，实际上它们讨论的都是模型参数的数值精度。我们的项目目前一直在用 fp64，这并不主流，它的精度很高，但相比之下计算速度会更慢，存储占用会更多。</p>
 
@@ -416,7 +416,7 @@ y = torch._scaled_mm(xq, wq, scale_a=sx, scale_b=sw, out_dtype=torch.bfloat16)</
 </details>
 
 
-<div class="endcard"><div><div class="nx off"><span class="k">下一节</span>1.09 工程加速（写作中）</div><a class="pv" href="1.07.html">← 上一节：1.07 学习率调度</a></div><a class="gh" href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.08_precision"><span class="k">代码和日志在 GitHub</span>觉得有用，点个 ⭐</a></div>
+<div class="nextsec"><a href="1.07.html">上一节：1.07 学习率调度</a> · 下一节：1.09 工程加速（写作中）</div>
 </section>
 </main>
 </div>

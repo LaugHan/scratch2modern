@@ -27,7 +27,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <section>
 <div class="ch-intro">第一章 · 训练</div>
 <h2>1.02 PyTorch</h2>
-<div class="summary"><div><span class="k">这一节</span>换成 PyTorch 张量</div><div><span class="k">结果</span>每一步的 loss 完全相同，快了约 25 倍</div><div class="rt">阅读约 4 分钟</div></div>
+<div class="summary"><div><span class="k">这一节</span>换成 PyTorch 张量</div><div><span class="k">结果</span>每一步的 loss 完全相同，快了约 25 倍</div></div>
 
 <figure style="margin:0"><svg class="chart" viewBox="0 0 760 260" role="img" aria-label="1.01 和 1.02 的 loss 曲线完全重合，训练时间从 108.8 秒降到 4.3 秒">
 <line class="grid" x1="44" x2="430" y1="172.5" y2="172.5"/><text class="tick" x="36" y="176.5" text-anchor="end">2.5</text>
@@ -219,7 +219,7 @@ torch.set_num_threads(1)</code></pre>
 </div>
 <p id="fast" style="margin-top:18px">最后补充一点：PyTorch 到底快在哪？要注意，两边做的乘法和加法一样多，算术本身一次都没有省，省下的是"调用"的次数。在 microgpt 里，每一次加法、乘法都是一次 Python 调用：新建一个对象，检查类型，记下它从哪来，这些开销比算术本身大得多。训练第一个名字时，前向就要建将近六万个 Value，反向还要再挨个走一遍。PyTorch 把一整个矩阵运算打包成一次调用，里面的几百次乘加在 C++ 里一口气算完，同样这一步，前向加反向一共只有一千六百次左右的调用。调用少了几十倍，时间也就少了 25 倍。</p>
 <p>不过，即使在 PyTorch 里，每次调用也有两三微秒的固定开销，而一个 16×16 的矩阵乘向量，真正算起来只要几十纳秒。所以现在的时间，大部分仍然花在调用上，而不是计算上。</p>
-<div class="endcard"><div><a class="nx" href="1.03.html"><span class="k">下一节</span>1.03 Batch →</a><a class="pv" href="1.01.html">← 上一节：1.01 microgpt</a></div><a class="gh" href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.02_torch"><span class="k">代码和日志在 GitHub</span>觉得有用，点个 ⭐</a></div>
+<div class="nextsec"><a href="1.01.html">上一节：1.01 microgpt</a> · <a href="1.03.html">下一节：1.03 Batch</a></div>
 </section>
 </main>
 </div>

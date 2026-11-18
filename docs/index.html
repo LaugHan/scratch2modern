@@ -28,8 +28,6 @@
     <div class="btns"><a class="btn solid" href="1.01.html">从第一章开始</a><a class="btn" href="https://github.com/LaugHan/scratch2modern">⭐ Star on GitHub</a></div>
   </div>
   <figure style="margin:0">
-    <div class="bignum"><div><b>93.5s → 4.0s</b><span>训练时间</span></div><div><b>2.52 → 1.18</b><span>验证集 bpb</span></div></div>
-    <div class="bigsub">1 层 GPT · 单卡 · 每一步都有对照实验</div>
     <svg class="chart" viewBox="0 0 560 360" role="img" aria-label="第一章：训练时间和验证集 bpb 的变化">
 <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="currentColor" stroke-width="1.5"/></marker></defs>
 <line class="grid" x1="46" x2="546" y1="316.0" y2="316.0"/><text class="tick" x="38" y="320.0" text-anchor="end">1.0</text>
@@ -66,19 +64,8 @@
 
 <div class="sec-title" id="chapters">章节</div>
 <div class="chlist">
-  <div class="row head"><span class="no">第一章</span><h3>训练</h3><p>模型不动，只改怎么训练。</p><span class="st on">已写到 1.08</span></div>
-  <a class="row sec" href="1.01.html"><span class="no">1.01</span><h3>microgpt</h3><p>起点：Karpathy 的 microgpt，200 行纯 Python 的 GPT</p><span class="st">起点 · CPU 上 109 秒</span></a>
-  <a class="row sec" href="1.02.html"><span class="no">1.02</span><h3>PyTorch</h3><p>换成 PyTorch 张量</p><span class="st">快约 25 倍</span></a>
-  <a class="row sec" href="1.03.html"><span class="no">1.03</span><h3>Batch</h3><p>一次喂一批数据（batch），换到 TinyStories</p><span class="st">names 上再快 15 倍</span></a>
-  <a class="row sec" href="1.04.html"><span class="no">1.04</span><h3>GPU</h3><p>把训练搬到 GPU 上</p><span class="st">最多快 82 倍</span></a>
-  <a class="row sec" href="1.05.html"><span class="no">1.05</span><h3>Tokenizer</h3><p>换一种切 token 的方式：BPE</p><span class="st">bpb 2.39 → 1.20</span></a>
-  <a class="row sec" href="1.06.html"><span class="no">1.06</span><h3>优化器</h3><p>手写 6 个优化器：SGD 到 Muon</p><span class="st">Muon 比 Adam 好 0.013</span></a>
-  <a class="row sec" href="1.07.html"><span class="no">1.07</span><h3>学习率调度</h3><p>学习率调度：衰减的形状和 warmup</p><span class="st">衰减比不衰减好 0.07</span></a>
-  <a class="row sec" href="1.08.html"><span class="no">1.08</span><h3>数值精度</h3><p>数值精度：fp64 到 fp8</p><span class="st">bf16 和 fp64 一样准</span></a>
-  <div class="row sec dim"><span class="no">1.09</span><h3>工程加速</h3><p></p><span class="st">写作中</span></div>
-  <div class="row sec dim"><span class="no">1.10</span><h3>训练细节</h3><p></p><span class="st">写作中</span></div>
-  <div class="row sec dim"><span class="no">1.11</span><h3>回顾</h3><p></p><span class="st">写作中</span></div>
-  <div class="row dim"><span class="no">第二章</span><h3>模型结构</h3><p>换到更大的模型和更多样的数据上，对比各种架构改进。</p><span class="st">进行中</span></div>
+  <a class="row" href="1.01.html"><span class="no">第一章</span><h3>训练</h3><p>模型不动，只改怎么训练：PyTorch、batch、GPU、tokenizer、优化器、学习率调度、数值精度、工程加速、训练细节。</p><span class="st on">已写到 1.08</span></a>
+  <div class="row dim"><span class="no">第二章</span><h3>模型结构</h3><p>模型变深、变大以后，结构要怎么改。</p><span class="st">规划中</span></div>
   <div class="row dim"><span class="no">第三章</span><h3>后训练</h3><p>让只会续写的模型听懂指令。</p><span class="st">规划中</span></div>
   <div class="row dim"><span class="no">Infra</span><h3>显存、通信与并行</h3><p>一张卡放不下、算不完的时候怎么办。</p><span class="st">规划中</span></div>
 </div>

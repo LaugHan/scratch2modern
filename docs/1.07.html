@@ -31,7 +31,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <section>
 <div class="ch-intro">第一章 · 训练</div>
 <h2>1.07 学习率调度</h2>
-<div class="summary"><div><span class="k">这一节</span>学习率调度：衰减的形状和 warmup</div><div><span class="k">结果</span>衰减到 0 比不衰减好 0.07，形状影响不大；warmup 几乎没用</div><div class="rt">阅读约 7 分钟</div></div>
+<div class="summary"><div><span class="k">这一节</span>学习率调度：衰减的形状和 warmup</div><div><span class="k">结果</span>衰减到 0 比不衰减好 0.07，形状影响不大；warmup 几乎没用</div></div>
 
 <p>上一节的优化器，决定的是每一步往哪走，以及各个参数之间步长谁大谁小。可整体的步长在训练过程中该怎么变，我们一直用的是线性衰减：从峰值开始，一步步降到 0。为什么要降？降成什么形状？开头要不要先慢慢升上去？这一节就来比一比。</p>
 
@@ -239,7 +239,7 @@ def wsd(step, num_steps, decay_frac=0.2):
 </details>
 
 
-<div class="endcard"><div><a class="nx" href="1.08.html"><span class="k">下一节</span>1.08 数值精度 →</a><a class="pv" href="1.06.html">← 上一节：1.06 优化器</a></div><a class="gh" href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.07_schedule"><span class="k">代码和日志在 GitHub</span>觉得有用，点个 ⭐</a></div>
+<div class="nextsec"><a href="1.06.html">上一节：1.06 优化器</a> · <a href="1.08.html">下一节：1.08 数值精度</a></div>
 </section>
 </main>
 </div>

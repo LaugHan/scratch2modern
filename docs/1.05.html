@@ -27,7 +27,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <section>
 <div class="ch-intro">第一章 · 训练</div>
 <h2>1.05 Tokenizer</h2>
-<div class="summary"><div><span class="k">这一节</span>换一种切 token 的方式：BPE</div><div><span class="k">结果</span>同样的步数，bpb 从 2.39 降到 1.20，降了一半</div><div class="rt">阅读约 4 分钟</div></div>
+<div class="summary"><div><span class="k">这一节</span>换一种切 token 的方式：BPE</div><div><span class="k">结果</span>同样的步数，bpb 从 2.39 降到 1.20，降了一半</div></div>
 
 <p>到目前为止，模型都是一个字符一个 token。前面训练出来的故事还读不通：模型每一步只猜一个字母，一个单词要一个字母一个字母地拼出来，光一个 the 就要连着猜对三次。那能不能换一种切法，让一个 token 装下更多的内容？</p>
 
@@ -178,7 +178,7 @@ def val_bpb():
   </div>
 </div>
 
-<div class="endcard"><div><a class="nx" href="1.06.html"><span class="k">下一节</span>1.06 优化器 →</a><a class="pv" href="1.04.html">← 上一节：1.04 GPU</a></div><a class="gh" href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.05_tokenizer"><span class="k">代码和日志在 GitHub</span>觉得有用，点个 ⭐</a></div>
+<div class="nextsec"><a href="1.04.html">上一节：1.04 GPU</a> · <a href="1.06.html">下一节：1.06 优化器</a></div>
 </section>
 </main>
 </div>

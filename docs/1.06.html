@@ -31,7 +31,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <section>
 <div class="ch-intro">第一章 · 训练</div>
 <h2>1.06 优化器</h2>
-<div class="summary"><div><span class="k">这一节</span>手写 6 个优化器：SGD 到 Muon</div><div><span class="k">结果</span>Muon 1.163 最好，Adam 1.176，SGD 1.319 最差</div><div class="rt">阅读约 8 分钟</div></div>
+<div class="summary"><div><span class="k">这一节</span>手写 6 个优化器：SGD 到 Muon</div><div><span class="k">结果</span>Muon 1.163 最好，Adam 1.176，SGD 1.319 最差</div></div>
 
 <p>前面几节一直在想办法让训练跑得更快，可参数到底怎么更新，用的始终是 microgpt 自带的 Adam，我们没问过为什么是它。反向传播算出来的梯度，只告诉我们往哪个方向改参数，loss 下降得最快。每一步走多远、不同的参数要不要区别对待、以前的梯度要不要用上，这些都由优化器决定。这一节我们手写 6 个优化器，看看它们差在哪里。</p>
 
@@ -402,7 +402,7 @@ adam.step()                         # 其余参数还是交给 Adam</code></pre>
 <p id="big" style="margin-top:22px">最后补充一点：这些结论放到大模型上还成立吗？大体是一致的。SGD 基本不用来训练 Transformer；AdamW 是大模型预训练的默认选择，LLaMA、Chinchilla、DeepSeek-V3 用的都是它；Muon 正在被前沿模型采用，Kimi K2、GLM-4.5、DeepSeek-V4 都换成了它。</p>
 <p>不一致的地方，主要来自规模。weight decay 在我们这里有害，但大模型要训练很久，不加的话权重会越来越大，超出 bf16 这类低精度数能精确表示的范围，所以是必需的。Muon 的额外开销在我们这里有 21%，到了大模型里，矩阵大了，额外的计算不到 1%。至于 Muon 到底能快多少，Moonshot 报告约 2 倍；<a href="https://arxiv.org/abs/2509.02046">Wen et al. (2025)</a> 把 AdamW 认真调好以后再比，只有 1.1 到 1.4 倍，而且模型越大越少。这也说明了，比较优化器时，每个都要各自调好学习率，不然比的就是学习率。</p>
 
-<div class="endcard"><div><a class="nx" href="1.07.html"><span class="k">下一节</span>1.07 学习率调度 →</a><a class="pv" href="1.05.html">← 上一节：1.05 Tokenizer</a></div><a class="gh" href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.06_optimizer"><span class="k">代码和日志在 GitHub</span>觉得有用，点个 ⭐</a></div>
+<div class="nextsec"><a href="1.05.html">上一节：1.05 Tokenizer</a> · <a href="1.07.html">下一节：1.07 学习率调度</a></div>
 </section>
 </main>
 </div>

@@ -27,7 +27,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <section>
 <div class="ch-intro">第一章 · 训练</div>
 <h2>1.04 GPU</h2>
-<div class="summary"><div><span class="k">这一节</span>把训练搬到 GPU 上</div><div><span class="k">结果</span>loss 不变，batch 1 快 1.8 倍，batch 64 快 82 倍</div><div class="rt">阅读约 4 分钟</div></div>
+<div class="summary"><div><span class="k">这一节</span>把训练搬到 GPU 上</div><div><span class="k">结果</span>loss 不变，batch 1 快 1.8 倍，batch 64 快 82 倍</div></div>
 
 <p>上一节在 CPU 上，TinyStories 的 batch 越大反而越慢。就算把内存分配的问题解决掉，CPU 每个 token 也要约 22 微秒，它是真的算不过来了。要算得更快，就得换一种硬件：GPU。</p>
 
@@ -150,7 +150,7 @@ train_time += time.perf_counter() - t0</code></pre></div></div>
 </details>
 
 
-<div class="endcard"><div><a class="nx" href="1.05.html"><span class="k">下一节</span>1.05 Tokenizer →</a><a class="pv" href="1.03.html">← 上一节：1.03 Batch</a></div><a class="gh" href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.04_cuda"><span class="k">代码和日志在 GitHub</span>觉得有用，点个 ⭐</a></div>
+<div class="nextsec"><a href="1.03.html">上一节：1.03 Batch</a> · <a href="1.05.html">下一节：1.05 Tokenizer</a></div>
 </section>
 </main>
 </div>

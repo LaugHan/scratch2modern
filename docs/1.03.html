@@ -27,7 +27,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <section>
 <div class="ch-intro">第一章 · 训练</div>
 <h2>1.03 Batch</h2>
-<div class="summary"><div><span class="k">这一节</span>一次喂一批数据（batch），换到 TinyStories</div><div><span class="k">结果</span>names 上又快了 15 倍；TinyStories 在 CPU 上 batch 反而越大越慢</div><div class="rt">阅读约 5 分钟</div></div>
+<div class="summary"><div><span class="k">这一节</span>一次喂一批数据（batch），换到 TinyStories</div><div><span class="k">结果</span>names 上又快了 15 倍；TinyStories 在 CPU 上 batch 反而越大越慢</div></div>
 
 <p>上一节最后我们发现，时间大部分花在调用上，而不是计算上。现在每次调用只处理一个 token：16 个数进去，16 个数出来。既然每次调用的开销差不多是固定的，那一次多喂一些数据进去，同样的开销就能算更多的东西。这就是 batch。</p>
 
@@ -205,7 +205,7 @@ def get_batch(data, batch_size):
 
 <p id="malloc" style="margin-top:18px">最后补充一点：为什么 TinyStories 上 batch 越大反而越慢？注意力要算每个位置对每个位置的权重，这是一个 B × 4 × 256 × 256 的矩阵，batch 16 时已经超过 32 MB。Linux 上的内存分配器（glibc 的 malloc）遇到这么大的一块，会直接向操作系统要新的内存页，用完马上还回去，下一次再重新要。每次拿到新页，都要先触发缺页中断、把整页清零，这部分开销比计算本身还大。在一个单独的测试里，把这个阈值调大以后，batch 64 每步从 1463 毫秒降到了 403 毫秒。但即便如此，CPU 上每个 token 还是要约 22 微秒，batch 再大也没有帮助：CPU 没有多少调用开销可以摊，它是真的算不过来了。</p>
 
-<div class="endcard"><div><a class="nx" href="1.04.html"><span class="k">下一节</span>1.04 GPU →</a><a class="pv" href="1.02.html">← 上一节：1.02 PyTorch</a></div><a class="gh" href="https://github.com/LaugHan/scratch2modern/tree/main/src/ch1/1.03_batch"><span class="k">代码和日志在 GitHub</span>觉得有用，点个 ⭐</a></div>
+<div class="nextsec"><a href="1.02.html">上一节：1.02 PyTorch</a> · <a href="1.04.html">下一节：1.04 GPU</a></div>
 </section>
 </main>
 </div>
