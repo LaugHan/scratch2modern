@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.10 训练细节 · scratch2modern</title>
+<meta name="description" content="1.10：初始化、weight decay、梯度裁剪、dropout，一项一项试。">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="1.10 训练细节 · scratch2modern">
+<meta property="og:description" content="1.10：初始化、weight decay、梯度裁剪、dropout，一项一项试。">
+<meta property="og:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://laughan.github.io/scratch2modern/assets/og.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script>
+addEventListener('DOMContentLoaded', () => { if (window.hljs) document.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el)); });
+function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.open = open); }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+<style>.math{overflow-x:auto;overflow-y:hidden;margin:6px 0 14px}</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="./">scratch2modern</a><nav><a href="./#chapters">章节</a><a class="gh" href="https://github.com/LaugHan/scratch2modern" aria-label="在 GitHub 上 Star"><img src="https://img.shields.io/github/stars/LaugHan/scratch2modern?style=social&amp;label=Star" alt="GitHub Star" height="20"></a></nav></div></header>
+<div class="wrap layout">
+<aside class="side" id="side" data-cur="1.10"><ol class="subs" hidden><li><a href="#init">初始化</a></li><li><a href="#wd">weight decay</a></li><li><a href="#clip">梯度裁剪</a></li><li><a href="#dropout">dropout</a></li><li><a href="#overfit">让模型过拟合</a></li><li><a href="#big">大模型里</a></li><li><a href="#deep">深入</a></li></ol></aside><script src="toc.js"></script>
+<main class="content">
+<section>
+<div class="ch-intro">第一章 · 训练</div>
+<h2>1.10 训练细节</h2>
+<div class="summary"><div><span class="k">这一节</span>训练细节：初始化、weight decay、梯度裁剪、dropout</div><div><span class="k">结果</span>几乎都不比基线好；数据少到过拟合时，weight decay 好 0.029</div></div>
+
+<p>这一节讲的是一些零碎的点。打开大模型的训练配置，除了优化器、学习率、精度这些大的选择，总还有一组小参数：初始化的标准差、weight decay、梯度裁剪的上限、dropout 的概率。前面我们一直没有关注它们，但它们还是有可能影响训练。这一节就一项一项看：每一项要解决什么问题，在我们的模型上有没有用。</p>
+
+<figure style="margin:0 0 0px;max-width:600px"><svg class="chart" viewBox="0 0 680 538" role="img" aria-label="四项训练细节各种做法的验证集 bpb">
+<line class="grid" x1="241.2" x2="241.2" y1="10" y2="498"/><text class="tick" x="241.2" y="514" text-anchor="middle">1.17</text>
+<line class="grid" x1="343.7" x2="343.7" y1="10" y2="498"/><text class="tick" x="343.7" y="514" text-anchor="middle">1.18</text>
+<line class="grid" x1="446.2" x2="446.2" y1="10" y2="498"/><text class="tick" x="446.2" y="514" text-anchor="middle">1.19</text>
+<line class="grid" x1="548.7" x2="548.7" y1="10" y2="498"/><text class="tick" x="548.7" y="514" text-anchor="middle">1.20</text>
+<text class="lab" x="20" y="24" style="fill:var(--fg);font-weight:600">初始化</text>
+<text class="lab" x="178" y="47" text-anchor="end">0.08（基线）</text>
+<line x1="282.5" x2="305.6" y1="42" y2="42" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="293.8" cy="42" r="5.5"/>
+<text class="val" x="315.6" y="47">1.1751</text>
+<text class="lab" x="178" y="71" text-anchor="end">0.02</text>
+<line x1="255.3" x2="330.3" y1="66" y2="66" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="297.6" cy="66" r="5.5"/>
+<text class="val" x="340.3" y="71">1.1755</text>
+<text class="lab" x="178" y="95" text-anchor="end">Xavier</text>
+<line x1="264.5" x2="345.4" y1="90" y2="90" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="309.3" cy="90" r="5.5"/>
+<text class="val" x="355.4" y="95">1.1766</text>
+<text class="lab" x="178" y="119" text-anchor="end">Kaiming</text>
+<line x1="372.3" x2="429.3" y1="114" y2="114" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="409.5" cy="114" r="5.5"/>
+<text class="val" x="439.3" y="119">1.1864</text>
+<text class="lab" x="178" y="143" text-anchor="end">0.02 + 输出层置零</text>
+<line x1="306.8" x2="382.5" y1="138" y2="138" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="341.3" cy="138" r="5.5"/>
+<text class="val" x="392.5" y="143">1.1798</text>
+<text class="lab" x="178" y="167" text-anchor="end">全零</text>
+<text class="val" x="606" y="167" text-anchor="end">→ 3.16</text>
+<line class="grid" x1="20" x2="660" y1="178" y2="178" style="stroke-dasharray:4 4"/>
+<text class="lab" x="20" y="202" style="fill:var(--fg);font-weight:600">weight decay</text>
+<text class="lab" x="178" y="225" text-anchor="end">不加（基线）</text>
+<line x1="282.5" x2="305.6" y1="220" y2="220" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="293.8" cy="220" r="5.5"/>
+<text class="val" x="315.6" y="225">1.1751</text>
+<text class="lab" x="178" y="249" text-anchor="end">AdamW 0.1</text>
+<line x1="316.3" x2="407.4" y1="244" y2="244" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="356.8" cy="244" r="5.5"/>
+<text class="val" x="417.4" y="249">1.1813</text>
+<text class="lab" x="178" y="273" text-anchor="end">AdamW，embedding 不加</text>
+<line x1="343.8" x2="405.9" y1="268" y2="268" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="371.9" cy="268" r="5.5"/>
+<text class="val" x="415.9" y="273">1.1827</text>
+<text class="lab" x="178" y="297" text-anchor="end">L2 0.1</text>
+<text class="val" x="606" y="297" text-anchor="end">→ 2.42</text>
+<line class="grid" x1="20" x2="660" y1="308" y2="308" style="stroke-dasharray:4 4"/>
+<text class="lab" x="20" y="332" style="fill:var(--fg);font-weight:600">梯度裁剪</text>
+<text class="lab" x="178" y="355" text-anchor="end">不裁剪（基线）</text>
+<line x1="282.5" x2="305.6" y1="350" y2="350" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="293.8" cy="350" r="5.5"/>
+<text class="val" x="315.6" y="355">1.1751</text>
+<text class="lab" x="178" y="379" text-anchor="end">裁到 1.0</text>
+<line x1="301.2" x2="332.9" y1="374" y2="374" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="315.4" cy="374" r="5.5"/>
+<text class="val" x="342.9" y="379">1.1772</text>
+<line class="grid" x1="20" x2="660" y1="390" y2="390" style="stroke-dasharray:4 4"/>
+<text class="lab" x="20" y="414" style="fill:var(--fg);font-weight:600">dropout</text>
+<text class="lab" x="178" y="437" text-anchor="end">0（基线）</text>
+<line x1="282.5" x2="305.6" y1="432" y2="432" style="stroke:var(--accent);stroke-width:2"/>
+<circle class="pt" cx="293.8" cy="432" r="5.5"/>
+<text class="val" x="315.6" y="437">1.1751</text>
+<text class="lab" x="178" y="461" text-anchor="end">0.1</text>
+<text class="val" x="606" y="461" text-anchor="end">→ 1.30</text>
+<text class="lab" x="178" y="485" text-anchor="end">后半段才开 0.1</text>
+<text class="val" x="606" y="485" text-anchor="end">→ 1.29</text>
+<line x1="293.8" x2="293.8" y1="10" y2="498" class="ref"/>
+<text class="tick" x="395" y="532" text-anchor="middle">验证集 bpb（点是 3 个种子平均，横线是范围；虚线是基线；→ 表示超出范围）</text>
+</svg></figure>
+<p class="cap">每次只改一项，其余和基线一样。几乎没有一种做法比基线更好。</p>
+
+<p>基线是 1.09 打开全部加速以后的配置：bpe1024，宽度 48，上下文 256，batch 16，4096 步，Adam 学习率 0.01 线性衰减，bf16 混合精度，初始化 N(0, 0.08)，不加 weight decay，不裁剪，不加 dropout。每种做法跑 3 个种子。</p>
+<details class="blk" open id="init"><summary><span class="bn">1</span><span class="bt">初始化</span><span class="bd">训练开始时参数取什么值</span></summary>
+<p>参数在训练开始时取什么值。最直接的想法是全部设成 0，但这样训练不起来：同一层的神经元初始值一样，输出一样，梯度一样，更新以后还是一样，永远像同一个神经元。在我们的模型里更糟，embedding 是 0，后面每一层的输入都是 0，所有梯度都是 0，参数一步都动不了。</p>
+<p>所以要随机，通常从正态分布 \(N(0, \sigma^2)\) 里取，问题是 \(\sigma\) 取多大。看一个线性层 \(y = Wx\)，输出的每个元素是 fan_in 个乘积加起来的（fan_in 就是输入的维度，fan_out 是输出的维度）。如果 \(x\) 的每个元素方差是 1：</p>
+<div class="math">\[y_i = \sum_{j=1}^{\text{fan\_in}} W_{ij}\,x_j \quad\Rightarrow\quad \mathrm{Var}(y_i) = \text{fan\_in}\cdot\sigma^2\]</div>
+<p>\(\sigma\) 太大，每过一层方差就放大一次，层数一多就爆炸；太小，信号和梯度逐层消失。按这个思路推出来的有两种：</p>
+<div class="math">\[\sigma_{\text{Xavier}} = \sqrt{\frac{2}{\text{fan\_in} + \text{fan\_out}}}, \qquad \sigma_{\text{Kaiming}} = \sqrt{\frac{2}{\text{fan\_in}}}\]</div>
+<ol class="plain">
+  <li>Xavier（Glorot &amp; Bengio 2010）：前向要求 \(\sigma^2 = 1/\text{fan\_in}\)，反向要求 \(\sigma^2 = 1/\text{fan\_out}\)，两者取折中。</li>
+  <li>Kaiming（He et al. 2015）：只看前向。ReLU 会把一半的值变成 0，方差减半，所以乘 2 补回来。</li>
+</ol>
+<p>GPT-1 没有用这两种，而是直接取了一个固定的 0.02，理由是"模型里到处都有 layernorm，简单的 N(0, 0.02) 就够了"：归一化每一层都会把信号拉回固定的大小，逐层变大变小就不那么要紧了。之后 GPT-2、nanoGPT、Megatron-LM、OLMo 2 一路沿用 0.02。我们一直用的 0.08 来自 microgpt，也属于固定常数这一类。还有一种做法是把残差分支的输出层初始化为 0，放在最后的"深入"里。</p>
+<pre class="solo"><code class="language-python">def init_std(name, nout, nin):  # nin 就是 fan_in，nout 是 fan_out
+    if init == &#x27;xavier&#x27;:
+        return math.sqrt(2 / (nin + nout))
+    if init == &#x27;kaiming&#x27;:
+        return math.sqrt(2 / nin)
+    if init == &#x27;zero_proj&#x27;:     # 残差分支的输出层置零，其余 0.02
+        return 0.0 if name.endswith((&#x27;attn_wo&#x27;, &#x27;mlp_fc2&#x27;)) else 0.02
+    return float(init)          # 固定常数，如 0.02、0.08</code></pre>
+<p>48×48 的矩阵，Xavier 算出来是 0.14，Kaiming 是 0.20。σ 差了 10 倍，所以每种初始化各扫 3 个学习率，在最好的那个上跑 3 个种子。</p>
+<figure style="margin:0 0 16px;max-width:600px"><svg class="chart" viewBox="0 0 680 260" role="img" aria-label="不同初始化前 1024 步的验证集 bpb">
+<line class="grid" x1="50" x2="570" y1="220.0" y2="220.0"/><text class="tick" x="42" y="224.0" text-anchor="end">1</text>
+<line class="grid" x1="50" x2="570" y1="168.0" y2="168.0"/><text class="tick" x="42" y="172.0" text-anchor="end">2</text>
+<line class="grid" x1="50" x2="570" y1="116.0" y2="116.0"/><text class="tick" x="42" y="120.0" text-anchor="end">3</text>
+<line class="grid" x1="50" x2="570" y1="64.0" y2="64.0"/><text class="tick" x="42" y="68.0" text-anchor="end">4</text>
+<line class="grid" x1="50" x2="570" y1="12.0" y2="12.0"/><text class="tick" x="42" y="16.0" text-anchor="end">5</text>
+<text class="tick" x="50.0" y="238" text-anchor="middle">0</text>
+<text class="tick" x="180.0" y="238" text-anchor="middle">256</text>
+<text class="tick" x="310.0" y="238" text-anchor="middle">512</text>
+<text class="tick" x="440.0" y="238" text-anchor="middle">768</text>
+<text class="tick" x="570.0" y="238" text-anchor="middle">1024</text>
+<text class="tick" x="310" y="256" text-anchor="middle">步数（前 1024 步）；纵轴：验证集 bpb</text>
+<polyline points="50.0,107.6 115.0,107.6 180.0,107.6 245.0,107.6 310.0,107.6 375.0,107.6 440.0,107.6 505.0,107.6 570.0,107.6" fill="none" style="stroke:var(--c2);stroke-width:2.2"/>
+<text class="lab" x="576" y="111.6">全零</text>
+<polyline points="50.0,19.7 115.0,184.4 180.0,189.5 245.0,193.2 310.0,195.6 375.0,197.3 440.0,198.3 505.0,199.9 570.0,200.7" fill="none" style="stroke:var(--c1);stroke-width:2.2"/>
+<text class="lab" x="58.0" y="13.7">Kaiming，开头 4.85</text>
+<polyline points="50.0,106.1 115.0,186.5 180.0,191.3 245.0,195.0 310.0,197.4 375.0,199.0 440.0,200.1 505.0,201.5 570.0,202.2" fill="none" style="stroke:var(--chart-raw);stroke-width:1.6"/>
+<polyline points="50.0,107.4 115.0,185.5 180.0,188.9 245.0,192.9 310.0,195.8 375.0,197.8 440.0,199.3 505.0,200.8 570.0,201.6" fill="none" style="stroke:var(--chart-raw);stroke-width:1.6"/>
+<polyline points="50.0,103.3 115.0,186.7 180.0,191.4 245.0,194.9 310.0,197.4 375.0,199.2 440.0,200.3 505.0,201.6 570.0,202.6" fill="none" style="stroke:var(--fg);stroke-width:2.2"/>
+<text class="lab" x="576" y="198.2">其余三种</text><text class="lab" x="576" y="214.2">几乎重合</text>
+</svg></figure>
+<p>全零从头到尾停在 3.16，这正是对 1024 个 token 均匀瞎猜的水平。Xavier、0.02、0.08 三者打平，最佳学习率也都是 0.01，σ 相差 7 倍，结果却一样，这就是 GPT-1 那句话的意思。Kaiming 差了 0.011，它的 σ 最大，一开始的 bpb 是 4.85，比瞎猜还差：lm_head 太大，一开始就很自信地猜错，要先花一段时间纠正回来。</p>
+</details>
+<details class="blk" open id="wd"><summary><span class="bn">2</span><span class="bt">weight decay</span><span class="bd">每步把参数往 0 拉一点</span></summary>
+<p>每一步把参数往 0 拉一点，防止参数无限变大。参数越大，模型越容易记住训练数据里的细节和噪声；在大模型的长时间训练里，参数还可能大到超出 bf16 能精确表示的范围。最经典的做法是 L2 正则，在 loss 上加一项参数的平方和：</p>
+<div class="math">\[L&#x27; = L + \frac{\lambda}{2}\lVert\theta\rVert^2 \quad\Rightarrow\quad \nabla L&#x27; = \nabla L + \lambda\theta\]</div>
+<p>梯度里多出一项 \(\lambda\theta\)。对 SGD 来说，这等价于每步把参数乘以 \(1-\eta\lambda\)，所以叫权重衰减。但在 Adam 里出了问题，\(\lambda\theta\) 加进梯度以后，会和梯度一起被 \(\sqrt{\hat v}\) 除掉：</p>
+<div class="math">\[\theta \leftarrow \theta - \eta\,\frac{\hat m}{\sqrt{\hat v}+\epsilon}, \qquad \text{其中 } \hat m, \hat v \text{ 都由 } \nabla L + \lambda\theta \text{ 算出}\]</div>
+<p>梯度大的参数，\(\sqrt{\hat v}\) 大，被拉得反而少；梯度小的参数，被拉得多。AdamW（Loshchilov &amp; Hutter 2019）的修正是把它从梯度里拿出来，单独做：</p>
+<div class="math">\[\theta \leftarrow \theta - \eta\lambda\,\theta - \eta\,\frac{\hat m}{\sqrt{\hat v}+\epsilon}, \qquad \hat m, \hat v \text{ 只由 } \nabla L \text{ 算出}\]</div>
+<p>\(\lambda = 0.1\) 是大模型的主流取值，GPT-3、LLaMA、DeepSeek-V3 都是 AdamW 0.1。OLMo 2 还把 embedding 排除在外：embedding 被拉得太小，前几层的梯度就会变大，训练不稳定。</p>
+<pre class="solo"><code class="language-python">torch.optim.Adam(params, lr=0.01, weight_decay=0.1)   # Adam 的 weight_decay 是 L2：加进梯度
+torch.optim.AdamW(params, lr=0.01, weight_decay=0.1)  # AdamW：和梯度分开，单独做
+
+# embedding 不加 weight decay：分成两组参数
+groups = [{&#x27;params&#x27;: [wte, wpe], &#x27;weight_decay&#x27;: 0.0},
+          {&#x27;params&#x27;: 其余参数,    &#x27;weight_decay&#x27;: 0.1}]</code></pre>
+<p>结果：L2 0.1 用在 Adam 上，完全训练失败，bpb 2.42。算一下就明白：参数大约 0.08，L2 往梯度里加的是 0.008；真正的梯度平摊到 13.8 万个参数上，每个只有约 0.001。L2 那一项比真梯度大好几倍，Adam 再把它归一化，变成每一步都以满学习率把参数往 0 拉。这正是 AdamW 要解决的问题被放大到了极致。AdamW 两种做法都比不加略差（0.006、0.008），原因放到后面"让模型过拟合"里说。</p>
+</details>
+<details class="blk" open id="clip"><summary><span class="bn">3</span><span class="bt">梯度裁剪</span><span class="bd">梯度太大时整体缩短</span></summary>
+<p>偶尔会有某一步的梯度特别大，比如遇到一个不寻常的 batch。按这样的梯度走一步，参数被推得很远，loss 突然飙升，甚至直接发散。梯度裁剪（Pascanu et al. 2013）把所有参数的梯度拼成一个长向量，算它的总长度，超过上限 \(c\) 时整体按比例缩小：</p>
+<div class="math">\[g \leftarrow g \cdot \min\Big(1,\ \frac{c}{\lVert g\rVert}\Big), \qquad \lVert g\rVert = \sqrt{\textstyle\sum_i g_i^2}\]</div>
+<figure style="margin:0 0 8px;max-width:600px"><svg class="chart" viewBox="0 0 680 200" role="img" aria-label="按总长度裁剪：梯度方向不变，长度缩到上限">
+<defs><marker id="a10" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:context-stroke"/></marker></defs>
+<path d="M90,170 A110,110 0 0 1 310,170" style="fill:none;stroke:var(--muted);stroke-dasharray:4 4"/>
+<text class="tick" x="86" y="174" text-anchor="end">长度 = c</text>
+<line x1="200" y1="170" x2="297.5" y2="30.7" style="stroke:var(--chart-raw);stroke-width:2.5" marker-end="url(#a10)"/>
+<line x1="200" y1="170" x2="263.1" y2="79.9" style="stroke:var(--accent);stroke-width:2.5" marker-end="url(#a10)"/>
+<text class="lab" x="305.5" y="34.7">原来的梯度 g，太长</text>
+<text class="lab" x="251.1" y="83.9" text-anchor="end" style="fill:var(--accent)">裁剪后：方向不变，长度 = c</text>
+<circle cx="200" cy="170" r="3" style="fill:var(--fg)"/>
+<text class="tick" x="440" y="70">没超过 c 的梯度原样不动；</text><text class="tick" x="440" y="90">超过了，就整体按比例缩短，</text><text class="tick" x="440" y="110">所有参数的梯度一起缩。</text>
+</svg></figure>
+<p>方向不变，只是步子变小。另一种逐个值截断的做法会改变各分量之间的比例，也就改变了方向，这里不测。\(c = 1.0\) 几乎是所有大模型的统一选择：GPT-3、LLaMA、PaLM、DeepSeek-V3、OLMo 2。</p>
+<pre class="solo"><code class="language-python">norm = torch.nn.utils.clip_grad_norm_(params, 1.0)  # 返回裁剪前的总长度</code></pre>
+<p>我们在学习率 0.01 和 0.04 下各比一次。1.07 里学习率 0.04 会中途发散，看裁剪能不能救回来。不裁剪时，梯度的总长度是这样的：</p>
+<figure style="margin:0 0 16px;max-width:600px"><svg class="chart" viewBox="0 0 680 260" role="img" aria-label="不裁剪时梯度总长度随步数的变化">
+<line class="grid" x1="50" x2="550" y1="220.0" y2="220.0"/><text class="tick" x="42" y="224.0" text-anchor="end">0.2</text>
+<line class="grid" x1="50" x2="550" y1="171.7" y2="171.7"/><text class="tick" x="42" y="175.7" text-anchor="end">0.5</text>
+<line class="grid" x1="50" x2="550" y1="135.2" y2="135.2"/><text class="tick" x="42" y="139.2" text-anchor="end">1</text>
+<line class="grid" x1="50" x2="550" y1="98.8" y2="98.8"/><text class="tick" x="42" y="102.8" text-anchor="end">2</text>
+<line class="grid" x1="50" x2="550" y1="50.5" y2="50.5"/><text class="tick" x="42" y="54.5" text-anchor="end">5</text>
+<line class="grid" x1="50" x2="550" y1="14.0" y2="14.0"/><text class="tick" x="42" y="18.0" text-anchor="end">10</text>
+<line class="ref" x1="50" x2="550" y1="135.2" y2="135.2"/><text class="lab" x="556" y="139.2" style="fill:var(--accent)">裁剪上限 1.0</text>
+<text class="tick" x="50.0" y="238" text-anchor="middle">0</text>
+<text class="tick" x="175.0" y="238" text-anchor="middle">1024</text>
+<text class="tick" x="300.0" y="238" text-anchor="middle">2048</text>
+<text class="tick" x="425.0" y="238" text-anchor="middle">3072</text>
+<text class="tick" x="550.0" y="238" text-anchor="middle">4096</text>
+<text class="tick" x="300" y="256" text-anchor="middle">步数；纵轴：梯度总长度（对数坐标），实线是每 128 步平均，虚线是最大值</text>
+<polyline points="65.6,185.6 81.2,192.1 96.9,188.5 112.5,185.2 128.1,182.4 143.8,179.7 159.4,177.1 175.0,177.1 190.6,175.6 206.2,175.3 221.9,174.6 237.5,174.4 253.1,173.9 268.8,173.4 284.4,172.3 300.0,172.6 315.6,171.5 331.2,172.6 346.9,171.3 362.5,171.0 378.1,170.9 393.8,170.0 409.4,170.1 425.0,170.3 440.6,169.6 456.2,169.4 471.9,169.4 487.5,169.7 503.1,169.3 518.8,169.9 534.4,170.6 550.0,171.1" fill="none" style="stroke:var(--c1);stroke-width:2"/>
+<polyline points="65.6,103.8 81.2,181.0 96.9,159.0 112.5,172.8 128.1,160.1 143.8,160.3 159.4,152.1 175.0,154.0 190.6,161.6 206.2,161.1 221.9,159.5 237.5,160.8 253.1,160.2 268.8,159.3 284.4,156.7 300.0,156.3 315.6,152.6 331.2,163.3 346.9,157.0 362.5,157.6 378.1,161.5 393.8,159.3 409.4,157.0 425.0,161.9 440.6,161.3 456.2,154.3 471.9,154.5 487.5,160.8 503.1,162.3 518.8,157.3 534.4,162.3 550.0,160.0" fill="none" style="stroke:var(--c1);stroke-width:1.4;stroke-dasharray:4 3"/>
+<text class="lab" x="556" y="175.1">学习率 0.01</text>
+<polyline points="65.6,187.0 81.2,200.8 96.9,191.2 112.5,180.8 128.1,173.1 143.8,168.4 159.4,166.5 175.0,164.3 190.6,160.6 206.2,161.3 221.9,157.4 237.5,159.1 253.1,157.9 268.8,160.3 284.4,157.8 300.0,159.6 315.6,158.0 331.2,158.9 346.9,161.1 362.5,161.4 378.1,161.4 393.8,163.0 409.4,162.7 425.0,163.0 440.6,165.8 456.2,166.4 471.9,166.8 487.5,169.3 503.1,171.6" fill="none" style="stroke:var(--c2);stroke-width:2"/>
+<polyline points="65.6,68.6 81.2,178.6 96.9,171.0 112.5,154.2 128.1,149.2 143.8,142.8 159.4,147.8 175.0,139.0 190.6,129.3 206.2,147.0 221.9,129.9 237.5,135.9 253.1,145.7 268.8,138.3 284.4,135.5 300.0,144.3 315.6,139.9 331.2,138.4 346.9,146.6 362.5,144.6 378.1,145.0 393.8,144.2 409.4,140.1 425.0,147.7 440.6,152.8 456.2,148.3 471.9,148.9 487.5,154.7 503.1,156.8" fill="none" style="stroke:var(--c2);stroke-width:1.4;stroke-dasharray:4 3"/>
+<text class="lab" x="509.1" y="163.6" style="fill:var(--c2)">× 发散</text>
+<text class="lab" x="73.6" y="72.6">学习率 0.04</text>
+</svg></figure>
+<p>学习率 0.01 时，梯度的总长度平时只有 0.3 到 0.6，碰不到 1.0，只在训练开头触发过一次，裁不裁结果一样（1.1751 对 1.1772）。学习率 0.04 时，开头的梯度能冲到 3 到 6。不裁剪时 3 个种子全部发散，2 个在前 128 步，图上这一个撑到了第 3800 步左右；裁剪救回了 2 个，但结果是 1.222，远不如学习率 0.01，还有 1 个照样发散。所以裁剪是防偶尔尖峰的保险，不能让一个本来就太大的学习率变得好用。</p>
+</details>
+<details class="blk" open id="dropout"><summary><span class="bn">4</span><span class="bt">dropout</span><span class="bd">训练时随机丢掉一部分</span></summary>
+<p>训练时以概率 \(p\) 随机把一部分激活置成 0，剩下的放大，保持期望不变；评估时不丢：</p>
+<div class="math">\[\tilde x_i = \frac{m_i\, x_i}{1-p}, \qquad m_i = \begin{cases} 0 &amp; \text{概率 } p \\ 1 &amp; \text{概率 } 1-p \end{cases}\]</div>
+<p>每一步都像在训练一个随机缩小的子网络，模型不能依赖任何一个特定的神经元，用来防止死记训练数据，也就是过拟合：在训练集上很好，在新数据上变差。GPT-1、GPT-2 在三个地方用 0.1 的 dropout，我们照这个位置加：</p>
+<pre class="solo"><code class="language-python">x = F.dropout(tok_emb + pos_emb, p_drop)                                     # embedding 之后
+x_attn = F.scaled_dot_product_attention(q, k, v, is_causal=True, dropout_p=p_drop)  # 注意力权重上
+x = F.dropout(linear(x_attn, state_dict[&#x27;attn_wo&#x27;]), p_drop)                 # 子层的输出上</code></pre>
+<p>我们的数据过了约 2.7 遍，Xue et al. (2023) 发现数据要重复看很多遍时，dropout 有效，而且可以只在训练后期打开，所以也测这种做法。为了看有没有过拟合，我们在训练集上取了和验证集同样多的固定窗口，用同样的方式评估：</p>
+<figure style="margin:0 0 16px;max-width:600px"><svg class="chart" viewBox="0 0 680 260" role="img" aria-label="dropout 三种做法在训练集和验证集上的 bpb">
+<line class="grid" x1="50" x2="550" y1="194.2" y2="194.2"/><text class="tick" x="42" y="198.2" text-anchor="end">1.2</text>
+<line class="grid" x1="50" x2="550" y1="142.7" y2="142.7"/><text class="tick" x="42" y="146.7" text-anchor="end">1.3</text>
+<line class="grid" x1="50" x2="550" y1="91.3" y2="91.3"/><text class="tick" x="42" y="95.3" text-anchor="end">1.4</text>
+<line class="grid" x1="50" x2="550" y1="39.8" y2="39.8"/><text class="tick" x="42" y="43.8" text-anchor="end">1.5</text>
+<text class="tick" x="50.0" y="238" text-anchor="middle">0</text>
+<text class="tick" x="175.0" y="238" text-anchor="middle">1024</text>
+<text class="tick" x="300.0" y="238" text-anchor="middle">2048</text>
+<text class="tick" x="425.0" y="238" text-anchor="middle">3072</text>
+<text class="tick" x="550.0" y="238" text-anchor="middle">4096</text>
+<text class="tick" x="300" y="256" text-anchor="middle">步数；实线是验证集，虚线是训练集（种子 42）</text>
+<polyline points="81.2,14.2 96.9,48.2 112.5,73.6 128.1,90.8 143.8,102.4 159.4,114.8 175.0,124.7 190.6,129.6 206.2,135.5 221.9,141.9 237.5,146.9 253.1,152.2 268.8,154.6 284.4,161.2 300.0,162.5 315.6,167.0 331.2,168.9 346.9,174.3 362.5,176.0 378.1,180.0 393.8,184.0 409.4,186.6 425.0,189.5 440.6,191.6 456.2,194.7 471.9,197.1 487.5,199.3 503.1,201.7 518.8,203.9 534.4,206.0 550.0,207.1" fill="none" style="stroke:var(--fg);stroke-width:1.8"/>
+<polyline points="81.2,14.0 96.9,43.3 112.5,69.3 128.1,87.1 143.8,101.4 159.4,113.4 175.0,123.7 190.6,126.8 206.2,133.4 221.9,139.9 237.5,144.0 253.1,151.6 268.8,155.1 284.4,159.9 300.0,162.2 315.6,165.7 331.2,168.0 346.9,174.6 362.5,176.4 378.1,181.1 393.8,183.1 409.4,186.6 425.0,188.9 440.6,191.1 456.2,193.9 471.9,196.8 487.5,199.2 503.1,201.5 518.8,204.1 534.4,206.0 550.0,207.0" fill="none" style="stroke:var(--fg);stroke-width:1.8;stroke-dasharray:4 3"/>
+<text class="lab" x="556" y="211.1">不加</text>
+<polyline points="81.2,14.1 96.9,48.4 112.5,73.4 128.1,89.5 143.8,101.3 159.4,114.5 175.0,123.2 190.6,129.9 206.2,134.9 221.9,141.8 237.5,146.7 253.1,152.2 268.8,155.3 284.4,160.6 300.0,159.8 315.6,118.9 331.2,120.3 346.9,122.0 362.5,124.0 378.1,125.2 393.8,127.9 409.4,129.6 425.0,131.4 440.6,132.6 456.2,134.9 471.9,136.1 487.5,138.3 503.1,139.0 518.8,140.7 534.4,142.2 550.0,143.0" fill="none" style="stroke:var(--c1);stroke-width:1.8"/>
+<polyline points="81.2,14.0 96.9,43.5 112.5,69.0 128.1,85.5 143.8,99.7 159.4,113.0 175.0,122.1 190.6,127.1 206.2,133.3 221.9,138.5 237.5,144.0 253.1,152.3 268.8,154.5 284.4,159.5 300.0,160.5 315.6,115.5 331.2,116.5 346.9,119.9 362.5,120.9 378.1,123.0 393.8,124.2 409.4,126.9 425.0,128.2 440.6,129.8 456.2,131.9 471.9,133.3 487.5,135.3 503.1,136.2 518.8,137.8 534.4,139.2 550.0,140.1" fill="none" style="stroke:var(--c1);stroke-width:1.8;stroke-dasharray:4 3"/>
+<text class="lab" x="556" y="139.0">后半段才开 0.1</text>
+<polyline points="81.2,14.0 96.9,28.4 112.5,43.0 128.1,55.8 143.8,63.9 159.4,72.6 175.0,76.6 190.6,82.5 206.2,87.1 221.9,92.4 237.5,95.5 253.1,98.4 268.8,102.8 284.4,106.7 300.0,108.3 315.6,113.1 331.2,114.9 346.9,118.9 362.5,121.7 378.1,123.4 393.8,126.8 409.4,128.8 425.0,131.0 440.6,133.5 456.2,135.7 471.9,137.0 487.5,139.4 503.1,140.6 518.8,142.2 534.4,143.5 550.0,144.3" fill="none" style="stroke:var(--c2);stroke-width:1.8"/>
+<polyline points="81.2,14.0 96.9,23.7 112.5,38.1 128.1,50.0 143.8,61.4 159.4,69.2 175.0,73.3 190.6,78.8 206.2,83.4 221.9,87.1 237.5,90.2 253.1,95.4 268.8,99.3 284.4,102.4 300.0,104.7 315.6,108.0 331.2,110.2 346.9,115.7 362.5,117.8 378.1,120.4 393.8,122.6 409.4,125.0 425.0,126.4 440.6,129.7 456.2,131.7 471.9,133.0 487.5,135.3 503.1,136.8 518.8,138.1 534.4,139.4 550.0,140.2" fill="none" style="stroke:var(--c2);stroke-width:1.8;stroke-dasharray:4 3"/>
+<text class="lab" x="556" y="158.3">0.1</text>
+</svg></figure>
+<p>dropout 差了 0.12，后半段才打开的那一组，打开那一刻立刻跳高 0.08，之后再也回不来。原因在虚线上：不加 dropout 时，训练集和验证集从头到尾几乎重合，模型根本没有过拟合。13.8 万个参数记不住 630 万个 token，模型还在学不够的阶段，dropout 只会削弱它本来就不够的容量。</p>
+</details>
+
+<h3 id="overfit">让模型过拟合以后</h3>
+<p>weight decay 和 dropout 都没有用，原因是模型根本没有过拟合，它们要解决的问题不存在。为了看它们真正起作用的样子，我们人为制造过拟合：训练集只用前 1/20（约 31 万个 token），验证集不变，其余和基线完全相同。4096 步下来，训练集要过约 53 遍。</p>
+<figure style="margin:0 0 18px;max-width:600px"><svg class="chart" viewBox="0 0 680 278" role="img" aria-label="只用 1/20 训练数据时，各做法在训练集和验证集上的 bpb">
+<circle cx="196" cy="12" r="5" style="fill:none;stroke:var(--accent);stroke-width:1.6"/><text class="lab" x="208" y="17">训练集</text>
+<circle class="pt" cx="276" cy="12" r="5.5"/><text class="lab" x="288" y="17">验证集（3 个种子平均）</text>
+<line class="grid" x1="260.0" x2="260.0" y1="48" y2="236"/><text class="tick" x="260.0" y="252" text-anchor="middle">1.1</text>
+<line class="grid" x1="376.7" x2="376.7" y1="48" y2="236"/><text class="tick" x="376.7" y="252" text-anchor="middle">1.2</text>
+<line class="grid" x1="493.3" x2="493.3" y1="48" y2="236"/><text class="tick" x="493.3" y="252" text-anchor="middle">1.3</text>
+<line class="grid" x1="610.0" x2="610.0" y1="48" y2="236"/><text class="tick" x="610.0" y="252" text-anchor="middle">1.4</text>
+<line class="ref" x1="347.6" x2="347.6" y1="48" y2="236" style="stroke:var(--muted)"/>
+<text class="tick" x="351.6" y="44">全量数据、不加：1.175</text>
+<text class="lab" x="178" y="73" text-anchor="end">不加</text>
+<line x1="223.4" x2="533.1" y1="68" y2="68" style="stroke:var(--chart-raw);stroke-width:2"/>
+<circle cx="223.4" cy="68" r="5" style="fill:var(--bg);stroke:var(--accent);stroke-width:1.6"/>
+<circle class="pt" cx="533.1" cy="68" r="5.5"/>
+<text class="val" x="543.1" y="73">1.334</text>
+<text class="lab" x="178" y="103" text-anchor="end">AdamW 0.1</text>
+<line x1="232.8" x2="498.7" y1="98" y2="98" style="stroke:var(--chart-raw);stroke-width:2"/>
+<circle cx="232.8" cy="98" r="5" style="fill:var(--bg);stroke:var(--accent);stroke-width:1.6"/>
+<circle class="pt" cx="498.7" cy="98" r="5.5"/>
+<text class="val" x="508.7" y="103">1.305</text>
+<text class="lab" x="178" y="133" text-anchor="end">AdamW，embedding 不加</text>
+<line x1="237.4" x2="500.3" y1="128" y2="128" style="stroke:var(--chart-raw);stroke-width:2"/>
+<circle cx="237.4" cy="128" r="5" style="fill:var(--bg);stroke:var(--accent);stroke-width:1.6"/>
+<circle class="pt" cx="500.3" cy="128" r="5.5"/>
+<text class="val" x="510.3" y="133">1.306</text>
+<text class="lab" x="178" y="163" text-anchor="end">裁到 1.0</text>
+<line x1="223.9" x2="537.9" y1="158" y2="158" style="stroke:var(--chart-raw);stroke-width:2"/>
+<circle cx="223.9" cy="158" r="5" style="fill:var(--bg);stroke:var(--accent);stroke-width:1.6"/>
+<circle class="pt" cx="537.9" cy="158" r="5.5"/>
+<text class="val" x="547.9" y="163">1.338</text>
+<text class="lab" x="178" y="193" text-anchor="end">dropout 0.1</text>
+<line x1="428.9" x2="576.2" y1="188" y2="188" style="stroke:var(--chart-raw);stroke-width:2"/>
+<circle cx="428.9" cy="188" r="5" style="fill:var(--bg);stroke:var(--accent);stroke-width:1.6"/>
+<circle class="pt" cx="576.2" cy="188" r="5.5"/>
+<text class="val" x="586.2" y="193">1.371</text>
+<text class="lab" x="178" y="223" text-anchor="end">后半段才开 0.1</text>
+<line x1="407.8" x2="557.8" y1="218" y2="218" style="stroke:var(--chart-raw);stroke-width:2"/>
+<circle cx="407.8" cy="218" r="5" style="fill:var(--bg);stroke:var(--accent);stroke-width:1.6"/>
+<circle class="pt" cx="557.8" cy="218" r="5.5"/>
+<text class="val" x="567.8" y="223">1.355</text>
+<text class="tick" x="400" y="272" text-anchor="middle">bpb，越低越好；两点之间的横线是过拟合的程度</text>
+</svg></figure>
+<p>过拟合出现了：不加任何东西时，训练集 1.069，验证集 1.334，差了 0.27；全量数据时两者几乎一样。</p>
+<p>weight decay 起作用了，验证集好 0.029，3 个种子的范围完全不重叠。它让训练集差了 0.008，换来验证集好 0.029，这是正则该有的样子：少记一点训练集，多泛化一点。同样的 AdamW 0.1，没有过拟合时差 0.006，有过拟合时好 0.029，有没有用，取决于有没有过拟合。它的效果是累积出来的：</p>
+<figure style="margin:0 0 6px;max-width:600px"><svg class="chart" viewBox="0 0 680 220" role="img" aria-label="过拟合时，加 weight decay 比不加的验证集 bpb 低多少">
+<line class="grid" x1="54" x2="660" y1="163.3" y2="163.3"/><text class="tick" x="46" y="167.3" text-anchor="end">-0.03</text>
+<line class="grid" x1="54" x2="660" y1="130.0" y2="130.0"/><text class="tick" x="46" y="134.0" text-anchor="end">-0.02</text>
+<line class="grid" x1="54" x2="660" y1="96.7" y2="96.7"/><text class="tick" x="46" y="100.7" text-anchor="end">-0.01</text>
+<line class="grid" x1="54" x2="660" y1="63.3" y2="63.3"/><text class="tick" x="46" y="67.3" text-anchor="end">+0.00</text>
+<line class="grid" x1="54" x2="660" y1="30.0" y2="30.0"/><text class="tick" x="46" y="34.0" text-anchor="end">+0.01</text>
+<text class="tick" x="54.0" y="198" text-anchor="middle">0</text>
+<text class="tick" x="205.5" y="198" text-anchor="middle">1024</text>
+<text class="tick" x="357.0" y="198" text-anchor="middle">2048</text>
+<text class="tick" x="508.5" y="198" text-anchor="middle">3072</text>
+<text class="tick" x="660.0" y="198" text-anchor="middle">4096</text>
+<text class="tick" x="357" y="216" text-anchor="middle">步数</text>
+<text class="tick" x="58" y="18">AdamW 0.1 的验证集 bpb 减去不加的（3 个种子平均），低于 0 就是 weight decay 有用</text>
+<polyline points="72.9,51.6 91.9,41.5 110.8,34.6 129.8,21.1 148.7,25.9 167.6,32.2 186.6,30.5 205.5,27.9 224.4,50.5 243.4,51.3 262.3,53.9 281.2,50.2 300.2,56.5 319.1,63.5 338.1,66.5 357.0,74.9 375.9,76.2 394.9,74.7 413.8,90.1 432.8,94.3 451.7,93.7 470.6,101.1 489.6,104.8 508.5,113.0 527.4,113.9 546.4,124.7 565.3,132.9 584.2,140.1 603.2,141.3 622.1,147.8 641.1,155.6 660.0,161.6" fill="none" style="stroke:var(--accent);stroke-width:2.2"/>
+</svg></figure>
+<p class="cap">前 2000 步加了 weight decay 还略差，之后才拉开。前期模型还在学通用的规律，没什么可防；后期开始死记了，把参数往 0 拉才有东西可以对抗。</p>
+<p>dropout 缩小了差距，从 0.27 缩到 0.13，验证集却更差了：缩小的方式是训练集一起变差了 0.18。我们的模型宽度只有 48，每次丢掉 10%，损失的不只是死记，还有学会。梯度裁剪和过拟合无关，结果和不加一样，它管的是训练稳不稳，不管泛化。</p>
+<p>最大的变量其实是数据量：1/20 数据下最好的结果是 1.305，全量数据什么都不加是 1.175。正则能补回来的，远比不上多给数据。</p>
+
+<p id="big" style="margin-top:22px">最后补充一点：大模型训练是怎么做的？初始化用 0.02（GPT 系列、OLMo 2），weight decay 用 AdamW 0.1（GPT-3、LLaMA、DeepSeek-V3），梯度裁到 1.0（几乎所有大模型），预训练不用 dropout（LLaMA、PaLM）。四项里只有 dropout 和我们完全一致，原因也相同：大模型的数据足够多，一般只过一遍，不存在死记的问题。</p>
+<p>其他三项不一样，原因都是我们的模型没有遇到它们要解决的问题。这四项可以分成两类：weight decay、dropout 是正则类，防过拟合；初始化的细节、梯度裁剪是稳定类，防训练不稳定。我们的模型离过拟合还很远，又只有 1 层、有 rmsnorm、学习率不大，本来就稳定。大模型里 weight decay 主要也不是为了防过拟合，而是控制参数不要越长越大；梯度裁剪则是因为 loss 突然飙升很常见，PaLM 还会在飙升时退回之前的 checkpoint、跳过那一段数据。</p>
+
+
+<details class="blk" id="deep"><summary><span class="bn">+</span><span class="bt">深入</span><span class="bd">残差分支的输出层；dropout 的两个检查</span></summary>
+<p><b>残差分支的输出层。</b>Transformer 每一层的输出是加回主干上的（<code>x = x + attn(x)</code>），层数越多，加的次数越多，主干上的值越积越大。所以有一类做法单独处理残差分支的输出层（我们的 <code>attn_wo</code> 和 <code>mlp_fc2</code>）：GPT-2 把它的 σ 再乘 \(1/\sqrt{2L}\)，\(L\) 是层数；modded-nanogpt 直接置零，一开始每一层什么都不加，训练中再学出各自的贡献，同样的思路更早见于 Fixup 和 ReZero。我们测了 0.02 加输出层置零，1.1798，比单纯的 0.02 略差 0.004，和种子的波动差不多。我们只有 1 层，越积越大的问题还不存在，等第二章模型变深再看。</p>
+<p><b>dropout 的两个检查。</b>dropout 差这么多，先怀疑是不是写错了。去掉 CUDA Graph、完全不编译，各跑一次 dropout 0.1，结果都一样（1.29 到 1.31）；dropout 降到 0.02，也还差 0.05。</p>
+</details>
+
+
+<div class="nextsec"><a href="1.09.html">上一节：1.09 工程加速</a> · 下一节：1.11 回顾（写作中）</div>
+</section>
+</main>
+</div>
+<footer class="foot"><div class="wrap">起点代码来自 Andrej Karpathy 的 <a href="https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95">microgpt</a>。实验代码和日志都在 <a href="https://github.com/LaugHan/scratch2modern">GitHub</a>。作者 <a href="https://github.com/LaugHan">@LaugHan</a> · <a href="https://github.com/LaugHan/scratch2modern/blob/main/LICENSE">MIT 许可证</a> · 最后更新 2026-11-18</div></footer>
+</body>
+</html>
