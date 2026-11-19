@@ -29,7 +29,7 @@ function setAll(open) { document.querySelectorAll('details.blk').forEach(d => d.
 <h2>1.03 Batch</h2>
 <div class="summary"><div><span class="k">这一节</span>一次喂一批数据（batch），换到 TinyStories</div><div><span class="k">结果</span>names 上又快了 15 倍；TinyStories 在 CPU 上 batch 反而越大越慢</div></div>
 
-<p>上一节最后我们发现，时间大部分花在调用上，而不是计算上。现在每次调用只处理一个 token：16 个数进去，16 个数出来。既然每次调用的开销差不多是固定的，那一次多喂一些数据进去，同样的开销就能算更多的东西。这就是 batch。</p>
+<p>上一节最后我们发现，时间大部分花在调用上，而不是计算上。现在每处理一个 token，过完整个流程需要几十次 PyTorch 的调用。而实际上每次调用的过程中，如果说我们能计算更多的 token，那处理相同 token，所需的总调用时间就省下来了。这就是 batch。</p>
 
 <figure style="margin:0" class="small-fig"><svg class="chart" viewBox="0 0 640 184" role="img" aria-label="names 上每秒处理的 token 数">
 <text class="lab" x="140" y="22" text-anchor="end">1.02 逐个 token</text>
